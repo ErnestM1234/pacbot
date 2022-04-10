@@ -5,6 +5,7 @@ from graphics import Visualizer
 from graphics.variables import Split
 from graphics.variables import SQUARE_SIZE
 
+# ADDRESS = os.environ.get("BIND_ADDRESS","192.168.1.55")
 ADDRESS = os.environ.get("BIND_ADDRESS","localhost")
 PORT = os.environ.get("BIND_PORT", 11297)
 

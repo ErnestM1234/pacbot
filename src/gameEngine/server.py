@@ -13,11 +13,13 @@ from messages import MsgType
 # it can be changed with "export BIND_ADDRESS=...".
 ###
 ADDRESS = os.environ.get("BIND_ADDRESS","localhost")
+# ADDRESS = os.environ.get("BIND_ADDRESS","192.168.1.55")
 
 ###
 # BIND_PORT is the port the server is listening on. All modules (such as the game engine) should connect
 # to this port.
 ###
+# PORT = os.environ.get("BIND_PORT", 11297)
 PORT = os.environ.get("BIND_PORT", 11297)
 
 def main():
