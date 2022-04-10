@@ -46,8 +46,8 @@ class LowLevelModule(rm.ProtoModule):
         self.motors.move_cells(1)
 
     def _turn_right(self):
-        self.motors.turn_right()
-        if self.current_dir == PacmanCommand.EAST:
+        self.motors.turn_right() # change physical direction
+        if self.current_dir == PacmanCommand.EAST: # update inner state of robot accordingly
             self.current_dir = PacmanCommand.SOUTH
         elif self.current_dir == PacmanCommand.SOUTH:
             self.current_dir = PacmanCommand.WEST

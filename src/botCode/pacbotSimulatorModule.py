@@ -21,7 +21,7 @@ class PacbotSimulatorModule(rm.ProtoModule):
     def msg_received(self, msg, msg_type):
         if msg_type == MsgType.PACMAN_COMMAND:
             self.current_command = msg.dir
-            print(msg.dir)
+            # print(msg.dir)
 
     def tick(self):
         if self.current_command:
