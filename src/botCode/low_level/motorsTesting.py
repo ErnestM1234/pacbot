@@ -1,4 +1,4 @@
-from .sensorTesting import *
+from sensorTesting import *
 
 WALL_STOP_DIST = 5 # cm
 
@@ -37,15 +37,6 @@ class ArduinoMotors:
 
     def moveForwards(self, pwr):
         self.arduino.write(MotorDirection.FORWARD, pwr, MotorDirection.FORWARD, pwr)
-
-    # goes forwards and stops at a wall
-    def stopAtWall(self):
-        self.goForwards(1)
-        while True:
-            self.arduino.read()
-            if self.arduino.readSensor("FORWARD_DIST") < WALL_STOP_DIST:
-                self.stop()
-                break
 
     def stop(self):
         self.arduino.write(MotorDirection.STOP, 0.0, MotorDirection.STOP, 0.0)

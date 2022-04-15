@@ -59,8 +59,6 @@ class MotorDirection(Enum):
     MAINTAIN = 3 # maintain current power
 
 class ArduinoComms:
-
-
     def __init__(self):
         self.sensors = {
             "LEFT_ENCODER":0.0,     "RIGHT_ENCODER":0.0, 
@@ -71,6 +69,13 @@ class ArduinoComms:
         self.ser = serial.Serial('/dev/ttyS0', 9600, timeout=1)
         self.ser.reset_input_buffer()
 
+    """
+    Closes serial ports. Call this at the end of using Ardunio Comms
+    """
+    def closeComms(self):
+        self.ser.close()
+
+
     def readSensor(self, sensor):
         if sensor not in SENSOR_NAMES:
             return None
@@ -80,7 +85,6 @@ class ArduinoComms:
     def read(self):
         if self.ser.in_waiting > 0:
             sensor_input = self.ser.readline().decode('utf-8').rstrip()
-            print(sensor_input)
             try:
                 sensor_input_json = json.loads(sensor_input)
                 for sensor_name, value in sensor_input_json.items():
