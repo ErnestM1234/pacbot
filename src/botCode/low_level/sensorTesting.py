@@ -18,7 +18,9 @@ FORWARD_DIST    - float (cm)
 
 HEADING         - float (degree)
 
-input json string format: '{ 
+input json string format: 
+
+'{ 
     "LEFT_ENCODER":0.0, "RIGHT_ENCODER":0.0, 
     "LEFT_DISTANCE":0.0, "RIGHT_DISTANCE":0.0,
     "LEFT_DIAG_DIST":0.0, "RIGHT_DIAG_DIST":0.0,
@@ -56,7 +58,8 @@ class MotorDirection(Enum):
     BACKWARD = 0
     FORWARD = 1
     STOP = 2
-    MAINTAIN = 3 # maintain current power
+    # todo: remove maintain by setting last power sent state and resending it again
+    MAINTAIN = 3 # maintain current power 
 
 class ArduinoComms:
     def __init__(self):
@@ -76,24 +79,41 @@ class ArduinoComms:
         self.ser.close()
 
 
+    """
+    Input:
+        sensor - a valid sensor name
+    Returns:
+        the current value of the specified sensor (does not run update)
+    """
     def readSensor(self, sensor):
         if sensor not in SENSOR_NAMES:
             return None
         return self.sensors[sensor]
 
-    # update sensors
+    """
+    Reads a new set of values from the serial stream.
+    """
     def read(self):
         if self.ser.in_waiting > 0:
             sensor_input = self.ser.readline().decode('utf-8').rstrip()
             try:
                 sensor_input_json = json.loads(sensor_input)
-                for sensor_name, value in sensor_input_json.items():
-                    self.sensors[sensor_name] = value
+                self.sensors = sensor_input_json.items()
+                # for sensor_name, value in sensor_input_json.items():
+                #   self.sensors[sensor_name] = value
             except:
                 print("input not in valid JSON format or maybe something else went wrong idk")
 
         return self.sensors
 
+    """
+    Input:
+        r_dir   - direction of right motor spin
+        r_pwr   - power of right motor
+        l_dir   - direction of left motor spin
+        l_pwr   - power of left motor
+    Writes to command of format SENSOR_NAMES
+    """
     def write(self, r_dir, r_pwr, l_dir, l_pwr):
         # todo: check that values are valid
         output = {
