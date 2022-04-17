@@ -3,11 +3,13 @@ from .pacmanState_pb2 import PacmanState
 from .lightState_pb2 import LightState
 from .pacmanCommand_pb2 import PacmanCommand
 
+#     remember brew install protobuf
+
 class MsgType(Enum):
     LIGHT_STATE = 0
     PACMAN_LOCATION = 1
-    FULL_STATE = 2
-    PACMAN_COMMAND = 3
+    PACMAN_COMMAND = 2
+    FULL_STATE = 3
 
 message_buffers = {
     MsgType.PACMAN_COMMAND: PacmanCommand,

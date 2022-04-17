@@ -8,7 +8,7 @@ from pacbot import StateConverter, GameState
 
 ADDRESS = os.environ.get("BIND_ADDRESS","localhost") # the address of the game engine server
 # ADDRESS = os.environ.get("BIND_ADDRESS","192.168.1.55")
-PORT = os.environ.get("BIND_PORT", 11297)            # the port the game engine server is listening to
+PORT = os.environ.get("BIND_PORT", 11293)            # the port the game engine server is listening to
 
 FREQUENCY = game_frequency * ticks_per_update
 
@@ -26,6 +26,11 @@ class GameEngine(rm.ProtoModule):
 
         light_state = StateConverter.convert_game_state_to_light(self.game)
         self.write(light_state.SerializeToString(), MsgType.LIGHT_STATE)
+
+        # how to write a command
+        new_msg = PacmanCommand()
+        new_msg.dir = PacmanCommand.STOP
+        self.write(new_msg.SerializeToString(), MsgType.PACMAN_COMMAND)
 
     def msg_received(self, msg, msg_type):
         if msg_type == MsgType.PACMAN_LOCATION:
