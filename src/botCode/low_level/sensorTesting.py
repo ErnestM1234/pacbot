@@ -130,7 +130,7 @@ class ArduinoComms:
             "LEFT_MOTOR_DIRECTION":l_dir,
             "LEFT_MOTOR_POWER":l_pwr,
         }
-        self.ser.write(json.dumps(output).encode('utf-8'))
+        #self.ser.write(json.dumps(output).encode('utf-8'))
 
     def print_all_values(self):
         print(self.sensors)
