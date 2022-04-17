@@ -78,7 +78,6 @@ class ArduinoComms:
     def closeComms(self):
         self.ser.close()
 
-
     """
     Input:
         sensor - a valid sensor name
@@ -89,6 +88,15 @@ class ArduinoComms:
         if sensor not in SENSOR_NAMES:
             return None
         return self.sensors[sensor]
+
+    """
+    Brian
+    This function returns the heading of the pacbot (current direction it is facing).
+    This function returns an integer number from 0 to 360.
+    North, on the game field, is 0 degrees.
+    """
+    def getHeading(self):
+        return None
 
     """
     Reads a new set of values from the serial stream.
