@@ -4,19 +4,37 @@ import os
 import robomodules as rm
 from messages import *
 
-# SERVER_ADDRESS = os.environ.get("BIND_ADDRESS","localhost")
-SERVER_ADDRESS = os.environ.get("BIND_ADDRESS","192.168.1.55")
+SERVER_ADDRESS = os.environ.get("BIND_ADDRESS","localhost")
+# SERVER_ADDRESS = os.environ.get("BIND_ADDRESS","192.168.1.55")
 SERVER_PORT = os.environ.get("BIND_PORT", 11297)
 
-LOCAL_ADDRESS = os.environ.get("LOCAL_ADDRESS","localhost")
+LOCAL_ADDRESS = os.environ.get("LOCAL_ADDRESS","localhost") # always on local host
 LOCAL_PORT = os.environ.get("LOCAL_PORT", 11295)
 
+GAME_ENGINE_ADDRESS = os.environ.get("BIND_ADDRESS","localhost")
+#GAME_ENGINE_ADDRESS = os.environ.get("LOCAL_ADDRESS","192.168.1.55") # some other IP
+GAME_ENGINE_PORT = os.environ.get("BIND_PORT", 11293)
+
 SERVER_FREQUENCY = 0
+GAME_ENGINE_FREQUENCY = 0 # no idea what this value means
 LOCAL_FREQUENCY = 30
 
+"""
+Vocab (please read!):
+
+SERVER      - Harvard's server that gives pacbot information about the state
+            of the game and where pac bot is
+LOCAL       - Running locally on the pac bot and controls motors
+GAME_ENGINE - Princeton's computation server that gives pacbot actions
+ remember brew install protobuf
+"""
+
+
+# this connects to the Server
 class PacbotServerClient(rm.ProtoModule):
     def __init__(self, addr, port, loop):
         self.subscriptions = [MsgType.LIGHT_STATE]
+        # this connects to the game engine
         super().__init__(addr, port, message_buffers, MsgType, SERVER_FREQUENCY, self.subscriptions, loop)
         self.state = None
 
@@ -32,17 +50,19 @@ class PacbotServerClient(rm.ProtoModule):
     def get_state(self):
         return self.state
 
-class PacbotCommsModule(rm.ProtoModule):
+class PacbotServerCommsModule(rm.ProtoModule):
     def __init__(self, server_addr, server_port, local_addr, local_port):
         self.subscriptions = [MsgType.PACMAN_LOCATION]
+        # this connects to the local server
         super().__init__(local_addr, local_port, message_buffers, MsgType, LOCAL_FREQUENCY, self.subscriptions)
+        # this connects to the server
         self.server_module = PacbotServerClient(server_addr, server_port, self.loop)
         self.server_module.connect()
-
+        
     def msg_received(self, msg, msg_type):
         # This gets called whenever any message is received
         if msg_type == MsgType.PACMAN_LOCATION:
-            self.server_module.write(msg.SerializeToString(), MsgType.PACMAN_LOCATION)
+           self.server_module.write(msg.SerializeToString(), MsgType.PACMAN_LOCATION)
 
     def tick(self):
         # Get state from the server
@@ -52,7 +72,7 @@ class PacbotCommsModule(rm.ProtoModule):
             self.write(state.SerializeToString(), MsgType.LIGHT_STATE)
 
 def main():
-    module = PacbotCommsModule(SERVER_ADDRESS, SERVER_PORT, LOCAL_ADDRESS, LOCAL_PORT)
+    module = PacbotServerCommsModule(SERVER_ADDRESS, SERVER_PORT, LOCAL_ADDRESS, LOCAL_PORT)
     module.run()
 
 if __name__ == "__main__":
