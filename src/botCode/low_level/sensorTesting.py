@@ -113,30 +113,33 @@ class ArduinoComms:
             return None
         return self.sensors[sensor]
 
-    """
-    Brian and Boaz
-    This function returns the gyro reading of the pacbot as array
+    """ getAccel()
+    Input:  void
+    Output: array of accelerometer values
+    Returns numpy array of accelerometer X, Y, Z values
     """
     def getAccel(self):
         return np.array([self.readSensor("ACCEL_X"), self.readSensor("ACCEL_Y"),  self.readSensor("ACCEL_Z")])
 
-    """
-    Brian and Boaz
-    This function returns the gyro reading of the pacbot as array
+    """ getGyro()
+    Input:  void
+    Output: array of gyroscope values
+    Returns numpy array of gyroscope X, Y, Z values
     """
     def getGyro(self):
         return np.array([self.readSensor("GYRO_X"), self.readSensor("GYRO_Y"),  self.readSensor("GYRO_Z")])
 
-    """
-    Brian and Boaz
-    This function returns the magnetometer reading of the pacbot as array
+    """ getMag()
+    Input:  void
+    Output: array of magnetometer values
+    Returns numpy array of magnetometer X, Y, Z values
     """
     def getMag(self):
         return np.array([self.readSensor("MAG_X"), self.readSensor("MAG_Y"),  self.readSensor("MAG_Z")])
 
 
     """
-    Brian
+    Brian and Boaz
     This function returns the heading of the pacbot (current direction it is facing).
     This function returns an integer number from 0 to 360.
     North, on the game field, is 0 degrees.
