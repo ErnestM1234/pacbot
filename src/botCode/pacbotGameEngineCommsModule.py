@@ -42,7 +42,6 @@ class PacbotGameEngineClient(rm.ProtoModule):
     def msg_received(self, msg, msg_type):
         # This gets called whenever any message is received
         # This module will connect to server and receive the game state
-        print(msg)
         if msg_type == MsgType.PACMAN_COMMAND:
             self.command = msg
 
@@ -54,7 +53,7 @@ class PacbotGameEngineClient(rm.ProtoModule):
 
 
 class PacbotGameEngineCommsModule(rm.ProtoModule):
-    def __init__(self, server_addr, server_port, game_engine_addr, game_engine_port, local_addr, local_port):
+    def __init__(self, game_engine_addr, game_engine_port, local_addr, local_port):
         self.subscriptions = [MsgType.PACMAN_LOCATION]
         # this connects to the local server
         super().__init__(local_addr, local_port, message_buffers, MsgType, LOCAL_FREQUENCY, self.subscriptions)
@@ -76,7 +75,7 @@ class PacbotGameEngineCommsModule(rm.ProtoModule):
            self.write(command.SerializeToString(), MsgType.PACMAN_COMMAND)
 
 def main():
-    module = PacbotGameEngineCommsModule(SERVER_ADDRESS, SERVER_PORT, GAME_ENGINE_ADDRESS, GAME_ENGINE_PORT, LOCAL_ADDRESS, LOCAL_PORT)
+    module = PacbotGameEngineCommsModule(GAME_ENGINE_ADDRESS, GAME_ENGINE_PORT, LOCAL_ADDRESS, LOCAL_PORT)
     module.run()
 
 if __name__ == "__main__":

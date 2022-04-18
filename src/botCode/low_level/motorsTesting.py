@@ -2,41 +2,40 @@ from sensorTesting import *
 
 WALL_STOP_DIST = 5 # cm
 
-class AvailableMotors(Enum):
-    LEFT = 0
-    RIGHT = 1
-
-
-# this does not correspond directly to real motor, this is more of an abstract motor
-class ArduinoMotor:
-    def __init__(self, arduino, motor_state):
-        self.motor_state = motor_state
-        self.arduino = arduino
-
-    def move(self, dir, pwr):
-        if self.motor_state == AvailableMotors.RIGHT:
-            self.arduino.write(dir, pwr, MotorDirection.MAINTAIN, 0.0)
-        elif self.motor_state == AvailableMotors.LEFT:
-            self.arduino.write(MotorDirection.MAINTAIN, 0.00, dir, pwr)
-
 
 class ArduinoMotors:
     def __init__(self):
         self.arduino = ArduinoComms()
         self.heading = 0.0
-        self.right_motor = ArduinoMotor(self.arduino, AvailableMotors.RIGHT)
-        self.left_motor = ArduinoMotor(self.arduino, AvailableMotors.LEFT)
 
+    """ turn_right()
+    input:  void
+    return: void
+    Rotate robot right
+    """
     def turn_right(self):
-        self.right_motor.move(MotorDirection.FORWARD, 1) # idk if 1 works but thats what it be for now
-        self.left_motor.move(MotorDirection.BACKWARD, 1) # idk if 1 works but thats what it be for now
+        self.arduino.write(MotorDirection.FORWARDS, 20, MotorDirection.BACKWARDS, 20)
 
+    """ turn_left()
+    input:  void
+    return: void
+    Rotate robot left
+    """
     def turn_left(self):
-        self.right_motor.move(MotorDirection.BACKWARD, 1) # idk if 1 works but thats what it be for now
-        self.left_motor.move(MotorDirection.FORWARD, 1) # idk if 1 works but thats what it be for now
+        self.arduino.write(MotorDirection.BACKWARDS, 20, MotorDirection.FORWARDS, 20)
 
-    def moveForwards(self, pwr):
-        self.arduino.write(MotorDirection.FORWARD, pwr, MotorDirection.FORWARD, pwr)
+    """ moveForwards()
+    input:  void
+    return: void
+    moves robot forward at power 20
+    """
+    def moveForwards(self):
+        self.arduino.write(MotorDirection.FORWARD, 20, MotorDirection.FORWARD, 20)
 
+    """ stop()
+    input:  void
+    return: void
+    stops robot from moving
+    """
     def stop(self):
-        self.arduino.write(MotorDirection.STOP, 0.0, MotorDirection.STOP, 0.0)
+        self.arduino.write(MotorDirection.STOP, 0, MotorDirection.STOP, 0)

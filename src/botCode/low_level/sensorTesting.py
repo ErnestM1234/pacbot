@@ -3,74 +3,76 @@ import serial
 import json
 
 """
-SENSOR INPUTS:
+INPUTS:
 
-LEFT_ENCODER    - float (cm)
-RIGHT_ENCODER   - float (cm)
+LEFT_ENCODER    - float (mm)
+RIGHT_ENCODER   - float (mm)
 
-LEFT_DISTANCE   - float (cm)
-RIGHT_DISTANCE  - float (cm)
+LEFT_DISTANCE   - float (mm)
+RIGHT_DISTANCE  - float (mm)
+LEFT_DIAG_DIST  - float (mm)
+RIGHT_DIAG_DIST - float (mm)
+FORWARD_DIST    - float (mm)
 
-LEFT_DIAG_DIST  - float (cm)
-RIGHT_DIAG_DIST - float (cm)
+ACC_X           - integer (??)
+ACC_Y           - integer (??)
+ACC_Z           - integer (??)
 
-FORWARD_DIST    - float (cm)
+GYRO_X          - integer (??)
+GYRO_Y          - integer (??)
+GYRO_Z          - integer (??)
 
-HEADING         - float (degree)
-
-input json string format: 
-
-'{ 
-    "LEFT_ENCODER":0.0, "RIGHT_ENCODER":0.0, 
-    "LEFT_DISTANCE":0.0, "RIGHT_DISTANCE":0.0,
-    "LEFT_DIAG_DIST":0.0, "RIGHT_DIAG_DIST":0.0,
-    "FORWARD_DIST":0.0, "HEADING":0.0
-    }'
+MAG_X           - integer (??)
+MAG_Y           - integer (??)
+MAG_Z           - integer (??)
 
 
-MOTOR OUTPUTS:
+input json string format (no new lines until end): 
 
-RIGHT_MOTOR_DIRECTION       - MotorDirection
-RIGHT_MOTOR_POWER           - float (wats?? volts?? idk)
+{ 
+"LEFT_ENCODER":0,     "RIGHT_ENCODER":0, 
+"LEFT_DISTANCE":0,    "RIGHT_DISTANCE":0,
+"LEFT_DIAG_DIST":0,   "RIGHT_DIAG_DIST":0,  "FORWARD_DIST":0,
+"ACC_X":0,            "ACC_Y":0,            "ACC_Z":0,
+"GYRO_X":0,           "GYRO_Y":0,           "GYRO_Z":0,
+"MAG_X":0,            "MAG_Y":0,            "MAG_Z":0
+}\n
 
-LEFT_MOTOR_DIRECTION       - MotorDirection
-LEFT_MOTOR_POWER           - float (wats?? volts?? idk)
 
-output json string format: '{
-    "RIGHT_MOTOR_DIRECTION":0.0,
-    "RIGHT_MOTOR_POWER":0.0,
-    "LEFT_MOTOR_DIRECTION":0.0,
-    "LEFT_MOTOR_POWER":0.0,
-}'
+OUTPUTS:
 
+rmd         - right motor direction     int (FORWARDS = 0, BACKWARDS = 1, STOP = 2)
+rmp         - right motor power         int (0-255)
+lmd         - left motor direction      int (FORWARDS = 0, BACKWARDS = 1, STOP = 2)
+lmp         - left motor power          int (0-255)
+
+output json string format:
+{rmd:000,rmp:000,lmd:000,rmp:000}
 
 """
 
-SENSOR_NAMES = {
+SENSOR_NAMES = [
     "LEFT_ENCODER",     "RIGHT_ENCODER", 
     "LEFT_DISTANCE",    "RIGHT_DISTANCE",
-    "LEFT_DIAG_DIST",   "RIGHT_DIAG_DIST",
-    "FORWARD_DIST",     "HEADING"
-}
+    "LEFT_DIAG_DIST",   "RIGHT_DIAG_DIST",  "FORWARD_DIST",
+    "ACC_X",            "ACC_Y",            "ACC_Z",
+    "GYRO_X",           "GYRO_Y",           "GYRO_Z",
+    "MAG_X",            "MAG_Y",            "MAG_Z"
+]
 
 
 class MotorDirection(Enum):
-    BACKWARD = 0
-    FORWARD = 1
+    FORWARDS = 0
+    BACKWARDS = 1
     STOP = 2
-    # todo: remove maintain by setting last power sent state and resending it again
-    MAINTAIN = 3 # maintain current power 
 
 class ArduinoComms:
     def __init__(self):
-        self.sensors = {
-            "LEFT_ENCODER":0.0,     "RIGHT_ENCODER":0.0, 
-            "LEFT_DISTANCE":0.0,    "RIGHT_DISTANCE":0.0,
-            "LEFT_DIAG_DIST":0.0,   "RIGHT_DIAG_DIST":0.0,
-            "FORWARD_DIST":0.0,     "HEADING":0.0
-        }
+        self.sensors = {} # holds the most recent signal from arduino to pi
+        self.motorState = {"rmd":0,"rmp":0,"lmd":0,"lmp":0} # holds most recent signal sent from pi to arduino
         self.ser = serial.Serial('/dev/ttyS0', 9600, timeout=1)
         self.ser.reset_input_buffer()
+        self.heading = 0
 
     """
     Closes serial ports. Call this at the end of using Ardunio Comms
@@ -85,9 +87,12 @@ class ArduinoComms:
         the current value of the specified sensor (does not run update)
     """
     def readSensor(self, sensor):
-        if sensor not in SENSOR_NAMES:
-            return None
-        return self.sensors[sensor]
+        try:
+            sensorValue = self.sensors[sensor]
+        except:
+            sensorValue = 0
+        
+        return sensorValue
 
     """
     Brian
@@ -96,7 +101,7 @@ class ArduinoComms:
     North, on the game field, is 0 degrees.
     """
     def getHeading(self):
-        return None
+        return 0
 
     """
     Reads a new set of values from the serial stream.
@@ -104,33 +109,46 @@ class ArduinoComms:
     def read(self):
         if self.ser.in_waiting > 0:
             sensor_input = self.ser.readline().decode('utf-8').rstrip()
+            # this is to ensure that we are receiving a json formatted string
             try:
-                sensor_input_json = json.loads(sensor_input)
-                self.sensors = sensor_input_json.items()
-                # for sensor_name, value in sensor_input_json.items():
-                #   self.sensors[sensor_name] = value
+                self.sensors = json.loads(sensor_input)
             except:
-                print("input not in valid JSON format or maybe something else went wrong idk")
+                print("failed to parse json")
 
         return self.sensors
 
     """
     Input:
-        r_dir   - direction of right motor spin
-        r_pwr   - power of right motor
-        l_dir   - direction of left motor spin
-        l_pwr   - power of left motor
-    Writes to command of format SENSOR_NAMES
+        rightMotorDirection     - direction of right motor spin
+        rightMotorPower         - power of right motor
+        leftMotorDirection      - direction of left motor spin
+        leftMotorPower          - power of left motor
+    Writes to command of format {rmd:000,rmp:000,lmd:000,rmp:000}
     """
-    def write(self, r_dir, r_pwr, l_dir, l_pwr):
-        # todo: check that values are valid
-        output = {
-            "RIGHT_MOTOR_DIRECTION":r_dir,
-            "RIGHT_MOTOR_POWER":r_pwr,
-            "LEFT_MOTOR_DIRECTION":l_dir,
-            "LEFT_MOTOR_POWER":l_pwr,
-        }
-        #self.ser.write(json.dumps(output).encode('utf-8'))
+    def write(self, rightMotorDirection, rightMotorPower, leftMotorDirection, leftMotorPower):
+        # check input validity
+        rmdVerified = rightMotorDirection if (rightMotorDirection != 0 or rightMotorDirection != 1) else 2 # if not known value return stop
+        lmdVerified = leftMotorDirection  if (leftMotorDirection  != 0 or leftMotorDirection  != 1) else 2 # if not known value return stop
+        rmpVerified = max(min(rightMotorPower,255),0) # 0 < rmd < 255
+        lmpVerified = max(min(leftMotorPower, 255),0) # 0 < lmd < 255
+
+
+        # output integer format must be in three digits
+        self.motorState["rmd"] = rmdVerified
+        self.motorState["rmp"] = rmpVerified
+        self.motorState["lmd"] = lmdVerified
+        self.motorState["lmp"] = lmpVerified
+
+
+        # convert to string
+        rmd = str(rmdVerified).zfill(3)
+        rmp = str(rmpVerified).zfill(3)
+        lmd = str(lmdVerified).zfill(3)
+        lmp = str(lmpVerified).zfill(3)
+        output = "{rmd:" + rmd + ",rmp:" + rmp + ",lmd:" + lmd + ",lmp:" + lmp + "}"
+
+        # write to serial
+        self.ser.write(output.encode('utf-8'))
 
     def print_all_values(self):
         print(self.sensors)

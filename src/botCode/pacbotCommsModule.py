@@ -11,9 +11,9 @@ SERVER_PORT = os.environ.get("BIND_PORT", 11297)
 LOCAL_ADDRESS = os.environ.get("LOCAL_ADDRESS","localhost") # always on local host
 LOCAL_PORT = os.environ.get("LOCAL_PORT", 11295)
 
-GAME_ENGINE_ADDRESS = os.environ.get("LOCAL_ADDRESS","localhost")
-#LOCAL_ADDRESS = os.environ.get("LOCAL_ADDRESS","192.168.1.55") # some other IP
-GAME_ENGINE_PORT = os.environ.get("LOCAL_PORT", 11293)
+GAME_ENGINE_ADDRESS = os.environ.get("BIND_ADDRESS","localhost")
+#GAME_ENGINE_ADDRESS = os.environ.get("LOCAL_ADDRESS","192.168.1.55") # some other IP
+GAME_ENGINE_PORT = os.environ.get("BIND_PORT", 11293)
 
 SERVER_FREQUENCY = 0
 GAME_ENGINE_FREQUENCY = 0 # no idea what this value means
@@ -51,7 +51,7 @@ class PacbotServerClient(rm.ProtoModule):
         return self.state
 
 class PacbotServerCommsModule(rm.ProtoModule):
-    def __init__(self, server_addr, server_port, game_engine_addr, game_engine_port, local_addr, local_port):
+    def __init__(self, server_addr, server_port, local_addr, local_port):
         self.subscriptions = [MsgType.PACMAN_LOCATION]
         # this connects to the local server
         super().__init__(local_addr, local_port, message_buffers, MsgType, LOCAL_FREQUENCY, self.subscriptions)
@@ -72,7 +72,7 @@ class PacbotServerCommsModule(rm.ProtoModule):
             self.write(state.SerializeToString(), MsgType.LIGHT_STATE)
 
 def main():
-    module = PacbotServerCommsModule(SERVER_ADDRESS, SERVER_PORT, GAME_ENGINE_ADDRESS, GAME_ENGINE_PORT, LOCAL_ADDRESS, LOCAL_PORT)
+    module = PacbotServerCommsModule(SERVER_ADDRESS, SERVER_PORT, LOCAL_ADDRESS, LOCAL_PORT)
     module.run()
 
 if __name__ == "__main__":
