@@ -74,16 +74,16 @@ class ArduinoComms:
         self.ser.reset_input_buffer()
         self.heading = 0
 
-    """
+    """ closeComms()
     Closes serial ports. Call this at the end of using Ardunio Comms
     """
     def closeComms(self):
         self.ser.close()
 
-    """
+    """ readSensor()
     Input:
         sensor - a valid sensor name
-    Returns:
+    Output:
         the current value of the specified sensor (does not run update)
     """
     def readSensor(self, sensor):
@@ -103,7 +103,9 @@ class ArduinoComms:
     def getHeading(self):
         return 0
 
-    """
+    """ read()
+    input:  void
+    output: a python dictionary containing all of the sensor values
     Reads a new set of values from the serial stream.
     """
     def read(self):
@@ -123,6 +125,7 @@ class ArduinoComms:
         rightMotorPower         - power of right motor
         leftMotorDirection      - direction of left motor spin
         leftMotorPower          - power of left motor
+    Output:     void
     Writes to command of format {rmd:000,rmp:000,lmd:000,rmp:000}
     """
     def write(self, rightMotorDirection, rightMotorPower, leftMotorDirection, leftMotorPower):
@@ -150,6 +153,11 @@ class ArduinoComms:
         # write to serial
         self.ser.write(output.encode('utf-8'))
 
+    """ print_all_values()
+    input:  void
+    output: void
+    prints the sensor values in a dictionary
+    """
     def print_all_values(self):
         print(self.sensors)
 
