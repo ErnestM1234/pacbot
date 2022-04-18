@@ -46,8 +46,8 @@ class PacbotGameEngineClient(rm.ProtoModule):
             self.command = msg
 
     def tick(self):
-        return
-
+        return        
+        
     def get_command(self):
         return self.command
 
@@ -62,9 +62,9 @@ class PacbotGameEngineCommsModule(rm.ProtoModule):
         self.game_engine_module.connect()
 
     def msg_received(self, msg, msg_type):
-        # This gets called whenever any message is received
-        # if msg_type == MsgType.PACMAN_LOCATION:
-        #    self.server_module.write(msg.SerializeToString(), MsgType.PACMAN_LOCATION)
+        # broad cast information received from pacbot state to the game engine
+        if msg_type == MsgType.PACMAN_LOCATION:
+           self.game_engine_module.write(msg.SerializeToString(), MsgType.PACMAN_LOCATION)
         return
 
     def tick(self):

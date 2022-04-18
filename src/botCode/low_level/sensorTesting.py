@@ -71,7 +71,9 @@ class MotorDirection(Enum):
 ArduinoComms methods:
 closeComms()
 readSensor()
-getHeading()
+getHeading() ** unimplemented **
+getOdometer() ** unimplemented **
+resetOdometer()
 read()
 write()
 print_all_values()
@@ -83,8 +85,10 @@ class ArduinoComms:
         self.motorState = {"rmd":0,"rmp":0,"lmd":0,"lmp":0} # holds most recent signal sent from pi to arduino
         # self.ser = serial.Serial('/dev/ttyS0', 9600, timeout=1)
         # self.ser.reset_input_buffer()
-        self.heading = 0
-        self.odometer=0
+        self.heading = 90 # pacbot starts by facing east
+        self.odometer = 0
+        self.odometer_left = 0
+        self.odometer_right = 0
 
     """ closeComms()
     Input:  void
@@ -115,6 +119,28 @@ class ArduinoComms:
     def getHeading(self):
         return self.heading
 
+    """ getOdometer()
+    input:  void
+    output: odometer value (mm)
+    Returns the current value of the odometer
+    """
+    def getOdometer(self):
+        # todo: this function
+        # I think encoders return the position of the motor
+        # we can measure the average value for how much each individual encoder moves
+        self.odometer = ((self.odometer_left - self.sensors["LEFT_ENCODER"]) + (self.odometer_right - self.sensors["RIGHT_ENCODER"])) / 2
+        return self.odometer
+    
+    """ resetOdometer()
+    input:  void
+    output: void
+    sets odometer value to 0
+    """
+    def resetOdometer(self):
+        self.odometer_left = self.sensors["LEFT_ENCODER"]
+        self.odometer_right = self.sensors["RIGHT_ENCODER"]
+        self.odometer = 0
+
     """ read()
     input:  void
     output: a python dictionary containing all of the sensor values
@@ -128,7 +154,7 @@ class ArduinoComms:
     #             self.sensors = json.loads(sensor_input)
     #         except:
     #             print("failed to parse json")
-
+    #     # update odometer values for calculation
     #     return self.sensors
 
     """ write()

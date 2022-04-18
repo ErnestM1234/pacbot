@@ -21,7 +21,8 @@ class LowLevelCommandModule(rm.ProtoModule):
         self.current_location = (13, 7) # starting location
         self.bot = ArduinoMotors()
         self.current_dir = PacmanCommand.EAST
-        
+    
+    # todo: change these to face_north, face_east, etc instead
     def _should_turn_left(self, cmd):
         return \
             (self.current_dir == PacmanCommand.NORTH and cmd  == PacmanCommand.WEST) or \
