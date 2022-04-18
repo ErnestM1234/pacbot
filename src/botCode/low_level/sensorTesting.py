@@ -81,8 +81,8 @@ class ArduinoComms:
     def __init__(self):
         self.sensors = {} # holds the most recent signal from arduino to pi
         self.motorState = {"rmd":0,"rmp":0,"lmd":0,"lmp":0} # holds most recent signal sent from pi to arduino
-        self.ser = serial.Serial('/dev/ttyS0', 9600, timeout=1)
-        self.ser.reset_input_buffer()
+        # self.ser = serial.Serial('/dev/ttyS0', 9600, timeout=1)
+        # self.ser.reset_input_buffer()
         self.heading = 0
         self.odometer=0
 
@@ -120,16 +120,16 @@ class ArduinoComms:
     output: a python dictionary containing all of the sensor values
     Reads a new set of values from the serial stream.
     """
-    def read(self):
-        if self.ser.in_waiting > 0:
-            sensor_input = self.ser.readline().decode('utf-8').rstrip()
-            # this is to ensure that we are receiving a json formatted string
-            try:
-                self.sensors = json.loads(sensor_input)
-            except:
-                print("failed to parse json")
+    # def read(self):
+    #     if self.ser.in_waiting > 0:
+    #         sensor_input = self.ser.readline().decode('utf-8').rstrip()
+    #         # this is to ensure that we are receiving a json formatted string
+    #         try:
+    #             self.sensors = json.loads(sensor_input)
+    #         except:
+    #             print("failed to parse json")
 
-        return self.sensors
+    #     return self.sensors
 
     """ write()
     Input:
@@ -166,7 +166,7 @@ class ArduinoComms:
         self.simulation_update(rmdVerified, rmpVerified, lmdVerified, lmpVerified)
 
         # write to serial
-        self.ser.write(output.encode('utf-8'))
+        # self.ser.write(output.encode('utf-8'))
 
     """ print_all_values()
     input:  void
@@ -174,22 +174,24 @@ class ArduinoComms:
     prints the sensor values in a dictionary
     """
     def print_all_values(self):
-        println(self.sensors)
+        print(self.sensors)
 
 
     # ------------------------ Simulation ------------------------ #
     def simulation_update(self, rmd, rmp, lmd, lmp):
         # update odometer
         if rmd == MotorDirection.FORWARDS and lmd == MotorDirection.FORWARDS:
-            odometer += (rmp + lmp) / 2
+            self.odometer += (rmp + lmp) / 2
         elif rmd == MotorDirection.BACKWARDS and lmd == MotorDirection.BACKWARDS:
-            odometer -= (rmp + lmp) / 2
+            self.odometer -= (rmp + lmp) / 2
         
         # update heading
         elif rmd == MotorDirection.FORWARDS and lmd == MotorDirection.BACKWARDS: # right turn
-            heading += 10
+            print("----- right turn -----")
+            self.heading += 10
         elif rmd == MotorDirection.BACKWARDS and lmd == MotorDirection.FORWARDS: # left turn
-            heading -= 10
+            print("----- left turn -----")
+            self.heading -= 10
     
     def simulation_reset_odometer(self):
         self.odometer = 0
@@ -198,7 +200,7 @@ class ArduinoComms:
         return self.odometer
 
     def simulation_print_state(self):
-        print("heading: " + self.heading + ", odometer" + self.odometer)
+        print("heading: " + str(self.heading) + ", odometer: " + str(self.odometer))
 
 
 

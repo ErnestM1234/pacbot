@@ -1,4 +1,4 @@
-from sensorTesting import *
+from .sensorTesting import *
 
 WALL_STOP_DIST = 5 # cm
 
@@ -61,11 +61,12 @@ class ArduinoMotors:
     """
     def turn_right(self):
         # todo: add right/left adjustment
-        target_heading = self.arduino.getHeading() + 90
-        while (self.arduino.getHeading() - target_heading > 0):
+        target_heading = (self.arduino.getHeading() + 90) % 360
+        while (abs(target_heading - self.arduino.getHeading()) > 5):
             # todo: adjust 350 value and/or rework logic
-            if (target_heading > 0 and self.arduino.getHeading() > 350): # handle case when robot's heading must pass 0 degrees
-                target_heading -= 360
+            print("ArduinoMotors: turning right")
+            # if (target_heading > 0 and self.arduino.getHeading() > 350): # handle case when robot's heading must pass 0 degrees
+            #    target_heading -= 360
             self.rotate_right()
         self.stop()
     
@@ -77,10 +78,11 @@ class ArduinoMotors:
     def turn_left(self):
         # todo: add right/left adjustment
         target_heading = self.arduino.getHeading() - 90
-        while (self.arduino.getHeading() - target_heading > 0):
+        while (abs(target_heading - self.arduino.getHeading()) > 5):
             # todo: adjust 350 value and/or rework logic
-            if (target_heading < 0 and self.arduino.getHeading() < 10): # handle case when robot's heading must pass 0 degrees
-                target_heading += 360
+            print("ArduinoMotors: turning left")
+            # if (target_heading < 0 and self.arduino.getHeading() < 10): # handle case when robot's heading must pass 0 degrees
+            #    target_heading += 360
             self.rotate_left()
         self.stop()
 
@@ -160,7 +162,7 @@ class ArduinoMotors:
     moves robot forward at power 20 (note this does not check for obstacles)
     """
     def move_forwards(self):
-        self.arduino.write(MotorDirection.FORWARD, 20, MotorDirection.FORWARD, 20)
+        self.arduino.write(MotorDirection.FORWARDS, 20, MotorDirection.FORWARDS, 20)
 
     """ move_backwards()
     input:  void

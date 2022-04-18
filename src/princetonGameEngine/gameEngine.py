@@ -1,6 +1,7 @@
 #!/usr/bin/env python3
 
 import os, sys, logging
+import time
 import robomodules as rm
 from messages import *
 from pacbot.variables import game_frequency, ticks_per_update
@@ -27,10 +28,6 @@ class GameEngine(rm.ProtoModule):
         light_state = StateConverter.convert_game_state_to_light(self.game)
         self.write(light_state.SerializeToString(), MsgType.LIGHT_STATE)
 
-        # how to write a command
-        new_msg = PacmanCommand()
-        new_msg.dir = PacmanCommand.STOP
-        self.write(new_msg.SerializeToString(), MsgType.PACMAN_COMMAND)
 
     def msg_received(self, msg, msg_type):
         if msg_type == MsgType.PACMAN_LOCATION:
@@ -54,6 +51,30 @@ class GameEngine(rm.ProtoModule):
             logging.info("Restarting...")
             self.game.restart()
             self._write_state()
+        elif char == "n":
+            # how to write a command
+            new_msg = PacmanCommand()
+            new_msg.dir = PacmanCommand.NORTH
+            self.write(new_msg.SerializeToString(), MsgType.PACMAN_COMMAND)
+            print("command: North")
+        elif char == "s":
+            # how to write a command
+            new_msg = PacmanCommand()
+            new_msg.dir = PacmanCommand.SOUTH
+            self.write(new_msg.SerializeToString(), MsgType.PACMAN_COMMAND)
+            print("command: South")
+        elif char == "e":
+            # how to write a command
+            new_msg = PacmanCommand()
+            new_msg.dir = PacmanCommand.EAST
+            self.write(new_msg.SerializeToString(), MsgType.PACMAN_COMMAND)
+            print("command: East")
+        elif char == "w":
+            # how to write a command
+            new_msg = PacmanCommand()
+            new_msg.dir = PacmanCommand.WEST
+            self.write(new_msg.SerializeToString(), MsgType.PACMAN_COMMAND)
+            print("command: West")
         elif char == "p":
             if (self.game.play):
                 logging.info('Game is paused')
@@ -76,6 +97,11 @@ def main():
     print('    r - restart')
     print('    p - (un)pause')
     print('    q - quit')
+    print('------------')
+    print('    n - north')
+    print('    s - south')
+    print('    e - east')
+    print('    w - west')
 
     engine.run()
 

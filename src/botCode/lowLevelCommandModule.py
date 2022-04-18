@@ -44,9 +44,11 @@ class LowLevelCommandModule(rm.ProtoModule):
             (self.current_dir == PacmanCommand.WEST and cmd  == PacmanCommand.EAST)
 
     def _move_forward(self):
+        print("move forwards")
         self.bot.move_cells(1)
 
     def _turn_right(self):
+        print("turn right")
         self.bot.turn_right() # change physical direction
         if self.current_dir == PacmanCommand.EAST: # update inner state of robot accordingly
             self.current_dir = PacmanCommand.SOUTH
@@ -58,6 +60,7 @@ class LowLevelCommandModule(rm.ProtoModule):
             self.current_dir = PacmanCommand.EAST
             
     def _turn_left(self):
+        print("turn left")
         self.bot.turn_left()
         if self.current_dir == PacmanCommand.EAST:
             self.current_dir = PacmanCommand.NORTH
@@ -116,6 +119,7 @@ class LowLevelCommandModule(rm.ProtoModule):
     def tick(self):
         if self.current_command:
             self._execute_command()
+            self.bot.arduino.simulation_print_state() # print sim state
             time.sleep(1) # todo: remove this later
 
     def kill(self):
