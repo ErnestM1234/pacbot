@@ -29,7 +29,7 @@ MAG_Z           - integer (??)
 
 input json string format (no new lines until end): 
 
-{ 
+{
 "LEFT_ENCODER":0,     "RIGHT_ENCODER":0, 
 "LEFT_DISTANCE":0,    "RIGHT_DISTANCE":0,
 "LEFT_DIAG_DIST":0,   "RIGHT_DIAG_DIST":0,  "FORWARD_DIST":0,
@@ -66,6 +66,17 @@ class MotorDirection(Enum):
     BACKWARDS = 1
     STOP = 2
 
+
+"""
+ArduinoComms methods:
+closeComms()
+readSensor()
+getHeading()
+read()
+write()
+print_all_values()
+"""
+
 class ArduinoComms:
     def __init__(self):
         self.sensors = {} # holds the most recent signal from arduino to pi
@@ -73,18 +84,19 @@ class ArduinoComms:
         self.ser = serial.Serial('/dev/ttyS0', 9600, timeout=1)
         self.ser.reset_input_buffer()
         self.heading = 0
+        self.odometer=0
 
     """ closeComms()
+    Input:  void
+    Output: void
     Closes serial ports. Call this at the end of using Ardunio Comms
     """
     def closeComms(self):
         self.ser.close()
 
     """ readSensor()
-    Input:
-        sensor - a valid sensor name
-    Output:
-        the current value of the specified sensor (does not run update)
+    Input:  sensor - a valid sensor name
+    Output: the current value of the specified sensor (does not run update)
     """
     def readSensor(self, sensor):
         try:
@@ -94,14 +106,14 @@ class ArduinoComms:
         
         return sensorValue
 
-    """
+    """ getHeading()
     Brian
     This function returns the heading of the pacbot (current direction it is facing).
     This function returns an integer number from 0 to 360.
     North, on the game field, is 0 degrees.
     """
     def getHeading(self):
-        return 0
+        return self.heading
 
     """ read()
     input:  void
@@ -119,7 +131,7 @@ class ArduinoComms:
 
         return self.sensors
 
-    """
+    """ write()
     Input:
         rightMotorDirection     - direction of right motor spin
         rightMotorPower         - power of right motor
@@ -150,6 +162,9 @@ class ArduinoComms:
         lmp = str(lmpVerified).zfill(3)
         output = "{rmd:" + rmd + ",rmp:" + rmp + ",lmd:" + lmd + ",lmp:" + lmp + "}"
 
+        # for testing purposes comment out when not testing
+        self.simulation_update(rmdVerified, rmpVerified, lmdVerified, lmpVerified)
+
         # write to serial
         self.ser.write(output.encode('utf-8'))
 
@@ -159,7 +174,32 @@ class ArduinoComms:
     prints the sensor values in a dictionary
     """
     def print_all_values(self):
-        print(self.sensors)
+        println(self.sensors)
+
+
+    # ------------------------ Simulation ------------------------ #
+    def simulation_update(self, rmd, rmp, lmd, lmp):
+        # update odometer
+        if rmd == MotorDirection.FORWARDS and lmd == MotorDirection.FORWARDS:
+            odometer += (rmp + lmp) / 2
+        elif rmd == MotorDirection.BACKWARDS and lmd == MotorDirection.BACKWARDS:
+            odometer -= (rmp + lmp) / 2
+        
+        # update heading
+        elif rmd == MotorDirection.FORWARDS and lmd == MotorDirection.BACKWARDS: # right turn
+            heading += 10
+        elif rmd == MotorDirection.BACKWARDS and lmd == MotorDirection.FORWARDS: # left turn
+            heading -= 10
+    
+    def simulation_reset_odometer(self):
+        self.odometer = 0
+
+    def simulation_get_odometer(self):
+        return self.odometer
+
+    def simulation_print_state(self):
+        print("heading: " + self.heading + ", odometer" + self.odometer)
+
 
 
 # if __name__ == '__main__':

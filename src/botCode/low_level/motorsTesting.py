@@ -10,19 +10,22 @@ class Directions(Enum):
     WEST = 270
 
 """
-ArduinoMotors methods:
+class ArduinoMotors methods:
 
 rotate_right()
 rotate_left()
 turn_right()
 turn_left()
 
-faceNorth()
-faceSouth()
-faceEast()
-faceWest()
+face_north()
+face_south()
+face_east()
+face_west()
 
-moveForwards()
+move_forwards()
+move_backwards()
+move_dist() ** currently unimplemented **
+move_cells() ** currently unimplemented **
 stop()
 
 """
@@ -30,7 +33,8 @@ stop()
 class ArduinoMotors:
     def __init__(self):
         self.arduino = ArduinoComms()
-        self.heading = 0.0
+        self.heading = 0
+        self.odometer = 0
 
     # ------------------------ Rotations ------------------------ #
     """ rotate_right()
@@ -143,21 +147,51 @@ class ArduinoMotors:
             heading = self.arduino.getHeading()
             if heading < Directions.WEST + 3 and heading >  Directions.WEST + 360 - 3: # stop with error +/- 3 deg
                 break
-            elif heading > Directions.EAST and heading < Directions.WEST: # go right
+            elif heading > Directions.EAST and heading < Directions.WEST:   # go right
                 self.rotate_right()
             else:                                                           # go left
                 self.rotate_left()
         self.stop()
 
     # ------------------------ Go/Stop ------------------------ #
-    """ moveForwards()
+    """ move_forwards()
     input:  void
     return: void
-    moves robot forward at power 20
+    moves robot forward at power 20 (note this does not check for obstacles)
     """
-    def moveForwards(self):
+    def move_forwards(self):
         self.arduino.write(MotorDirection.FORWARD, 20, MotorDirection.FORWARD, 20)
 
+    """ move_backwards()
+    input:  void
+    return: void
+    moves robot backwards at power 20 (note this does not check for obstacles)
+    """
+    def move_backwards(self):
+        self.arduino.write(MotorDirection.BACKWARDS, 20, MotorDirection.BACKWARDS, 20)
+
+    """ move_dist()
+    input:  dist - mm to move forwards
+    return: void
+    moves robot forwards specified distance in mm
+    """
+    def move_dist(self, dist):
+        # this is a simulation implementation not real!!
+        self.arduino.simulation_reset_odometer();
+        while self.arduino.odometer < dist:
+            self.move_forwards()
+
+    """ move_cells()
+    input:  dist - number of cells to move forwards
+    return: void
+    moves robot forwards specified distance in number of cells, then stops
+    """
+    def move_cells(self, dist):
+        # keep in mind: each passage is 7" wide, there is a .25" boundary between each
+        # this means we must move 7.25" or ~184 mm
+        self.move_dist(dist * 184)
+        self.stop()
+    
     """ stop()
     input:  void
     return: void
