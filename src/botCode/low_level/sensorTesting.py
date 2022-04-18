@@ -1,6 +1,7 @@
 from enum import Enum
 import serial
 import json
+import numpy as np
 
 """
 SENSOR INPUTS:
@@ -47,10 +48,9 @@ output json string format: '{
 """
 
 SENSOR_NAMES = {
-    "LEFT_ENCODER",     "RIGHT_ENCODER", 
-    "LEFT_DISTANCE",    "RIGHT_DISTANCE",
-    "LEFT_DIAG_DIST",   "RIGHT_DIAG_DIST",
-    "FORWARD_DIST",     "HEADING"
+    "ACCEL_X",  "ACCEL_Y",  "ACCEL_Z",
+    "GYRO_X",   "GYRO_Y",   "GYRO_Z",
+    "MAG_X",    "MAG_Y",    "MAG_Z"
 }
 
 
@@ -90,13 +90,70 @@ class ArduinoComms:
         return self.sensors[sensor]
 
     """
-    Brian
+    Brian and Boaz
+    This function returns the gyro reading of the pacbot as array
+    """
+    def getAccel(self):
+        return np.array([self.readSensor("ACCEL_X"), self.readSensor("ACCEL_Y"),  self.readSensor("ACCEL_Z")])
+
+    """
+    Brian and Boaz
+    This function returns the gyro reading of the pacbot as array
+    """
+    def getGyro(self):
+        return np.array([self.readSensor("GYRO_X"), self.readSensor("GYRO_Y"),  self.readSensor("GYRO_Z")])
+
+    """
+    Brian and Boaz
+    This function returns the magnetometer reading of the pacbot as array
+    """
+    def getMag(self):
+        return np.array([self.readSensor("MAG_X"), self.readSensor("MAG_Y"),  self.readSensor("MAG_Z")])
+
+
+    """
+    Brian and Boaz
     This function returns the heading of the pacbot (current direction it is facing).
     This function returns an integer number from 0 to 360.
     North, on the game field, is 0 degrees.
     """
     def getHeading(self):
-        return None
+
+        ACCEL_X = self.getAccel()[0]
+        ACCEL_Y = self.getAccel()[1]
+        ACCEL_Z = self.getAccel()[2]
+
+        ACCEL = np.array([ACCEL_X, ACCEL_Y, ACCEL_Z])
+
+        """
+        GYRO_X = self.getGyro()[0]
+        GYRO_Y = self.getGyro()[1]
+        GYRO_Z = self.getGyro()[2]
+        """
+
+
+        MAX_X = self.getMag()[0]
+        MAG_Y = self.getMag()[1]
+        MAG_Z = self.getMag()[2]
+
+        # Algorithm for converting gyro and mag to heading
+        # https://stackoverflow.com/questions/35061294/how-to-calculate-heading-using-gyro-and-magnetometer
+
+        # Calculte aux
+        unit_x = np.array([1, 0, 0])
+        aux = np.cross(unit_x, np.cross(ACCEL, unit_x))
+
+        # Calculate roll
+        aux_y = aux[1]
+        aux_z = aux[2]
+        roll = np.arctan(aux.)
+
+        # Calculate pitch
+
+        # Calculate heading
+
+        return 
+
 
     """
     Reads a new set of values from the serial stream.
