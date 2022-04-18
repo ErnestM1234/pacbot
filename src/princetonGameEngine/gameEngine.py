@@ -87,7 +87,8 @@ class GameEngine(rm.ProtoModule):
 
     def msg_received(self, msg, msg_type):
         if msg_type == MsgType.LIGHT_STATE:
-            self.game.pacbot.update((msg.x, msg.y))
+            return
+            # self.game.pacbot.update((msg.x, msg.y))
 
     def tick(self):
         # this function will get called in a loop with FREQUENCY frequency
