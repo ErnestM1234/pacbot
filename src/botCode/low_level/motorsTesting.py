@@ -25,7 +25,6 @@ faceWest()
 moveForwards()
 stop()
 
-
 """
 
 class ArduinoMotors:
@@ -33,6 +32,7 @@ class ArduinoMotors:
         self.arduino = ArduinoComms()
         self.heading = 0.0
 
+    # ------------------------ Rotations ------------------------ #
     """ rotate_right()
     input:  void
     return: void
@@ -49,14 +49,19 @@ class ArduinoMotors:
     def rotate_left(self):
         self.arduino.write(MotorDirection.BACKWARDS, 20, MotorDirection.FORWARDS, 20)
 
+    # ------------------------ Turning ------------------------ #
     """ turn_right()
     input:  void
     return: void
     turns robot 90 degrees to the right, then stops
     """
     def turn_right(self):
-        old_heading = self.arduino.getHeading()
-        while abs(old_heading - self.arduino.getHeading()) > 90:
+        # todo: add right/left adjustment
+        target_heading = self.arduino.getHeading() + 90
+        while (self.arduino.getHeading() - target_heading > 0):
+            # todo: adjust 350 value and/or rework logic
+            if (target_heading > 0 and self.arduino.getHeading() > 350): # handle case when robot's heading must pass 0 degrees
+                target_heading -= 360
             self.rotate_right()
         self.stop()
     
@@ -65,21 +70,25 @@ class ArduinoMotors:
     return: void
     turns robot 90 degrees to the left, then stops
     """
-    def turn_right(self):
-        old_heading = self.arduino.getHeading()
-        while abs(old_heading - self.arduino.getHeading()) < 90:
+    def turn_left(self):
+        # todo: add right/left adjustment
+        target_heading = self.arduino.getHeading() - 90
+        while (self.arduino.getHeading() - target_heading > 0):
+            # todo: adjust 350 value and/or rework logic
+            if (target_heading < 0 and self.arduino.getHeading() < 10): # handle case when robot's heading must pass 0 degrees
+                target_heading += 360
             self.rotate_left()
         self.stop()
 
-
+    # ------------------------ Directions ------------------------ #
     """ face_north()
     input:  void
     return: void
     turns robot to face north (error = +/- 3 deg), then stops
     """
     def face_north(self):
-        # decide whether to go right or left
         while True:
+            # decide whether to go right or left
             heading = self.arduino.getHeading()
             if heading < Directions.NORTH + 3 and heading >  Directions.NORTH + 360 - 3: # stop with error +/- 3 deg
                 break
@@ -95,8 +104,8 @@ class ArduinoMotors:
     turns robot to face north (error = +/- 3 deg), then stops
     """
     def face_south(self):
-        # decide whether to go right or left
         while True:
+            # decide whether to go right or left
             heading = self.arduino.getHeading()
             if heading < Directions.SOUTH + 3 and heading >  Directions.SOUTH + 360 - 3: # stop with error +/- 3 deg
                 break
@@ -140,6 +149,7 @@ class ArduinoMotors:
                 self.rotate_left()
         self.stop()
 
+    # ------------------------ Go/Stop ------------------------ #
     """ moveForwards()
     input:  void
     return: void
