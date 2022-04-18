@@ -15,22 +15,78 @@ FREQUENCY = game_frequency * ticks_per_update
 
 class GameEngine(rm.ProtoModule):
     def __init__(self, addr, port):
-        self.subscriptions = [MsgType.PACMAN_LOCATION]
+        self.subscriptions = [MsgType.LIGHT_STATE]
         super().__init__(addr, port, message_buffers, MsgType, FREQUENCY, self.subscriptions)
         self.loop.add_reader(sys.stdin, self.keypress)
 
         self.game = GameState()
 
-    def _write_state(self):
-        full_state = StateConverter.convert_game_state_to_full(self.game)
-        self.write(full_state.SerializeToString(), MsgType.FULL_STATE)
+    """ command_north()
+    input: void
+    output: void
+    send command for pacbot to go north
+    """
+    def command_north(self):
+        command = PacmanCommand()
+        command.dir = PacmanCommand.NORTH
+        self.write(command.SerializeToString(), MsgType.PACMAN_COMMAND)
+        print("command: North")
+    
+    """ command_south()
+    input: void
+    output: void
+    send command for pacbot to go south
+    """
+    def command_south(self):
+        command = PacmanCommand()
+        command.dir = PacmanCommand.SOUTH
+        self.write(command.SerializeToString(), MsgType.PACMAN_COMMAND)
+        print("command: South")
 
-        light_state = StateConverter.convert_game_state_to_light(self.game)
-        self.write(light_state.SerializeToString(), MsgType.LIGHT_STATE)
+    """ command_east()
+    input: void
+    output: void
+    send command for pacbot to go east
+    """
+    def command_east(self):
+        command = PacmanCommand()
+        command.dir = PacmanCommand.EAST
+        self.write(command.SerializeToString(), MsgType.PACMAN_COMMAND)
+        print("command: East")
+
+    """ command_west()
+    input: void
+    output: void
+    send command for pacbot to go west
+    """
+    def command_west(self):
+        command = PacmanCommand()
+        command.dir = PacmanCommand.WEST
+        self.write(command.SerializeToString(), MsgType.PACMAN_COMMAND)
+        print("command: West")
+    
+    """ command_stop()
+    input: void
+    output: void
+    send command for pacbot to stop
+    """
+    def command_stop(self):
+        command = PacmanCommand()
+        command.dir = PacmanCommand.STOP
+        self.write(command.SerializeToString(), MsgType.PACMAN_COMMAND)
+        print("command: stop")
+
+    def _write_state(self):
+        # full_state = StateConverter.convert_game_state_to_full(self.game)
+        # self.write(full_state.SerializeToString(), MsgType.FULL_STATE)
+
+        # light_state = StateConverter.convert_game_state_to_light(self.game)
+        # self.write(light_state.SerializeToString(), MsgType.LIGHT_STATE)
+        return
 
 
     def msg_received(self, msg, msg_type):
-        if msg_type == MsgType.PACMAN_LOCATION:
+        if msg_type == MsgType.LIGHT_STATE:
             self.game.pacbot.update((msg.x, msg.y))
 
     def tick(self):
@@ -52,29 +108,15 @@ class GameEngine(rm.ProtoModule):
             self.game.restart()
             self._write_state()
         elif char == "n":
-            # how to write a command
-            new_msg = PacmanCommand()
-            new_msg.dir = PacmanCommand.NORTH
-            self.write(new_msg.SerializeToString(), MsgType.PACMAN_COMMAND)
-            print("command: North")
+            self.command_north()
         elif char == "s":
-            # how to write a command
-            new_msg = PacmanCommand()
-            new_msg.dir = PacmanCommand.SOUTH
-            self.write(new_msg.SerializeToString(), MsgType.PACMAN_COMMAND)
-            print("command: South")
+            self.command_south()
         elif char == "e":
-            # how to write a command
-            new_msg = PacmanCommand()
-            new_msg.dir = PacmanCommand.EAST
-            self.write(new_msg.SerializeToString(), MsgType.PACMAN_COMMAND)
-            print("command: East")
+            self.command_east()
         elif char == "w":
-            # how to write a command
-            new_msg = PacmanCommand()
-            new_msg.dir = PacmanCommand.WEST
-            self.write(new_msg.SerializeToString(), MsgType.PACMAN_COMMAND)
-            print("command: West")
+            self.command_west()
+        elif char == "s":
+            self.command_stop()
         elif char == "p":
             if (self.game.play):
                 logging.info('Game is paused')

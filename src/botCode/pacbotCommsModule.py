@@ -50,6 +50,7 @@ class PacbotServerClient(rm.ProtoModule):
     def get_state(self):
         return self.state
 
+# this connects to the pacbot('s sever)
 class PacbotServerCommsModule(rm.ProtoModule):
     def __init__(self, server_addr, server_port, local_addr, local_port):
         self.subscriptions = [MsgType.PACMAN_LOCATION]

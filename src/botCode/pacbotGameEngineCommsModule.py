@@ -12,7 +12,7 @@ LOCAL_ADDRESS = os.environ.get("LOCAL_ADDRESS","localhost") # always on local ho
 LOCAL_PORT = os.environ.get("LOCAL_PORT", 11295)
 
 GAME_ENGINE_ADDRESS = os.environ.get("LOCAL_ADDRESS","localhost")
-#LOCAL_ADDRESS = os.environ.get("LOCAL_ADDRESS","192.168.1.55") # some other IP
+# LOCAL_ADDRESS = os.environ.get("LOCAL_ADDRESS","192.168.1.55") # some other IP
 GAME_ENGINE_PORT = os.environ.get("LOCAL_PORT", 11293)
 
 SERVER_FREQUENCY = 0
@@ -54,7 +54,7 @@ class PacbotGameEngineClient(rm.ProtoModule):
 
 class PacbotGameEngineCommsModule(rm.ProtoModule):
     def __init__(self, game_engine_addr, game_engine_port, local_addr, local_port):
-        self.subscriptions = [MsgType.PACMAN_LOCATION]
+        self.subscriptions = [MsgType.LIGHT_STATE]
         # this connects to the local server
         super().__init__(local_addr, local_port, message_buffers, MsgType, LOCAL_FREQUENCY, self.subscriptions)
         # this connects to the game engine
@@ -62,9 +62,9 @@ class PacbotGameEngineCommsModule(rm.ProtoModule):
         self.game_engine_module.connect()
 
     def msg_received(self, msg, msg_type):
-        # broad cast information received from pacbot state to the game engine
-        if msg_type == MsgType.PACMAN_LOCATION:
-           self.game_engine_module.write(msg.SerializeToString(), MsgType.PACMAN_LOCATION)
+        if msg_type == MsgType.LIGHT_STATE:
+            # broadcast state to Game Enginex
+            self.game_engine_module.write(msg.SerializeToString(), MsgType.LIGHT_STATE)
         return
 
     def tick(self):
