@@ -212,7 +212,7 @@ class ArduinoComms:
     """
     def read(self):
         if self.ser.in_waiting > 0:
-            sensor_input = self.ser.readline().decode('utf-8').rstrip()
+            sensor_input = self.ser.readline().decode('ascii').rstrip()
             print(self.ser.readline())
             # this is to ensure that we are receiving a json formatted string
             try:
