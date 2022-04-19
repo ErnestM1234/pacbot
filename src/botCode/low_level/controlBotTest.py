@@ -5,13 +5,12 @@ from motorsTesting import *
 
 # goes forwards and stops at a wall
 def main():
-    char = sys.stdin.read(1)
     
     bot = ArduinoMotors()
     bot.move_forwards()
     while True:
         bot.arduino.read()
-
+        char = sys.stdin.read(1)
         if char == "f":
             bot.move_forwards()
             print("forwards")
