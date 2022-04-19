@@ -169,19 +169,19 @@ class ArduinoComms:
         # Calculate roll
         aux_y = aux[1]
         aux_z = aux[2]
-        roll = np.arctan(aux_y/aux_z)
+        roll = np.arctan2(aux_y/aux_z)
 
         # Calculate pitch
         y = -ACCEL_X
         x = sqrt(ACCEL_Y**2 + ACCEL_Z**2)
-        pitch = atan2(y, x) * 180/pi
+        pitch = atan2(y, x)
 
         # Calculate heading
         y = -MAG_Y*cos(roll) + MAG_Z*sin(roll)
         x = MAG_X*cos(pitch) + MAG_Y*sin(roll)*sin(pitch) + MAG_Z*cos(roll)*sin(pitch)
-        heading = atan2(y, x)
+        heading = atan2(y, x) * 180/pi
 
-        return heading
+        return heading 
 
     """ getOdometer()
     input:  void
