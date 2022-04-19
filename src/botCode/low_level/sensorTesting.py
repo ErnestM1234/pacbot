@@ -239,8 +239,8 @@ class ArduinoComms:
     """
     def write(self, rightMotorDirection, rightMotorPower, leftMotorDirection, leftMotorPower):
         # check input validity
-        rmdVerified = rightMotorDirection if (rightMotorDirection != 0 or rightMotorDirection != 1) else 2 # if not known value return stop
-        lmdVerified = leftMotorDirection  if (leftMotorDirection  != 0 or leftMotorDirection  != 1) else 2 # if not known value return stop
+        rmdVerified = rightMotorDirection if (rightMotorDirection != 0 and rightMotorDirection != 1) else 2 # if not known value return stop
+        lmdVerified = leftMotorDirection  if (leftMotorDirection  != 0 and leftMotorDirection  != 1) else 2 # if not known value return stop
         rmpVerified = max(min(rightMotorPower,255),0) # 0 < rmd < 255
         lmpVerified = max(min(leftMotorPower, 255),0) # 0 < lmd < 255
 
