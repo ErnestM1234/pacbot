@@ -258,7 +258,7 @@ class ArduinoComms:
         lmd = str(lmdVerified).zfill(3)
         lmp = str(lmpVerified).zfill(3)
         # output = "{rmd:" + rmd + ",rmp:" + rmp + ",lmd:" + lmd + ",lmp:" + lmp + "}"
-        output = "{rmd:" + str(MotorDirection.FORWARDS) + ",rmp:" + rmp + ",lmd:" + str(MotorDirection.FORWARDS) + ",lmp:" + lmp + "}"
+        output = "{rmd:" + MotorDirection.FORWARDS + ",rmp:" + rmp + ",lmd:" + MotorDirection.FORWARDS + ",lmp:" + lmp + "}"
 
         print(output)
 
