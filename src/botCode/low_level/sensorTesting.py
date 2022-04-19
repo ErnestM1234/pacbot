@@ -247,6 +247,8 @@ class ArduinoComms:
                 self.sensors[key] = value
         
             # update odometer
+            print("L enc: " + str(self.sensors["LEFT_ENCODER"]))
+            print("R enc: " + str(self.sensors["RIGHT_ENCODER"]))
             self.updateOdometer()
 
         return self.sensors
