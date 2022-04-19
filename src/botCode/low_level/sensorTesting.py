@@ -177,7 +177,7 @@ class ArduinoComms:
         pitch = atan2(y, x) * 180/pi
 
         # Calculate heading
-        y = -MAG_X*cos(roll) + MAG_Z*sin(roll)
+        y = -MAG_Y*cos(roll) + MAG_Z*sin(roll)
         x = MAG_X*cos(pitch) + MAG_Y*sin(roll)*sin(pitch) + MAG_Z*cos(roll)*sin(pitch)
         heading = atan2(y, x)
 
