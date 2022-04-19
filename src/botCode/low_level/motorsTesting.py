@@ -200,4 +200,4 @@ class ArduinoMotors:
     stops robot from moving
     """
     def stop(self):
-        self.arduino.write(MotorDirection.STOP, 0, MotorDirection.STOP, 0)
+        self.arduino.write(MotorDirection.FORWARDS, 0, MotorDirection.FORWARDS, 0)
