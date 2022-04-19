@@ -258,6 +258,7 @@ class ArduinoComms:
         lmd = str(lmdVerified).zfill(3)
         lmp = str(lmpVerified).zfill(3)
         output = "{rmd:" + rmd + ",rmp:" + rmp + ",lmd:" + lmd + ",lmp:" + lmp + "}"
+        print(output)
 
         # for testing purposes comment out when not testing
         # self.simulation_update(rmdVerified, rmpVerified, lmdVerified, lmpVerified)
