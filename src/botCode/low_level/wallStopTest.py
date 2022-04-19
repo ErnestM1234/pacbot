@@ -1,10 +1,8 @@
-import json
 from motorsTesting import *
 
 # goes forwards and stops at a wall
 def main():
     bot = ArduinoMotors()
-
     bot.move_forwards()
     while True:
         bot.arduino.read()

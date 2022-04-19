@@ -1,4 +1,6 @@
+from audioop import avg
 from enum import Enum
+import math
 import serial
 import json
 import numpy as np
@@ -7,6 +9,7 @@ from math import sin as sin
 from math import atan2 as atan2
 from math import sqrt as sqrt
 from math import pi as pi
+import time
 
 
 """
@@ -103,9 +106,13 @@ class ArduinoComms:
         self.ser = serial.Serial('/dev/ttyS0', 9600, timeout=1)
         self.ser.reset_input_buffer()
         self.heading = 90 # pacbot starts by facing east
+
         self.odometer = 0
         self.odometer_left = 0
         self.odometer_right = 0
+
+        self.last_time_measured = 0
+
 
     """ closeComms()
     Input:  void
@@ -197,7 +204,7 @@ class ArduinoComms:
         # todo: this function
         # I think encoders return the position of the motor
         # we can measure the average value for how much each individual encoder moves
-        self.odometer = ((self.odometer_left - self.sensors["LEFT_ENCODER"]) + (self.odometer_right - self.sensors["RIGHT_ENCODER"])) / 2
+        # self.odometer = ((self.odometer_left - self.sensors["LEFT_ENCODER"]) + (self.odometer_right - self.sensors["RIGHT_ENCODER"])) / 2
         return self.odometer
     
     """ resetOdometer()
@@ -206,9 +213,22 @@ class ArduinoComms:
     sets odometer value to 0
     """
     def resetOdometer(self):
-        self.odometer_left = self.sensors["LEFT_ENCODER"]
-        self.odometer_right = self.sensors["RIGHT_ENCODER"]
+        # self.odometer_left = self.sensors["LEFT_ENCODER"]
+        # self.odometer_right = self.sensors["RIGHT_ENCODER"]
         self.odometer = 0
+
+    """ resetOdometer()
+    input:  void
+    output: void
+    update odometer
+    """
+    def updateOdometer(self):
+        curr_time = time.time()
+        d_time = (curr_time - self.last_time_measured)
+        avg_enc = ((self.sensors["LEFT_ENCODER"]) + (self.sensors["RIGHT_ENCODER"])) / 2
+        rpm_to_radians_per_sec = math.pi * 2 / 60 
+        self.odometer += avg_enc * d_time * rpm_to_radians_per_sec
+        self.last_time_measured = curr_time
 
     """ read()
     input:  void
@@ -223,9 +243,10 @@ class ArduinoComms:
             print(sensor_input)
             for key, value in json.loads(sensor_input).items():
                 self.sensors[key] = value
-            # except:
-            #     print("failed to parse json")
-        # update odometer values for calculation
+        
+            # update odometer
+            self.updateOdometer()
+
         return self.sensors
 
     """ write()
@@ -239,26 +260,35 @@ class ArduinoComms:
     """
     def write(self, rightMotorDirection, rightMotorPower, leftMotorDirection, leftMotorPower):
         # check input validity
-        rmdVerified = rightMotorDirection if (rightMotorDirection != 0 and rightMotorDirection != 1) else 2 # if not known value return stop
-        lmdVerified = leftMotorDirection  if (leftMotorDirection  != 0 and leftMotorDirection  != 1) else 2 # if not known value return stop
         rmpVerified = max(min(rightMotorPower,255),0) # 0 < rmd < 255
         lmpVerified = max(min(leftMotorPower, 255),0) # 0 < lmd < 255
 
 
         # output integer format must be in three digits
-        self.motorState["rmd"] = rmdVerified
+        self.motorState["rmd"] = rightMotorDirection
         self.motorState["rmp"] = rmpVerified
-        self.motorState["lmd"] = lmdVerified
+        self.motorState["lmd"] = leftMotorDirection
         self.motorState["lmp"] = lmpVerified
 
 
         # convert to string
-        rmd = str(rmdVerified).zfill(3)
+        # rmd = str(rmdVerified).zfill(3)
         rmp = str(rmpVerified).zfill(3)
-        lmd = str(lmdVerified).zfill(3)
+        # lmd = str(lmdVerified).zfill(3)
         lmp = str(lmpVerified).zfill(3)
         # output = "{rmd:" + rmd + ",rmp:" + rmp + ",lmd:" + lmd + ",lmp:" + lmp + "}"
-        output = "{rmd:" + "000" + ",rmp:" + rmp + ",lmd:" + "000" + ",lmp:" + lmp + "}"
+
+        if rightMotorDirection == MotorDirection.FORWARDS:
+            rmd = "000"
+        else:
+            rmd = "001"
+
+        if leftMotorDirection == MotorDirection.FORWARDS:
+            lmd = "000"
+        else:
+            lmd = "001"
+        
+        output = "{rmd:" + rmd + ",rmp:" + rmp + ",lmd:" + lmd + ",lmp:" + lmp + "}"
 
         print(output)
 
