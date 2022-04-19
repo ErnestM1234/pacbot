@@ -215,7 +215,8 @@ class ArduinoComms:
             sensor_input = self.ser.readline().decode('ascii').rstrip()
             # this is to ensure that we are receiving a json formatted string
             try:
-                self.sensors = json.loads(sensor_input)
+                for key, value in json.loads(sensor_input).items():
+                    self.sensors[key] = value
             except:
                 print("failed to parse json")
         # update odometer values for calculation
