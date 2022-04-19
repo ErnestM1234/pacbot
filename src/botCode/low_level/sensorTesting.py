@@ -93,7 +93,12 @@ print_all_values()
 
 class ArduinoComms:
     def __init__(self):
-        self.sensors = {} # holds the most recent signal from arduino to pi
+        self.sensors = {"LEFT_ENCODER":0,     "RIGHT_ENCODER":0, 
+    "LEFT_DISTANCE":0,    "RIGHT_DISTANCE":0,
+    "LEFT_DIAG_DIST":0,   "RIGHT_DIAG_DIST":0,  "FORWARD_DIST":100,
+    "ACC_X":0,            "ACC_Y":0,            "ACC_Z":0,
+    "GYRO_X":0,           "GYRO_Y":0,           "GYRO_Z":0,
+    "MAG_X":0,            "MAG_Y":0,            "MAG_Z":0} # holds the most recent signal from arduino to pi
         self.motorState = {"rmd":0,"rmp":0,"lmd":0,"lmp":0} # holds most recent signal sent from pi to arduino
         self.ser = serial.Serial('/dev/ttyS0', 9600, timeout=1)
         self.ser.reset_input_buffer()
