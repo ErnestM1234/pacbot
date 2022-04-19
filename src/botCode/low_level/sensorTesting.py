@@ -2,6 +2,12 @@ from enum import Enum
 import serial
 import json
 import numpy as np
+from math import cos as cos
+from math import sin as sin
+from math import atan2 as atan2
+from math import sqrt as sqrt
+from math import pi as pi
+
 
 """
 INPUTS:
@@ -138,10 +144,10 @@ class ArduinoComms:
         return np.array([self.readSensor("MAG_X"), self.readSensor("MAG_Y"),  self.readSensor("MAG_Z")])
 
 
-    """
-    Brian and Boaz
-    This function returns the heading of the pacbot (current direction it is facing).
-    This function returns an integer number from 0 to 360.
+    """ getHeading()
+    Input: void
+    Output: heading 0 to 360
+    Returns the heading of the pacbot (current direction it is facing), an integer number from 0 to 360.
     North, on the game field, is 0 degrees.
     """
     def getHeading(self):
@@ -149,21 +155,12 @@ class ArduinoComms:
         ACCEL_X = self.getAccel()[0]
         ACCEL_Y = self.getAccel()[1]
         ACCEL_Z = self.getAccel()[2]
-
+        
         ACCEL = np.array([ACCEL_X, ACCEL_Y, ACCEL_Z])
 
-        """
-        GYRO_X = self.getGyro()[0]
-        GYRO_Y = self.getGyro()[1]
-        GYRO_Z = self.getGyro()[2]
-        """
-
-
-        MAX_X = self.getMag()[0]
+        MAG_X = self.getMag()[0]
         MAG_Y = self.getMag()[1]
         MAG_Z = self.getMag()[2]
-
-        # Algorithm for converting gyro and mag to heading
         
         # Calculte aux
         unit_x = np.array([1, 0, 0])
@@ -172,15 +169,19 @@ class ArduinoComms:
         # Calculate roll
         aux_y = aux[1]
         aux_z = aux[2]
-        roll = np.arctan()
+        roll = np.arctan(aux_y/aux_z)
 
         # Calculate pitch
+        y = -ACCEL_X
+        x = sqrt(ACCEL_Y**2 + ACCEL_Z**2)
+        pitch = atan2(y, x) * 180/pi
 
         # Calculate heading
+        y = -MAG_X*cos(roll) + MAG_Z*sin(roll)
+        x = MAG_X*cos(pitch) + MAG_Y*sin(roll)*sin(pitch) + MAG_Z*cos(roll)*sin(pitch)
+        heading = atan2(y, x)
 
-        return 
-
-        return self.heading
+        return heading
 
     """ getOdometer()
     input:  void
