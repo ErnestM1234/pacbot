@@ -23,4 +23,7 @@ def main():
         elif char == "r":
             print("right")
             bot.rotate_right()
+        elif char == "s":
+            print("stop")
+            bot.stop()
 main()
