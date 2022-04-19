@@ -5,6 +5,7 @@ import os
 from messages import MsgType
 
 ADDRESS = os.environ.get("LOCAL_ADDRESS","localhost")
+# ADDRESS = os.environ.get("LOCAL_ADDRESS","10.24.106.144")
 PORT = os.environ.get("LOCAL_PORT", 11295)
 
 def main():
