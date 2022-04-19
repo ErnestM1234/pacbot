@@ -1,4 +1,4 @@
-from .sensorTesting import *
+from sensorTesting import *
 
 WALL_STOP_DIST = 50 # mm
 
