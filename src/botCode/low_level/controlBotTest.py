@@ -11,7 +11,7 @@ def main():
     while True:
         bot.arduino.read()
         print("odometer:" + str(bot.arduino.getOdometer()))
-        print("heading:" + str(bot.arduino.getHeading()))
+        # print("heading:" + str(bot.arduino.getHeading()))
         char = sys.stdin.read(1)
         if char == "f":
             bot.move_forwards()
