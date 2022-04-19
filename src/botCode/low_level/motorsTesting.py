@@ -1,6 +1,6 @@
 from .sensorTesting import *
 
-WALL_STOP_DIST = 5 # cm
+WALL_STOP_DIST = 50 # mm
 
 
 class Directions(Enum):
@@ -162,7 +162,7 @@ class ArduinoMotors:
     moves robot forward at power 20 (note this does not check for obstacles)
     """
     def move_forwards(self):
-        self.arduino.write(MotorDirection.FORWARDS, 20, MotorDirection.FORWARDS, 20)
+        self.arduino.write(MotorDirection.FORWARDS, 100, MotorDirection.FORWARDS, 100)
 
     """ move_backwards()
     input:  void

@@ -95,8 +95,8 @@ class ArduinoComms:
     def __init__(self):
         self.sensors = {} # holds the most recent signal from arduino to pi
         self.motorState = {"rmd":0,"rmp":0,"lmd":0,"lmp":0} # holds most recent signal sent from pi to arduino
-        # self.ser = serial.Serial('/dev/ttyS0', 9600, timeout=1)
-        # self.ser.reset_input_buffer()
+        self.ser = serial.Serial('/dev/ttyS0', 9600, timeout=1)
+        self.ser.reset_input_buffer()
         self.heading = 90 # pacbot starts by facing east
         self.odometer = 0
         self.odometer_left = 0
@@ -210,16 +210,16 @@ class ArduinoComms:
     output: a python dictionary containing all of the sensor values
     Reads a new set of values from the serial stream.
     """
-    # def read(self):
-    #     if self.ser.in_waiting > 0:
-    #         sensor_input = self.ser.readline().decode('utf-8').rstrip()
-    #         # this is to ensure that we are receiving a json formatted string
-    #         try:
-    #             self.sensors = json.loads(sensor_input)
-    #         except:
-    #             print("failed to parse json")
-    #     # update odometer values for calculation
-    #     return self.sensors
+    def read(self):
+        if self.ser.in_waiting > 0:
+            sensor_input = self.ser.readline().decode('utf-8').rstrip()
+            # this is to ensure that we are receiving a json formatted string
+            try:
+                self.sensors = json.loads(sensor_input)
+            except:
+                print("failed to parse json")
+        # update odometer values for calculation
+        return self.sensors
 
     """ write()
     Input:
@@ -253,10 +253,10 @@ class ArduinoComms:
         output = "{rmd:" + rmd + ",rmp:" + rmp + ",lmd:" + lmd + ",lmp:" + lmp + "}"
 
         # for testing purposes comment out when not testing
-        self.simulation_update(rmdVerified, rmpVerified, lmdVerified, lmpVerified)
+        # self.simulation_update(rmdVerified, rmpVerified, lmdVerified, lmpVerified)
 
         # write to serial
-        # self.ser.write(output.encode('utf-8'))
+        self.ser.write(output.encode('utf-8'))
 
     """ print_all_values()
     input:  void

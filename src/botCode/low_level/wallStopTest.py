@@ -5,7 +5,7 @@ from motorsTesting import *
 def main():
     bot = ArduinoMotors()
 
-    bot.moveForwards(1)
+    bot.moveForwards()
     while True:
         bot.arduino.read()
         if bot.arduino.readSensor("FORWARD_DIST") < WALL_STOP_DIST:
