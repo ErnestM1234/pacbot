@@ -10,7 +10,7 @@ def main():
         bot.arduino.read()
         if bot.arduino.readSensor("FORWARD_DIST") < WALL_STOP_DIST:
             bot.stop()
-            print("done")
+            # print("done")
             return
 
 main()
