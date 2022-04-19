@@ -30,6 +30,8 @@ stop()
 
 """
 
+MOTOR_SPEED = 200
+
 class ArduinoMotors:
     def __init__(self):
         self.arduino = ArduinoComms()
@@ -43,7 +45,7 @@ class ArduinoMotors:
     Rotate robot right
     """
     def rotate_right(self):
-        self.arduino.write(MotorDirection.FORWARDS, 255, MotorDirection.BACKWARDS, 255)
+        self.arduino.write(MotorDirection.FORWARDS, MOTOR_SPEED, MotorDirection.BACKWARDS, MOTOR_SPEED)
 
     """ rotate_left()
     input:  void
@@ -51,7 +53,7 @@ class ArduinoMotors:
     Rotate robot left
     """
     def rotate_left(self):
-        self.arduino.write(MotorDirection.BACKWARDS, 255, MotorDirection.FORWARDS, 255)
+        self.arduino.write(MotorDirection.BACKWARDS, MOTOR_SPEED, MotorDirection.FORWARDS, MOTOR_SPEED)
 
     # ------------------------ Turning ------------------------ #
     """ turn_right()
@@ -162,7 +164,7 @@ class ArduinoMotors:
     moves robot forward at power 20 (note this does not check for obstacles)
     """
     def move_forwards(self):
-        self.arduino.write(MotorDirection.FORWARDS, 255, MotorDirection.FORWARDS, 255)
+        self.arduino.write(MotorDirection.FORWARDS, MOTOR_SPEED, MotorDirection.FORWARDS, MOTOR_SPEED)
 
     """ move_backwards()
     input:  void
@@ -170,7 +172,7 @@ class ArduinoMotors:
     moves robot backwards at power 20 (note this does not check for obstacles)
     """
     def move_backwards(self):
-        self.arduino.write(MotorDirection.BACKWARDS, 255, MotorDirection.BACKWARDS, 255)
+        self.arduino.write(MotorDirection.BACKWARDS, MOTOR_SPEED, MotorDirection.BACKWARDS, MOTOR_SPEED)
 
     """ move_dist()
     input:  dist - mm to move forwards
