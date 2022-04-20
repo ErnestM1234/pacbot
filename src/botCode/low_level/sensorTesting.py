@@ -172,7 +172,7 @@ class ArduinoComms:
         if abs(GYRO_Z) > 1:
             self.gyro_z += GYRO_Z * d_time
 
-        print("GYRO_X: " + "{:4.2f}".format(self.gyro_x) + " GYRO_Y: " + "{:4.2f}".format(self.gyro_y) + " GYRO_Z: " + "{:4.2f}".format(self.gyro_z))
+        # print("GYRO_X: " + "{:4.2f}".format(self.gyro_x) + " GYRO_Y: " + "{:4.2f}".format(self.gyro_y) + " GYRO_Z: " + "{:4.2f}".format(self.gyro_z))
 
         self.last_gyro_time = time.time()
 
