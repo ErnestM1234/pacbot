@@ -9,8 +9,8 @@ def mop(bot):
     while True:
         bot.arduino.read()
         print(str(bot.arduino.getOdometer()))
-        if bot.arduino.readSensor("FORWARD_DIST") < 30:
-            bot.arduino.resetOdometer()
+        # if bot.arduino.readSensor("FORWARD_DIST") < 30:
+        #     bot.arduino.resetOdometer()
     
         
         # char = input()
