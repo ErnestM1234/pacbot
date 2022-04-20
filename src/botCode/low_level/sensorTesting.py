@@ -243,8 +243,8 @@ class ArduinoComms:
             # this is to ensure that we are receiving a json formatted string
             for key, value in json.loads(sensor_input).items():
                 self.sensors[key] = value
-            print("ACC_X: " + self.sensors["ACC_X"] + " ACC_Y: " + self.sensors["ACC_Y"] + " ACC_Z: " + self.sensors["ACC_Z"])
-            print("MAG_X: " + self.sensors["MAG_X"] + " MAG_Y: " + self.sensors["MAG_Y"] + " MAG_Z: " + self.sensors["MAG_Z"])
+            print("ACC_X: " + str(self.sensors["ACC_X"]) + " ACC_Y: " + str(self.sensors["ACC_Y"]) + " ACC_Z: " + str(self.sensors["ACC_Z"]))
+            print("MAG_X: " + str(self.sensors["MAG_X"]) + " MAG_Y: " + str(self.sensors["MAG_Y"]) + " MAG_Z: " + str(self.sensors["MAG_Z"]))
 
 
         # update odometer
