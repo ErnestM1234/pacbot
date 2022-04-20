@@ -75,6 +75,7 @@ SENSOR_NAMES = [
     "MAG_X",            "MAG_Y",            "MAG_Z"
 ]
 
+RPM_TO_RADIANS_PER_NANSEC = math.pi * 2 / 60000000000 
 
 class MotorDirection(Enum):
     FORWARDS = 0
@@ -96,12 +97,13 @@ print_all_values()
 
 class ArduinoComms:
     def __init__(self):
-        self.sensors = {"LEFT_ENCODER":0,     "RIGHT_ENCODER":0, 
-    "LEFT_DISTANCE":0,    "RIGHT_DISTANCE":0,
-    "LEFT_DIAG_DIST":0,   "RIGHT_DIAG_DIST":0,  "FORWARD_DIST":100,
-    "ACC_X":0,            "ACC_Y":0,            "ACC_Z":0,
-    "GYRO_X":0,           "GYRO_Y":0,           "GYRO_Z":0,
-    "MAG_X":0,            "MAG_Y":0,            "MAG_Z":0} # holds the most recent signal from arduino to pi
+        self.sensors = {
+            "LEFT_ENCODER":0, "RIGHT_ENCODER":0, "LEFT_DISTANCE":100, "RIGHT_DISTANCE":100,
+            "LEFT_DIAG_DIST":100, "RIGHT_DIAG_DIST":100, "FORWARD_DIST":100,
+            "ACC_X":0, "ACC_Y":0, "ACC_Z":0,
+            "GYRO_X":0, "GYRO_Y":0, "GYRO_Z":0,
+            "MAG_X":0, "MAG_Y":0, "MAG_Z":0
+        } # holds the most recent signal from arduino to pi
         self.motorState = {"rmd":0,"rmp":0,"lmd":0,"lmp":0} # holds most recent signal sent from pi to arduino
         # open connection to arduino
         self.ser = serial.Serial('/dev/ttyS0', 9600, timeout=1)
@@ -130,6 +132,7 @@ class ArduinoComms:
     """
     def readSensor(self, sensor):
         if sensor not in SENSOR_NAMES:
+            print("sensor " + sensor + " not found")
             return None
         return self.sensors[sensor]
 
@@ -139,7 +142,7 @@ class ArduinoComms:
     Returns numpy array of accelerometer X, Y, Z values
     """
     def getAccel(self):
-        return np.array([self.readSensor("ACCEL_X"), self.readSensor("ACCEL_Y"),  self.readSensor("ACCEL_Z")])
+        return np.array([self.readSensor("ACC_X"), self.readSensor("ACC_Y"),  self.readSensor("ACC_Z")])
 
     """ getGyro()
     Input:  void
@@ -206,7 +209,6 @@ class ArduinoComms:
         # todo: this function
         # I think encoders return the position of the motor
         # we can measure the average value for how much each individual encoder moves
-        # self.odometer = ((self.odometer_left - self.sensors["LEFT_ENCODER"]) + (self.odometer_right - self.sensors["RIGHT_ENCODER"])) / 2
         return self.odometer
     
     """ resetOdometer()
@@ -215,8 +217,6 @@ class ArduinoComms:
     sets odometer value to 0
     """
     def resetOdometer(self):
-        # self.odometer_left = self.sensors["LEFT_ENCODER"]
-        # self.odometer_right = self.sensors["RIGHT_ENCODER"]
         self.odometer = 0
 
     """ resetOdometer()
@@ -228,8 +228,7 @@ class ArduinoComms:
         curr_time = time.time_ns()
         d_time = (curr_time - self.last_time_measured)
         avg_enc = ((self.sensors["LEFT_ENCODER"]) + (self.sensors["RIGHT_ENCODER"])) / 2
-        rpm_to_radians_per_sec = math.pi * 2 / 60000000000 
-        self.odometer += avg_enc * d_time * rpm_to_radians_per_sec
+        self.odometer += avg_enc * d_time * RPM_TO_RADIANS_PER_NANSEC
         self.last_time_measured = curr_time
 
     """ read()
@@ -238,17 +237,15 @@ class ArduinoComms:
     Reads a new set of values from the serial stream.
     """
     def read(self):
+        # read from input buffer
         if self.ser.in_waiting > 0:
             sensor_input = self.ser.readline().decode('ascii').rstrip()
             # this is to ensure that we are receiving a json formatted string
             # print(sensor_input)
             for key, value in json.loads(sensor_input).items():
                 self.sensors[key] = value
-        
-            # update odometer
-            # print("L enc: " + str(self.sensors["LEFT_ENCODER"]))
-            # print("R enc: " + str(self.sensors["RIGHT_ENCODER"]))
 
+        # update odometer
         self.updateOdometer()
         # print("odometer:" + str(self.getOdometer()))
 
