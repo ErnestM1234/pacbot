@@ -225,10 +225,10 @@ class ArduinoComms:
     update odometer
     """
     def updateOdometer(self):
-        curr_time = time.time()
+        curr_time = time.time_ns()
         d_time = (curr_time - self.last_time_measured)
         avg_enc = ((self.sensors["LEFT_ENCODER"]) + (self.sensors["RIGHT_ENCODER"])) / 2
-        rpm_to_radians_per_sec = math.pi * 2 / 60 
+        rpm_to_radians_per_sec = math.pi * 2 / 60000000000 
         self.odometer += avg_enc * d_time * rpm_to_radians_per_sec
         self.last_time_measured = curr_time
 
