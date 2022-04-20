@@ -154,7 +154,7 @@ class ArduinoComms:
         GYRO_X = self.readSensor("GYRO_X") / 4375;
         GYRO_Y = self.readSensor("GYRO_Y") / 4375;
         GYRO_Z = self.readSensor("GYRO_Z") / 4375;
-        print("GYRO_X: " + str(GYRO_X).zfill(6) + " GYRO_Y: " + str(GYRO_Y).zfill(6) + " GYRO_Z: " + str(GYRO_Z).zfill(6))
+        print("GYRO_X: " + "{:06.2f}".format(GYRO_X) + " GYRO_Y: " + "{:06.2f}".format(GYRO_Y) + " GYRO_Z: " + "{:06.2f}".format(GYRO_Z))
 
         return np.array([GYRO_X, GYRO_Y, GYRO_Z])
 
