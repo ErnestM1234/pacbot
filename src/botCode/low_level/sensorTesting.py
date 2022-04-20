@@ -150,7 +150,12 @@ class ArduinoComms:
     Returns numpy array of gyroscope X, Y, Z values
     """
     def getGyro(self):
-        return np.array([self.readSensor("GYRO_X"), self.readSensor("GYRO_Y"),  self.readSensor("GYRO_Z")])
+
+        GYRO_X = self.readSensor("GYRO_X") / 4375;
+        GYRO_Y = self.readSensor("GYRO_Y") / 4375;
+        GYRO_Z = self.readSensor("GYRO_Z") / 4375;
+
+        return np.array([GYRO_X, GYRO_Y, GYRO_Z])
 
     """ getMag()
     Input:  void
