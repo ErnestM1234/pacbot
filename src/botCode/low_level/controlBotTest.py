@@ -5,8 +5,8 @@ from motorsTesting import *
 
 # goes forwards and stops at a wall
 def mop(bot):
-    bot.move_forwards()
     while True:
+        bot.move_forwards()
         bot.arduino.read()
         print(str(bot.arduino.getOdometer()))
         if bot.arduino.readSensor("FORWARD_DIST") < 30:
