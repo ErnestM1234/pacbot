@@ -12,7 +12,8 @@ def main():
         bot.arduino.read()
         print("odometer:" + str(bot.arduino.getOdometer()))
         # print("heading:" + str(bot.arduino.getHeading()))
-        char = input()
+        char = ""
+        # char = input()
         if char == "f":
             bot.move_forwards()
             print("forwards")
