@@ -231,7 +231,6 @@ class ArduinoComms:
         rpm_to_radians_per_sec = math.pi * 2 / 60000000000 
         self.odometer += avg_enc * d_time * rpm_to_radians_per_sec
         self.last_time_measured = curr_time
-        print("here")
 
     """ read()
     input:  void
@@ -242,8 +241,8 @@ class ArduinoComms:
         if self.ser.in_waiting > 0:
             sensor_input = self.ser.readline().decode('ascii').rstrip()
             # this is to ensure that we are receiving a json formatted string
-            #try:
             print(sensor_input)
+            print("odometer:" + str(self.getOdometer()))
             for key, value in json.loads(sensor_input).items():
                 self.sensors[key] = value
         
