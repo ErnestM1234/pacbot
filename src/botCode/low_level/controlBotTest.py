@@ -10,7 +10,7 @@ def main():
     bot.stop()
     while True:
         bot.arduino.read()
-        print("heading:" + str(bot.arduino.getHeading()))
+        # print("heading:" + str(bot.arduino.getHeading()))
         # print(str(bot.arduino.getHeading()))
         char = ""
         # char = input()
