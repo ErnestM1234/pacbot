@@ -158,7 +158,10 @@ class ArduinoComms:
     Returns numpy array of magnetometer X, Y, Z values
     """
     def getMag(self):
-        return np.array([self.readSensor("MAG_X"), self.readSensor("MAG_Y"),  self.readSensor("MAG_Z")])
+        MAG_X = self.readSensor("MAG_X") / 2**15 * 6842
+        MAG_Y = self.readSensor("MAG_Y") / 2**15 * 6842
+        MAG_Z = self.readSensor("MAG_Z") / 2**15 * 6842
+        return np.array([MAG_X, MAG_Y, MAG_Z])
 
 
     """ getHeading()
