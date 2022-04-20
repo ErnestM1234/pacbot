@@ -186,7 +186,7 @@ class ArduinoComms:
         # Calculate roll
         aux_y = aux[1]
         aux_z = aux[2]
-        roll = np.arctan2(aux_y/aux_z)
+        roll = np.arctan2(aux_y, aux_z)
 
         # Calculate pitch
         y = -ACCEL_X
