@@ -241,7 +241,7 @@ class ArduinoComms:
         if self.ser.in_waiting > 0:
             sensor_input = self.ser.readline().decode('ascii').rstrip()
             # this is to ensure that we are receiving a json formatted string
-            # print(sensor_input)
+            print(sensor_input)
             for key, value in json.loads(sensor_input).items():
                 self.sensors[key] = value
 
