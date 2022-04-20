@@ -250,7 +250,7 @@ class ArduinoComms:
             # print("R enc: " + str(self.sensors["RIGHT_ENCODER"]))
 
         self.updateOdometer()
-        print("odometer:" + str(self.getOdometer()))
+        # print("odometer:" + str(self.getOdometer()))
 
         return self.sensors
 
