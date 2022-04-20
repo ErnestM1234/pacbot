@@ -154,6 +154,7 @@ class ArduinoComms:
         GYRO_X = self.readSensor("GYRO_X") / 4375;
         GYRO_Y = self.readSensor("GYRO_Y") / 4375;
         GYRO_Z = self.readSensor("GYRO_Z") / 4375;
+        print("GYRO_X: " + str(GYRO_X).zfill(8) + " GYRO_Y: " + str(GYRO_Y).zfill(8) + " GYRO_Z: " + str(GYRO_Z).zfill(8))
 
         return np.array([GYRO_X, GYRO_Y, GYRO_Z])
 
@@ -257,7 +258,7 @@ class ArduinoComms:
             for key, value in json.loads(sensor_input).items():
                 self.sensors[key] = value
             # print("ACC_X: " + str(self.sensors["ACC_X"]) + " ACC_Y: " + str(self.sensors["ACC_Y"]) + " ACC_Z: " + str(self.sensors["ACC_Z"]))
-            print("GYRO_X: " + str(self.sensors["GYRO_X"]).zfill(8) + " GYRO_Y: " + str(self.sensors["GYRO_Y"]).zfill(8) + " GYRO_Z: " + str(self.sensors["GYRO_Z"]).zfill(8))
+            # print("GYRO_X: " + str(self.sensors["GYRO_X"]).zfill(8) + " GYRO_Y: " + str(self.sensors["GYRO_Y"]).zfill(8) + " GYRO_Z: " + str(self.sensors["GYRO_Z"]).zfill(8))
             # print("MAG_X: " + str(self.sensors["MAG_X"]) + " MAG_Y: " + str(self.sensors["MAG_Y"]) + " MAG_Z: " + str(self.sensors["MAG_Z"]))
 
 
