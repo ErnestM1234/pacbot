@@ -166,7 +166,7 @@ class ArduinoComms:
         self.gyro_z += GYRO_Z * d_time
 
 
-        print("GYRO_X: " + "{:4.2f}".format(GYRO_X) + " GYRO_Y: " + "{:4.2f}".format(GYRO_Y) + " GYRO_Z: " + "{:4.2f}".format(GYRO_Z))
+        print("GYRO_X: " + "{:4.2f}".format(self.gyro_x) + " GYRO_Y: " + "{:4.2f}".format(self.gyro_y) + " GYRO_Z: " + "{:4.2f}".format(self.gyro_z))
 
         self.last_gyro_time = time.time()
 
