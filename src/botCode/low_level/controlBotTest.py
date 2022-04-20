@@ -4,32 +4,40 @@ import sys
 from motorsTesting import *
 
 # goes forwards and stops at a wall
-def main():
+def mop(bot):
     
-    bot = ArduinoMotors()
-    bot.stop()
+    bot.move_forwards()
     while True:
         bot.arduino.read()
-        # print("heading:" + str(bot.arduino.getHeading()))
-        # print(str(bot.arduino.getHeading()))
-        char = ""
-        # char = input()
-        if char == "f":
-            bot.move_forwards()
-            print("forwards")
-        elif char == "b":
-            print("backwards")
-            bot.move_backwards()
-        elif char == "l":
-            print("left")
-            bot.rotate_left()
-        elif char == "r":
-            print("right")
-            bot.rotate_right()
-        elif char == "s":
-            print("stop")
-            bot.stop()
-        elif char == "a": # reset odometer
-            print("reset odometer")
+        print(str(bot.arduino.getOdometer()))
+        if bot.arduino.readSensor("FORWARD_DIST") < 30:
             bot.arduino.resetOdometer()
-main()
+    
+        
+        # char = input()
+        # if char == "f":
+        #     bot.move_forwards()
+        #     print("forwards")
+        # elif char == "b":
+        #     print("backwards")
+        #     bot.move_backwards()
+        # elif char == "l":
+        #     print("left")
+        #     bot.rotate_left()
+        # elif char == "r":
+        #     print("right")
+        #     bot.rotate_right()
+        # elif char == "s":
+        #     print("stop")
+        #     bot.stop()
+        # elif char == "a": # reset odometer
+        #     print("reset odometer")
+        #     bot.arduino.resetOdometer()
+
+def main():
+    bot = ArduinoMotors()
+    try:
+        mop(bot)
+    except KeyboardInterrupt:
+        bot.stop()
+
