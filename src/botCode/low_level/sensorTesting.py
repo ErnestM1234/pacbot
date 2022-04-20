@@ -113,7 +113,7 @@ class ArduinoComms:
         self.odometer_left = 0
         self.odometer_right = 0
 
-        self.last_time_measured = 0
+        self.last_time_measured = time.time_ns()
 
 
     """ closeComms()
