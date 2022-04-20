@@ -178,6 +178,8 @@ class ArduinoComms:
         MAG_X = self.getMag()[0]
         MAG_Y = self.getMag()[1]
         MAG_Z = self.getMag()[2]
+        print("MAG_X: " + str(MAG_X) + " MAG_Y: " + str(MAG_Y) + " MAG_Z: " + str(MAG_Z))
+
         
         # Calculte aux
         unit_x = np.array([1, 0, 0])
@@ -243,9 +245,9 @@ class ArduinoComms:
             # this is to ensure that we are receiving a json formatted string
             for key, value in json.loads(sensor_input).items():
                 self.sensors[key] = value
-            print("ACC_X: " + str(self.sensors["ACC_X"]) + " ACC_Y: " + str(self.sensors["ACC_Y"]) + " ACC_Z: " + str(self.sensors["ACC_Z"]))
-            print("GYRO_X: " + str(self.sensors["GYRO_X"]) + " GYRO_Y: " + str(self.sensors["GYRO_Y"]) + " GYRO_Z: " + str(self.sensors["GYRO_Z"]))
-            print("MAG_X: " + str(self.sensors["MAG_X"]) + " MAG_Y: " + str(self.sensors["MAG_Y"]) + " MAG_Z: " + str(self.sensors["MAG_Z"]))
+            # print("ACC_X: " + str(self.sensors["ACC_X"]) + " ACC_Y: " + str(self.sensors["ACC_Y"]) + " ACC_Z: " + str(self.sensors["ACC_Z"]))
+            # print("GYRO_X: " + str(self.sensors["GYRO_X"]) + " GYRO_Y: " + str(self.sensors["GYRO_Y"]) + " GYRO_Z: " + str(self.sensors["GYRO_Z"]))
+            # print("MAG_X: " + str(self.sensors["MAG_X"]) + " MAG_Y: " + str(self.sensors["MAG_Y"]) + " MAG_Z: " + str(self.sensors["MAG_Z"]))
 
 
         # update odometer
