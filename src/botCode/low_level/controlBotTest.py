@@ -10,10 +10,10 @@ def main():
     bot.move_forwards()
     while True:
         bot.arduino.read()
-        # print("heading:" + str(bot.arduino.getHeading()))
+        print("heading:" + str(bot.arduino.getHeading()))
         # print(str(bot.arduino.getHeading()))
-        # char = ""
-        char = input()
+        char = ""
+        # char = input()
         if char == "f":
             bot.move_forwards()
             print("forwards")
