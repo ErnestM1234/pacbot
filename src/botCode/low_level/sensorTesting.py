@@ -161,10 +161,16 @@ class ArduinoComms:
         GYRO_Y = self.readSensor("GYRO_Y") / 4375;
         GYRO_Z = self.readSensor("GYRO_Z") / 4375;
 
-        self.gyro_x += GYRO_X * d_time
+        # self.gyro_x += GYRO_X * d_time
         self.gyro_y += GYRO_Y * d_time
         self.gyro_z += GYRO_Z * d_time
 
+        if abs(GYRO_X) > 1:
+            self.gyro_x += GYRO_X * d_time
+        if abs(GYRO_Y) > 1:
+            self.gyro_y += GYRO_Y * d_time
+        if abs(GYRO_Z) > 1:
+            self.gyro_z += GYRO_Z * d_time
 
         print("GYRO_X: " + "{:4.2f}".format(self.gyro_x) + " GYRO_Y: " + "{:4.2f}".format(self.gyro_y) + " GYRO_Z: " + "{:4.2f}".format(self.gyro_z))
 
