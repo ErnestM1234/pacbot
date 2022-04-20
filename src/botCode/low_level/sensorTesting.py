@@ -116,6 +116,11 @@ class ArduinoComms:
         self.odometer_right = 0
 
         self.last_time_measured = time.time_ns()
+        self.last_gyro_time = time.time_ns()
+
+        self.gyro_x = 0
+        self.gyro_y = 0
+        self.gyro_z = 0
 
 
     """ closeComms()
@@ -151,10 +156,19 @@ class ArduinoComms:
     """
     def getGyro(self):
 
+        d_time = time.time() - self.last_gyro_time
         GYRO_X = self.readSensor("GYRO_X") / 4375;
         GYRO_Y = self.readSensor("GYRO_Y") / 4375;
         GYRO_Z = self.readSensor("GYRO_Z") / 4375;
-        print("GYRO_X: " + "{:06.2f}".format(GYRO_X) + " GYRO_Y: " + "{:06.2f}".format(GYRO_Y) + " GYRO_Z: " + "{:06.2f}".format(GYRO_Z))
+
+        self.gyro_x += GYRO_X * d_time
+        self.gyro_y += GYRO_Y * d_time
+        self.gyro_z += GYRO_Z * d_time
+
+
+        print("GYRO_X: " + "{:09.1f}".format(GYRO_X) + " GYRO_Y: " + "{:09.1f}".format(GYRO_Y) + " GYRO_Z: " + "{:09.1f}".format(GYRO_Z))
+
+        self.last_gyro_time = time.time()
 
         return np.array([GYRO_X, GYRO_Y, GYRO_Z])
 
