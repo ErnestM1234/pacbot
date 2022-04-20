@@ -7,7 +7,7 @@ from motorsTesting import *
 def main():
     
     bot = ArduinoMotors()
-    bot.move_forwards()
+    bot.stop()
     while True:
         bot.arduino.read()
         print("heading:" + str(bot.arduino.getHeading()))
