@@ -5,7 +5,7 @@ from motorsTesting import *
 
 # goes forwards and stops at a wall
 def mop(bot):
-    bot.move_forwards()
+    # bot.move_forwards()
     while True:
         bot.arduino.read()
         print(str(bot.arduino.getOdometer()))
