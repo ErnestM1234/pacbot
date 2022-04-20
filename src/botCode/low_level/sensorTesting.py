@@ -231,6 +231,7 @@ class ArduinoComms:
         rpm_to_radians_per_sec = math.pi * 2 / 60000000000 
         self.odometer += avg_enc * d_time * rpm_to_radians_per_sec
         self.last_time_measured = curr_time
+        print("here")
 
     """ read()
     input:  void
