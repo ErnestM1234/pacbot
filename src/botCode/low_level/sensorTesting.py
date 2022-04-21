@@ -67,7 +67,7 @@ SENSOR_NAMES = [
     "LEFT_DIAG_DIST",   "RIGHT_DIAG_DIST",  "FORWARD_DIST",
     "ACC_X",            "ACC_Y",            "ACC_Z",
     "GYRO_X",           "GYRO_Y",           "GYRO_Z",
-    # "MAG_X",            "MAG_Y",            "MAG_Z"
+    "MAG_X",            "MAG_Y",            "MAG_Z"
     "HEADING",
 ]
 
@@ -468,8 +468,9 @@ class ArduinoComms:
                 print(temp_sensor_data)
                 
                 for i in range(len(temp_sensor_data)):
-                    self.sensors[SENSOR_NAMES[i]] = int(temp_sensor_data[i])
                     print(temp_sensor_data[i])
+                    self.sensors[SENSOR_NAMES[i]] = int(temp_sensor_data[i])
+                    
                 
                 self.ser.reset_input_buffer()
 
