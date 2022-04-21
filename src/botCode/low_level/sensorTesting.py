@@ -335,9 +335,9 @@ class ArduinoComms:
         My = self.readSensor("MAG_Y") * self.mScale
         Mz = self.readSensor("MAG_Z") * self.mScale
 
-        print("aScale:" + str(self.aScale))
-        print("gScale:" + str(self.gScale))
-        print("mScale:" + str(self.mScale))
+        #print("aScale:" + str(self.aScale))
+        #print("gScale:" + str(self.gScale))
+        #print("mScale:" + str(self.mScale))
 
         if self.lastTimeAngle[0] == 0: #If this is the first time using updatePos
             self.lastTimeAngle[0] = time.time()
@@ -370,6 +370,7 @@ class ArduinoComms:
 
         #This combines a LPF on phi, rho, and theta with a HPF on the Gyro values
         alpha = self.tau/(self.tau + dt)
+        print(str(alpha))
         xAngle = (alpha * Gx) + ((1-alpha) * phi)
         yAngle = (alpha * Gy) + ((1-alpha) * rho)
         zAngle = (alpha * Gz) + ((1-alpha) * theta)
