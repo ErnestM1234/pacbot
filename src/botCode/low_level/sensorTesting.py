@@ -122,6 +122,9 @@ class ArduinoComms:
         self.gyro_y = 0
         self.gyro_z = 0
 
+        # 10 * (sampling rate)
+        self.tau = 100
+
 
     """ closeComms()
     Input:  void
@@ -201,38 +204,93 @@ class ArduinoComms:
     """
     def getHeading(self):
 
-        ACCEL_X = self.getAccel()[0]
-        ACCEL_Y = self.getAccel()[1]
-        ACCEL_Z = self.getAccel()[2]
+        Ax = self.readSensor("ACC_X")
+        Ay = self.readSensor("ACC_Y")
+        Az = self.readSensor("ACC_Z")
+
+        Gx_w = self.readSensor("GYRO_X")
+        Gy_w = self.readSensor("GYRO_Y")
+        Gz_w = self.readSensor("GYRO_Z")
+
+        Mx = self.readSensor("MAG_X")
+        My = self.readSensor("MAG_Y")
+        Mz = self.readSensor("MAG_Z")
+
+        if self.lastTimeAngle[0] == 0: #If this is the first time using updatePos
+            self.lastTimeAngle[0] = time.time()
+
+        #Find the angle change given by the Gyro
+        dt = time.time() - self.lastTimeAngle[0]    
+        Gx = self.prevAngle[0][0] + Gx_w * dt
+        Gy = self.prevAngle[0][1] + Gy_w * dt
+        Gz = self.prevAngle[0][2] + Gz_w * dt
+
+        #Using the Accelerometer find pitch and roll
+        rho = math.degrees(math.atan2(Ax, math.sqrt(Ay**2 + Az**2))) #pitch
+        phi = math.degrees(math.atan2(Ay, math.sqrt(Ax**2 + Az**2))) #roll
+
+        #Using the Magnetometer find yaw
+        theta = math.degrees(math.atan2(-1*My, Mx)) + 180 #yaw
+
+        #To deal with modular angles in a non-modular number system I had to keep
+        #the Gz and theta values from 'splitting' where one would read 359 and
+        #other 1, causing the filter to go DOWN from 359 to 1 rather than UP.  To
+        #accomplish this this I 'cycle' the Gz value around to keep the
+        #complementaty filter working.
+        if Gz - theta > 180:
+            Gz = Gz - 360
+        if Gz - theta < -180:
+            Gz = Gz + 360
+
+        #This must be used if the device wasn't laid flat
+        #theta = math.degrees(math.atan2(-1*My*math.cos(rho) + Mz*math.sin(phi), Mx*math.cos(rho) + My*math.sin(rho)*math.sin(phi) + Mz*math.sin(rho)*math.cos(phi)))
+
+        #This combines a LPF on phi, rho, and theta with a HPF on the Gyro values
+        alpha = self.tau/(self.tau + dt)
+        xAngle = (alpha * Gx) + ((1-alpha) * phi)
+        yAngle = (alpha * Gy) + ((1-alpha) * rho)
+        zAngle = (alpha * Gz) + ((1-alpha) * theta)
+
+        #Update previous angle with the current one
+        self.prevAngle[0] = [xAngle, yAngle, zAngle]
+
+        #Update time for dt calculations
+        self.lastTimeAngle[0] = time.time()
+
+        return xAngle, yAngle, zAngle #roll, pitch, yaw
+
+        # ACCEL_X = self.getAccel()[0]
+        # ACCEL_Y = self.getAccel()[1]
+        # ACCEL_Z = self.getAccel()[2]
         
-        ACCEL = np.array([ACCEL_X, ACCEL_Y, ACCEL_Z])
+        # ACCEL = np.array([ACCEL_X, ACCEL_Y, ACCEL_Z])
 
-        MAG_X = self.getMag()[0]
-        MAG_Y = self.getMag()[1]
-        MAG_Z = self.getMag()[2]
-        # print("MAG_X: " + str(MAG_X) + " MAG_Y: " + str(MAG_Y) + " MAG_Z: " + str(MAG_Z))
+        # MAG_X = self.getMag()[0]
+        # MAG_Y = self.getMag()[1]
+        # MAG_Z = self.getMag()[2]
+        # # print("MAG_X: " + str(MAG_X) + " MAG_Y: " + str(MAG_Y) + " MAG_Z: " + str(MAG_Z))
 
         
-        # Calculte aux
-        unit_x = np.array([1, 0, 0])
-        aux = np.cross(unit_x, np.cross(ACCEL, unit_x))
+        # # Calculte aux
+        # unit_x = np.array([1, 0, 0])
+        # aux = np.cross(unit_x, np.cross(ACCEL, unit_x))
 
-        # Calculate roll
-        aux_y = aux[1]
-        aux_z = aux[2]
-        roll = np.arctan2(aux_y, aux_z)
+        # # Calculate roll
+        # aux_y = aux[1]
+        # aux_z = aux[2]
+        # roll = np.arctan2(aux_y, aux_z)
 
-        # Calculate pitch
-        y = -ACCEL_X
-        x = sqrt(ACCEL_Y**2 + ACCEL_Z**2)
-        pitch = atan2(y, x)
+        # # Calculate pitch
+        # y = -ACCEL_X
+        # x = sqrt(ACCEL_Y**2 + ACCEL_Z**2)
+        # pitch = atan2(y, x)
 
-        # Calculate heading
-        y = -MAG_Y*cos(roll) + MAG_Z*sin(roll)
-        x = MAG_X*cos(pitch) + MAG_Y*sin(roll)*sin(pitch) + MAG_Z*cos(roll)*sin(pitch)
-        heading = atan2(y, x) * 180/pi
+        # # Calculate heading
+        # y = -MAG_Y*cos(roll) + MAG_Z*sin(roll)
+        # x = MAG_X*cos(pitch) + MAG_Y*sin(roll)*sin(pitch) + MAG_Z*cos(roll)*sin(pitch)
+        # heading = atan2(y, x) * 180/pi
 
-        return heading 
+        # return heading 
 
     """ getOdometer()
     input:  void

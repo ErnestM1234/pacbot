@@ -65,11 +65,13 @@ class ArduinoMotors:
         # todo: add right/left adjustment
         target_heading = (self.arduino.getHeading() + 90) % 360
         while (abs(target_heading - self.arduino.getHeading()) > 5):
-            # todo: adjust 350 value and/or rework logic
-            print("ArduinoMotors: turning right")
-            # if (target_heading > 0 and self.arduino.getHeading() > 350): # handle case when robot's heading must pass 0 degrees
-            #    target_heading -= 360
-            self.rotate_right()
+            # print("ArduinoMotors: turning right")
+            if abs(target_heading - self.arduino.getHeading()) < 180:
+                self.face_north() # rotates right
+            elif target_heading > self.arduino.getHeading():
+                self.rotate_right()
+            else:
+                self.rotate_left()
         self.stop()
     
     """ turn_left()
@@ -81,10 +83,7 @@ class ArduinoMotors:
         # todo: add right/left adjustment
         target_heading = self.arduino.getHeading() - 90
         while (abs(target_heading - self.arduino.getHeading()) > 5):
-            # todo: adjust 350 value and/or rework logic
-            print("ArduinoMotors: turning left")
-            # if (target_heading < 0 and self.arduino.getHeading() < 10): # handle case when robot's heading must pass 0 degrees
-            #    target_heading += 360
+            # print("ArduinoMotors: turning left")
             self.rotate_left()
         self.stop()
 
@@ -95,6 +94,7 @@ class ArduinoMotors:
     turns robot to face north (error = +/- 3 deg), then stops
     """
     def face_north(self):
+        # todo: prefer left or right of north
         while True:
             # decide whether to go right or left
             heading = self.arduino.getHeading()
