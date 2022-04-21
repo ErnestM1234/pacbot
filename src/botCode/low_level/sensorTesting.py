@@ -370,8 +370,8 @@ class ArduinoComms:
 
         #This combines a LPF on phi, rho, and theta with a HPF on the Gyro values
         alpha = self.tau/(self.tau + dt)
-        print("dt   " + str(dt))
-        print("alpha" + str(alpha))
+        # print("dt   " + str(dt))
+        # print("alpha" + str(alpha))
         xAngle = (alpha * Gx) + ((1-alpha) * phi)
         yAngle = (alpha * Gy) + ((1-alpha) * rho)
         zAngle = (alpha * Gz) + ((1-alpha) * theta)
