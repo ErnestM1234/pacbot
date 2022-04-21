@@ -106,7 +106,7 @@ class ArduinoComms:
         } # holds the most recent signal from arduino to pi
         self.motorState = {"rmd":0,"rmp":0,"lmd":0,"lmp":0} # holds most recent signal sent from pi to arduino
         # open connection to arduino
-        self.ser = serial.Serial('/dev/ttyS0', 1000000, timeout=1)
+        self.ser = serial.Serial('/dev/ttyS0', 250000, timeout=1)
         self.ser.reset_input_buffer()
         self.ser.readline()
 
