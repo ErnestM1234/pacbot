@@ -467,8 +467,9 @@ class ArduinoComms:
 
                 print(temp_sensor_data)
                 
-                # for i in range(len(temp_sensor_data)):
-                #     self.sensors[SENSOR_NAMES[i]] = int(temp_sensor_data[i])
+                for i in range(len(temp_sensor_data)):
+                    self.sensors[SENSOR_NAMES[i]] = int(temp_sensor_data[i])
+                    print(temp_sensor_data[i])
                 
                 self.ser.reset_input_buffer()
 
