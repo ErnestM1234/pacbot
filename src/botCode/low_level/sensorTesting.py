@@ -471,6 +471,10 @@ class ArduinoComms:
             # update odometer
             # self.updateOdometer()
             # print("odometer:" + str(self.getOdometer()))
+
+            d_time = (time.time_ns() - self.last_time_measured)
+            self.last_time_measured = time.time_ns()
+            print(str(d_time))
             
             # flush input
             self.ser.reset_input_buffer()
