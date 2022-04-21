@@ -115,9 +115,9 @@ class ArduinoMotors:
         while True:
             # decide whether to go right or left
             heading = self.arduino.getHeading()
-            if heading < Directions.SOUTH + 3 and heading >  Directions.SOUTH + 360 - 3: # stop with error +/- 3 deg
+            if heading < 270 + 3 and heading >  270 + 360 - 3: # stop with error +/- 3 deg
                 break
-            elif heading > Directions.NORTH and heading < Directions.SOUTH: # go right
+            elif heading > 0 and heading < 270: # go right
                 self.rotate_right()
             else:                                                           # go left
                 self.rotate_left()
