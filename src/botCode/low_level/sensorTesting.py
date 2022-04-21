@@ -468,7 +468,7 @@ class ArduinoComms:
                 print(temp_sensor_data)
                 
                 for i in range(len(temp_sensor_data)):
-                    print(temp_sensor_data[i])
+                    # print(temp_sensor_data[i])
                     self.sensors[SENSOR_NAMES[i]] = int(temp_sensor_data[i])
                     
                 
@@ -479,7 +479,7 @@ class ArduinoComms:
                 #     self.sensors[key] = value
             except:
                 print("json parsing error")
-                # print(sensor_input)
+                print(sensor_input)
                 # print("ACC_X: " + str(self.sensors["ACC_X"]) + " ACC_Y: " + str(self.sensors["ACC_Y"]) + " ACC_Z: " + str(self.sensors["ACC_Z"]))
                 # print("GYRO_X: " + str(self.sensors["GYRO_X"]).zfill(8) + " GYRO_Y: " + str(self.sensors["GYRO_Y"]).zfill(8) + " GYRO_Z: " + str(self.sensors["GYRO_Z"]).zfill(8))
                 # print("MAG_X: " + str(self.sensors["MAG_X"]) + " MAG_Y: " + str(self.sensors["MAG_Y"]) + " MAG_Z: " + str(self.sensors["MAG_Z"]))
