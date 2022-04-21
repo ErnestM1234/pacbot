@@ -64,7 +64,7 @@ output json string format:
 SENSOR_NAMES = {
     "ACCEL_X",  "ACCEL_Y",  "ACCEL_Z",
     "GYRO_X",   "GYRO_Y",   "GYRO_Z",
-    "MAG_X",    "MAG_Y",    "MAG_Z"
+    "MAG_X",    "MAG_Y",    "MAG_Z",
 }
 SENSOR_NAMES = [
     "LEFT_ENCODER",     "RIGHT_ENCODER", 
@@ -73,6 +73,7 @@ SENSOR_NAMES = [
     "ACC_X",            "ACC_Y",            "ACC_Z",
     "GYRO_X",           "GYRO_Y",           "GYRO_Z",
     "MAG_X",            "MAG_Y",            "MAG_Z"
+    "HEADING",
 ]
 
 RPM_TO_RADIANS_PER_NANSEC = math.pi * 2 / 60000000000 
@@ -102,7 +103,8 @@ class ArduinoComms:
             "LEFT_DIAG_DIST":100, "RIGHT_DIAG_DIST":100, "FORWARD_DIST":100,
             "ACC_X":0, "ACC_Y":0, "ACC_Z":0,
             "GYRO_X":0, "GYRO_Y":0, "GYRO_Z":0,
-            "MAG_X":0, "MAG_Y":0, "MAG_Z":0
+            "MAG_X":0, "MAG_Y":0, "MAG_Z":0,
+            "HEADING":0
         } # holds the most recent signal from arduino to pi
         self.motorState = {"rmd":0,"rmp":0,"lmd":0,"lmp":0} # holds most recent signal sent from pi to arduino
         # open connection to arduino
@@ -136,8 +138,8 @@ class ArduinoComms:
         gFullScale = 125
         mFullScale = 4
 
-        self.enableAccel_Gyro(aFullScale, gFullScale)
-        self.enableMag(mFullScale)
+        # self.enableAccel_Gyro(aFullScale, gFullScale)
+        # self.enableMag(mFullScale)
 
 
     """Setup the needed registers for the Accelerometer and Gyro"""
@@ -322,67 +324,68 @@ class ArduinoComms:
     North, on the game field, is 0 degrees.
     """
     def getHeading(self):
+        return self.sensors["HEADING"]
 
-        Ax = self.readSensor("ACC_X") * self.aScale
-        Ay = self.readSensor("ACC_Y") * self.aScale
-        Az = self.readSensor("ACC_Z") * self.aScale
+        # Ax = self.readSensor("ACC_X") * self.aScale
+        # Ay = self.readSensor("ACC_Y") * self.aScale
+        # Az = self.readSensor("ACC_Z") * self.aScale
 
-        Gx_w = self.readSensor("GYRO_X") * self.gScale
-        Gy_w = self.readSensor("GYRO_Y") * self.gScale
-        Gz_w = self.readSensor("GYRO_Z") * self.gScale
+        # Gx_w = self.readSensor("GYRO_X") * self.gScale
+        # Gy_w = self.readSensor("GYRO_Y") * self.gScale
+        # Gz_w = self.readSensor("GYRO_Z") * self.gScale
 
-        Mx = self.readSensor("MAG_X") * self.mScale
-        My = self.readSensor("MAG_Y") * self.mScale
-        Mz = self.readSensor("MAG_Z") * self.mScale
+        # Mx = self.readSensor("MAG_X") * self.mScale
+        # My = self.readSensor("MAG_Y") * self.mScale
+        # Mz = self.readSensor("MAG_Z") * self.mScale
 
-        #print("aScale:" + str(self.aScale))
-        #print("gScale:" + str(self.gScale))
-        #print("mScale:" + str(self.mScale))
+        # #print("aScale:" + str(self.aScale))
+        # #print("gScale:" + str(self.gScale))
+        # #print("mScale:" + str(self.mScale))
 
-        if self.lastTimeAngle[0] == 0: #If this is the first time using updatePos
-            self.lastTimeAngle[0] = time.time()
+        # if self.lastTimeAngle[0] == 0: #If this is the first time using updatePos
+        #     self.lastTimeAngle[0] = time.time()
 
-        #Find the angle change given by the Gyro
-        dt = time.time() - self.lastTimeAngle[0]    
-        Gx = self.prevAngle[0][0] + Gx_w * dt
-        Gy = self.prevAngle[0][1] + Gy_w * dt
-        Gz = self.prevAngle[0][2] + Gz_w * dt
+        # #Find the angle change given by the Gyro
+        # dt = time.time() - self.lastTimeAngle[0]    
+        # Gx = self.prevAngle[0][0] + Gx_w * dt
+        # Gy = self.prevAngle[0][1] + Gy_w * dt
+        # Gz = self.prevAngle[0][2] + Gz_w * dt
 
-        #Using the Accelerometer find pitch and roll
-        rho = math.degrees(math.atan2(Ax, math.sqrt(Ay**2 + Az**2))) #pitch
-        phi = math.degrees(math.atan2(Ay, math.sqrt(Ax**2 + Az**2))) #roll
+        # #Using the Accelerometer find pitch and roll
+        # rho = math.degrees(math.atan2(Ax, math.sqrt(Ay**2 + Az**2))) #pitch
+        # phi = math.degrees(math.atan2(Ay, math.sqrt(Ax**2 + Az**2))) #roll
 
-        #Using the Magnetometer find yaw
-        theta = math.degrees(math.atan2(-1*My, Mx)) + 180 #yaw
+        # #Using the Magnetometer find yaw
+        # theta = math.degrees(math.atan2(-1*My, Mx)) + 180 #yaw
 
-        #To deal with modular angles in a non-modular number system I had to keep
-        #the Gz and theta values from 'splitting' where one would read 359 and
-        #other 1, causing the filter to go DOWN from 359 to 1 rather than UP.  To
-        #accomplish this this I 'cycle' the Gz value around to keep the
-        #complementaty filter working.
-        if Gz - theta > 180:
-            Gz = Gz - 360
-        if Gz - theta < -180:
-            Gz = Gz + 360
+        # #To deal with modular angles in a non-modular number system I had to keep
+        # #the Gz and theta values from 'splitting' where one would read 359 and
+        # #other 1, causing the filter to go DOWN from 359 to 1 rather than UP.  To
+        # #accomplish this this I 'cycle' the Gz value around to keep the
+        # #complementaty filter working.
+        # if Gz - theta > 180:
+        #     Gz = Gz - 360
+        # if Gz - theta < -180:
+        #     Gz = Gz + 360
 
-        #This must be used if the device wasn't laid flat
-        #theta = math.degrees(math.atan2(-1*My*math.cos(rho) + Mz*math.sin(phi), Mx*math.cos(rho) + My*math.sin(rho)*math.sin(phi) + Mz*math.sin(rho)*math.cos(phi)))
+        # #This must be used if the device wasn't laid flat
+        # #theta = math.degrees(math.atan2(-1*My*math.cos(rho) + Mz*math.sin(phi), Mx*math.cos(rho) + My*math.sin(rho)*math.sin(phi) + Mz*math.sin(rho)*math.cos(phi)))
 
-        #This combines a LPF on phi, rho, and theta with a HPF on the Gyro values
-        alpha = self.tau/(self.tau + dt)
-        # print("dt   " + str(dt))
-        # print("alpha" + str(alpha))
-        xAngle = (alpha * Gx) + ((1-alpha) * phi)
-        yAngle = (alpha * Gy) + ((1-alpha) * rho)
-        zAngle = (alpha * Gz) + ((1-alpha) * theta)
+        # #This combines a LPF on phi, rho, and theta with a HPF on the Gyro values
+        # alpha = self.tau/(self.tau + dt)
+        # # print("dt   " + str(dt))
+        # # print("alpha" + str(alpha))
+        # xAngle = (alpha * Gx) + ((1-alpha) * phi)
+        # yAngle = (alpha * Gy) + ((1-alpha) * rho)
+        # zAngle = (alpha * Gz) + ((1-alpha) * theta)
 
-        #Update previous angle with the current one
-        self.prevAngle[0] = [xAngle, yAngle, zAngle]
+        # #Update previous angle with the current one
+        # self.prevAngle[0] = [xAngle, yAngle, zAngle]
 
-        #Update time for dt calculations
-        self.lastTimeAngle[0] = time.time()
+        # #Update time for dt calculations
+        # self.lastTimeAngle[0] = time.time()
 
-        return xAngle, yAngle, zAngle #roll, pitch, yaw
+        # return xAngle, yAngle, zAngle #roll, pitch, yaw
 
         # ACCEL_X = self.getAccel()[0]
         # ACCEL_Y = self.getAccel()[1]
