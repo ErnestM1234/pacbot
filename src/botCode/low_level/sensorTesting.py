@@ -464,6 +464,7 @@ class ArduinoComms:
                     self.sensors[key] = value
             except:
                 print("json parsing error")
+                print(sensor_input)
                 # print("ACC_X: " + str(self.sensors["ACC_X"]) + " ACC_Y: " + str(self.sensors["ACC_Y"]) + " ACC_Z: " + str(self.sensors["ACC_Z"]))
                 # print("GYRO_X: " + str(self.sensors["GYRO_X"]).zfill(8) + " GYRO_Y: " + str(self.sensors["GYRO_Y"]).zfill(8) + " GYRO_Z: " + str(self.sensors["GYRO_Z"]).zfill(8))
                 # print("MAG_X: " + str(self.sensors["MAG_X"]) + " MAG_Y: " + str(self.sensors["MAG_Y"]) + " MAG_Z: " + str(self.sensors["MAG_Z"]))
@@ -472,9 +473,9 @@ class ArduinoComms:
             # self.updateOdometer()
             # print("odometer:" + str(self.getOdometer()))
 
-            d_time = (time.time_ns() - self.last_time_measured)
-            self.last_time_measured = time.time_ns()
-            print(str(d_time))
+            # d_time = (time.time_ns() - self.last_time_measured)
+            # self.last_time_measured = time.time_ns()
+            # print(str(d_time))
             
             # flush input
             self.ser.reset_input_buffer()
