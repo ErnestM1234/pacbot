@@ -117,6 +117,7 @@ class ArduinoComms:
 
         self.last_time_measured = time.time_ns()
         self.last_gyro_time = time.time_ns()
+        self.lastTimeAngle = [time.time()]
 
         self.gyro_x = 0
         self.gyro_y = 0
