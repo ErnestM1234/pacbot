@@ -124,7 +124,7 @@ class ArduinoComms:
         self.gyro_z = 0
 
         # 1 / (sampling rate)
-        self.tau = 1 / 2
+        self.tau = 6/20
 
         self.prevAngle = [[0,0,0]]
 
@@ -455,14 +455,14 @@ class ArduinoComms:
     """
     def read(self):
         # read from input buffer
-        # if self.ser.in_waiting > 0:
-        sensor_input = self.ser.readline().decode('ascii').rstrip()
-        # this is to ensure that we are receiving a json formatted string
-        for key, value in json.loads(sensor_input).items():
-            self.sensors[key] = value
-            # print("ACC_X: " + str(self.sensors["ACC_X"]) + " ACC_Y: " + str(self.sensors["ACC_Y"]) + " ACC_Z: " + str(self.sensors["ACC_Z"]))
-            # print("GYRO_X: " + str(self.sensors["GYRO_X"]).zfill(8) + " GYRO_Y: " + str(self.sensors["GYRO_Y"]).zfill(8) + " GYRO_Z: " + str(self.sensors["GYRO_Z"]).zfill(8))
-            # print("MAG_X: " + str(self.sensors["MAG_X"]) + " MAG_Y: " + str(self.sensors["MAG_Y"]) + " MAG_Z: " + str(self.sensors["MAG_Z"]))
+        if self.ser.in_waiting > 0:
+            sensor_input = self.ser.readline().decode('ascii').rstrip()
+            # this is to ensure that we are receiving a json formatted string
+            for key, value in json.loads(sensor_input).items():
+                self.sensors[key] = value
+                # print("ACC_X: " + str(self.sensors["ACC_X"]) + " ACC_Y: " + str(self.sensors["ACC_Y"]) + " ACC_Z: " + str(self.sensors["ACC_Z"]))
+                # print("GYRO_X: " + str(self.sensors["GYRO_X"]).zfill(8) + " GYRO_Y: " + str(self.sensors["GYRO_Y"]).zfill(8) + " GYRO_Z: " + str(self.sensors["GYRO_Z"]).zfill(8))
+                # print("MAG_X: " + str(self.sensors["MAG_X"]) + " MAG_Y: " + str(self.sensors["MAG_Y"]) + " MAG_Z: " + str(self.sensors["MAG_Z"]))
 
         # update odometer
         # self.updateOdometer()
