@@ -117,7 +117,7 @@ class ArduinoComms:
 
         self.last_time_measured = time.time_ns()
         self.last_gyro_time = time.time_ns()
-        self.lastTimeAngle = [time.time()]
+        self.lastTimeAngle = [0]
 
         self.gyro_x = 0
         self.gyro_y = 0
@@ -334,6 +334,10 @@ class ArduinoComms:
         Mx = self.readSensor("MAG_X") * self.mScale
         My = self.readSensor("MAG_Y") * self.mScale
         Mz = self.readSensor("MAG_Z") * self.mScale
+
+        print("aScale:" + str(self.aScale))
+        print("gScale:" + str(self.gScale))
+        print("mScale:" + str(self.mScale))
 
         if self.lastTimeAngle[0] == 0: #If this is the first time using updatePos
             self.lastTimeAngle[0] = time.time()
