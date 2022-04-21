@@ -123,8 +123,8 @@ class ArduinoComms:
         self.gyro_y = 0
         self.gyro_z = 0
 
-        # 10 * (sampling rate)
-        self.tau = 100
+        # 1 / (sampling rate)
+        self.tau = 1/20
 
         self.prevAngle = [[0,0,0]]
 
