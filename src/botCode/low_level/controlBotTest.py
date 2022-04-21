@@ -9,6 +9,7 @@ def mop(bot):
     bot.stop()
     while True:
         bot.arduino.read()
+        print("test")
         # heading = bot.arduino.getHeading()
         # print("GYRO_X: " + "{:4.2f}".format(heading[0]) + " GYRO_Y: " + "{:4.2f}".format(heading[1]) + " GYRO_Z: " + "{:4.2f}".format(heading[2]))
         # print(str(bot.arduino.getOdometer()))
