@@ -126,6 +126,8 @@ class ArduinoComms:
         # 10 * (sampling rate)
         self.tau = 100
 
+        self.prevAngle = [[0,0,0]]
+
 
     """ closeComms()
     Input:  void
