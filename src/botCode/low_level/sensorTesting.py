@@ -459,6 +459,8 @@ class ArduinoComms:
     def read(self):
         # read from input buffer
         if self.ser.in_waiting > 0:
+            # flush input
+            self.ser.reset_input_buffer()
             # this is to ensure that we are receiving a json formatted string
             try:
                 sensor_input = self.ser.readline().decode('ascii').rstrip()
@@ -481,8 +483,7 @@ class ArduinoComms:
             # self.last_time_measured = time.time_ns()
             # print(str(d_time))
             
-            # flush input
-            self.ser.reset_input_buffer()
+
 
         return self.sensors
 
