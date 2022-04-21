@@ -461,12 +461,12 @@ class ArduinoComms:
                 sensor_input = self.ser.readline().decode('ascii').rstrip()
                 print(sensor_input)
 
-                sensor_input.replace('{','')
-                sensor_input.replace('}','')
-                temp_sensor_data = sensor_input.split(',')
+                # sensor_input.replace('{','')
+                # sensor_input.replace('}','')
+                # temp_sensor_data = sensor_input.split(',')
                 
-                for i in range(len(temp_sensor_data)):
-                    self.sensors[SENSOR_NAMES[i]] = int(temp_sensor_data[i])
+                # for i in range(len(temp_sensor_data)):
+                #     self.sensors[SENSOR_NAMES[i]] = int(temp_sensor_data[i])
 
                 self.ser.reset_input_buffer()
 
