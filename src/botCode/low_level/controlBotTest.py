@@ -12,9 +12,9 @@ def mop(bot):
         # heading = bot.arduino.getHeading()
         # print("GYRO_X: " + "{:4.2f}".format(heading[0]) + " GYRO_Y: " + "{:4.2f}".format(heading[1]) + " GYRO_Z: " + "{:4.2f}".format(heading[2]))
         # print(str(bot.arduino.getOdometer()))
-        if bot.arduino.readSensor("FORWARD_DIST") < 50:
-            bot.arduino.resetOdometer()
-            print("reset odometer")
+        # if bot.arduino.readSensor("FORWARD_DIST") < 50:
+        #     bot.arduino.resetOdometer()
+        #     print("reset odometer")
     
         #char = input()
         #if char == "n":
