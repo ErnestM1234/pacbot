@@ -61,11 +61,6 @@ output json string format:
 
 """
 
-SENSOR_NAMES = {
-    "ACCEL_X",  "ACCEL_Y",  "ACCEL_Z",
-    "GYRO_X",   "GYRO_Y",   "GYRO_Z",
-    "MAG_X",    "MAG_Y",    "MAG_Z",
-}
 SENSOR_NAMES = [
     "LEFT_ENCODER",     "RIGHT_ENCODER", 
     "LEFT_DISTANCE",    "RIGHT_DISTANCE",
@@ -465,9 +460,17 @@ class ArduinoComms:
             try:
                 sensor_input = self.ser.readline().decode('ascii').rstrip()
                 print(sensor_input)
-                sensor_items = json.loads(sensor_input).items()
-                for key, value in sensor_items:
-                    self.sensors[key] = value
+
+                # sensor_input.replace('{','')
+                # sensor_input.replace('}','')
+                # temp_sensor_data = sensor_input.split(',')
+                
+                # for i in range(len(temp_sensor_data)):
+                #     self.sensors[SENSOR_NAMES[i]] = int(temp_sensor_data[i])
+
+                # sensor_items = json.loads(sensor_input).items()
+                # for key, value in sensor_items:
+                #     self.sensors[key] = value
             except:
                 print("json parsing error")
                 # print(sensor_input)
