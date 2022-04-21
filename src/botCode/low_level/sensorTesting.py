@@ -458,8 +458,12 @@ class ArduinoComms:
         if self.ser.in_waiting > 0:
             sensor_input = self.ser.readline().decode('ascii').rstrip()
             # this is to ensure that we are receiving a json formatted string
-            for key, value in json.loads(sensor_input).items():
-                self.sensors[key] = value
+            try:
+                sensor_items = json.loads(sensor_input).items()
+                for key, value in sensor_items:
+                    self.sensors[key] = value
+            except:
+                print("json parsing error")
                 # print("ACC_X: " + str(self.sensors["ACC_X"]) + " ACC_Y: " + str(self.sensors["ACC_Y"]) + " ACC_Z: " + str(self.sensors["ACC_Z"]))
                 # print("GYRO_X: " + str(self.sensors["GYRO_X"]).zfill(8) + " GYRO_Y: " + str(self.sensors["GYRO_Y"]).zfill(8) + " GYRO_Z: " + str(self.sensors["GYRO_Z"]).zfill(8))
                 # print("MAG_X: " + str(self.sensors["MAG_X"]) + " MAG_Y: " + str(self.sensors["MAG_Y"]) + " MAG_Z: " + str(self.sensors["MAG_Z"]))
