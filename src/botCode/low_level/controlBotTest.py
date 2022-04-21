@@ -18,7 +18,7 @@ def mop(bot):
     
         #char = input()
         #if char == "n":
-        print("heading: " + bot.arduino.getHeading())
+        print("heading: " + str(bot.arduino.getHeading()))
         # print("MAG X: " + "{:6.2f}".format(bot.arduino.readSensor("MAG_X")) + " MAG Y: " + "{:6.2f}".format(bot.arduino.readSensor("MAG_Y")) + " MAG Z: " + "{:6.2f}".format(bot.arduino.readSensor("MAG_Z")))
         # if char == "f":
         #     bot.move_forwards()
