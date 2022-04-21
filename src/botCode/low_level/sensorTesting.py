@@ -323,17 +323,17 @@ class ArduinoComms:
     """
     def getHeading(self):
 
-        Ax = self.readSensor("ACC_X")
-        Ay = self.readSensor("ACC_Y")
-        Az = self.readSensor("ACC_Z")
+        Ax = self.readSensor("ACC_X") * self.aScale
+        Ay = self.readSensor("ACC_Y") * self.aScale
+        Az = self.readSensor("ACC_Z") * self.aScale
 
-        Gx_w = self.readSensor("GYRO_X")
-        Gy_w = self.readSensor("GYRO_Y")
-        Gz_w = self.readSensor("GYRO_Z")
+        Gx_w = self.readSensor("GYRO_X") * self.gScale
+        Gy_w = self.readSensor("GYRO_Y") * self.gScale
+        Gz_w = self.readSensor("GYRO_Z") * self.gScale
 
-        Mx = self.readSensor("MAG_X")
-        My = self.readSensor("MAG_Y")
-        Mz = self.readSensor("MAG_Z")
+        Mx = self.readSensor("MAG_X") * self.mScale
+        My = self.readSensor("MAG_Y") * self.mScale
+        Mz = self.readSensor("MAG_Z") * self.mScale
 
         if self.lastTimeAngle[0] == 0: #If this is the first time using updatePos
             self.lastTimeAngle[0] = time.time()
