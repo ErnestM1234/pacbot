@@ -128,6 +128,122 @@ class ArduinoComms:
 
         self.prevAngle = [[0,0,0]]
 
+        self.aScale = 0
+        self.gScale = 0
+        self.mScale = 0
+
+        aFullScale = 2
+        gFullScale = 125
+        mFullScale = 4
+
+        self.enableAccel_Gyro(aFullScale, gFullScale)
+        self.enableMag(mFullScale)
+
+
+    """Setup the needed registers for the Accelerometer and Gyro"""
+    def enableAccel_Gyro(self, aFullScale, gFullScale):
+        #Accelerometer
+        
+        g = 9.806
+        #the gravitational constant for a latitude of 45 degrees at sea level is 9.80665
+        #g for altitude is g(6,371.0088 km / (6,371.0088 km + altitude))^2
+        #9.80600 is a good approximation for Tulsa, OK
+
+        #default: 0b10000000
+        #ODR = 1.66 kHz; +/-2g; BW = 400Hz
+        b0_3 = 0b1000 #1.66 kHz
+        
+        #full-scale selection; 2**15 = 32768
+        if aFullScale == 4:
+            b4_5 = 0b10
+            self.aScale = 4*g/32768
+        elif aFullScale == 8:
+            b4_5 = 0b11
+            self.aScale = 8*g/32768
+        elif aFullScale == 16:
+            b4_5 = '01'
+            self.aScale = 16*g/32768
+        else: #default to 2g if no valid value is given
+            b4_5 = '00'
+            self.aScale = 2*g/32768
+            
+        b6_7 = '00' #0b00; 400Hz anti-aliasing filter bandwidth
+        
+        # self.bus.write_byte_data(self.accel_gyro, self.Accel_Gyro_REG['CTRL1_XL'], 0b10000000)
+        # self.bus.write_byte_data(self.accel_gyro, self.Accel_Gyro_REG['CTRL1_XL'], self.binConcat([b0_3, b4_5, b6_7]))
+
+        #Gyro
+
+        #default: 0b010000000
+        #ODR = 1.66 kHz; 500dps
+        b0_3 = 0b1000 #1.66 kHz
+        
+        #full-scale selection
+        if gFullScale == 254:
+            b4_6 = '000'
+            self.gScale = 254/32768.0
+        elif gFullScale == 1000:
+            b4_6 = 0b100
+            self.gScale = 1000/32768.0
+        elif gFullScale == 2000:
+            b4_6 = 0b110
+            self.gScale = 2000/32768.0
+        elif gFullScale == 125:
+            b4_6 = '001'
+            self.gScale = 125/32768.0
+        else: #default to 500 dps if no valid value is given
+            b4_6 = '010'
+            self.gScale = 500/32768.0
+            
+        # self.bus.write_byte_data(self.accel_gyro, self.Accel_Gyro_REG['CTRL2_G'], 0b10000100)
+        # self.bus.write_byte_data(self.accel_gyro, self.Accel_Gyro_REG['CTRL2_G'], self.binConcat([b0_3, b4_6, 0]))
+
+        #Accelerometer and Gyro
+
+        #default: 0b00000100
+        #IF_INC = 1 (automatically increment register address)
+        # self.bus.write_byte_data(self.accel_gyro, self.Accel_Gyro_REG['CTRL3_C'], 0b00000100)
+
+    """Setup the needed registers for the Magnetometer"""
+    def enableMag(self, mFullScale):
+        #Magnemometer        
+
+        #default: 0b01110000
+        #Temp off, High-Performance, ODR = 300Hz, Self_test off
+        # self.bus.write_byte_data(self.mag, self.Mag_REG['CTRL_REG1'], 0b01010010)
+        
+        #default: 0b00000000
+        # +/-4guass, reboot off, soft_reset off
+        
+        #full-scale selection; 2**15 = 32768
+        if mFullScale == 8:
+            b1_2 = '01'
+            self.mScale = 8.0/32768
+        elif mFullScale == 12:
+            b1_2 = 0b10
+            self.mScale = 12.0/32768
+        elif mFullScale == 16:
+            b1_2 = 0b11
+            self.mScale = 16.0/32768
+        else: #default to 4 guass if no valid value is given
+            b1_2 = '00'
+            self.mScale = 4.0/32768
+            
+        rebootMem = False #Reboot memory content
+        softReset = False #Configuration registers and user register reset function
+            
+        # self.bus.write_byte_data(self.mag, self.Mag_REG['CTRL_REG2'], 0b00000000)        
+        # self.bus.write_byte_data(self.mag, self.Mag_REG['CTRL_REG2'], 
+                                    # self.binConcat([0, b1_2, 0, rebootMem, softReset, 0, 0]))        
+
+        #default: 0b00000011
+        #Low-power off, default SPI, continous convo mode
+        # self.bus.write_byte_data(self.mag, self.Mag_REG['CTRL_REG3'], 0b00000000)
+
+        #default: 0b00000000
+        #High-Performance, data LSb at lower address
+        # self.bus.write_byte_data(self.mag, self.Mag_REG['CTRL_REG4'], 0b00001000)
+
 
     """ closeComms()
     Input:  void
@@ -341,7 +457,6 @@ class ArduinoComms:
             # print("ACC_X: " + str(self.sensors["ACC_X"]) + " ACC_Y: " + str(self.sensors["ACC_Y"]) + " ACC_Z: " + str(self.sensors["ACC_Z"]))
             # print("GYRO_X: " + str(self.sensors["GYRO_X"]).zfill(8) + " GYRO_Y: " + str(self.sensors["GYRO_Y"]).zfill(8) + " GYRO_Z: " + str(self.sensors["GYRO_Z"]).zfill(8))
             # print("MAG_X: " + str(self.sensors["MAG_X"]) + " MAG_Y: " + str(self.sensors["MAG_Y"]) + " MAG_Z: " + str(self.sensors["MAG_Z"]))
-            self.getGyro()
 
         # update odometer
         self.updateOdometer()
