@@ -459,11 +459,13 @@ class ArduinoComms:
             # this is to ensure that we are receiving a json formatted string
             try:
                 sensor_input = self.ser.readline().decode('ascii').rstrip()
-                print(sensor_input)
+                # print(sensor_input)
 
-                # sensor_input.replace('{','')
-                # sensor_input.replace('}','')
-                # temp_sensor_data = sensor_input.split(',')
+                sensor_input.replace('{','')
+                sensor_input.replace('}','')
+                temp_sensor_data = sensor_input.split(',')
+
+                print(temp_sensor_data)
                 
                 # for i in range(len(temp_sensor_data)):
                 #     self.sensors[SENSOR_NAMES[i]] = int(temp_sensor_data[i])
