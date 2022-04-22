@@ -79,6 +79,7 @@ class ArduinoMotors:
         # print("curr head: " + str(current_heading))
         # print("targ head: " + str(self.target_heading))
         while (abs(self.arduino.getHeading() - self.target_heading) > 3):
+            self.arduino.read()
             current_heading = self.arduino.getHeading()
             # print("curr head: " + str(current_heading))
             # print("targ head: " + str(self.target_heading))
