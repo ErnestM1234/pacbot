@@ -109,7 +109,8 @@ class ArduinoMotors:
         
         # if self.arduino.getHeading() - self.target_heading < 0:
         #     target_heading
-        self.arduino.write(MotorDirection.FORWARDS, MOTOR_SPEED, MotorDirection.BACKWARDS, MOTOR_SPEED)
+        # self.arduino.write(MotorDirection.FORWARDS, MOTOR_SPEED, MotorDirection.BACKWARDS, MOTOR_SPEED)
+        self.stop()
 
     # ------------------------ Rotations ------------------------ #
     """ rotate_right()

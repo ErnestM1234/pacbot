@@ -7,8 +7,10 @@ from motorsTesting import *
 def mop(bot):
     # bot.move_forwards()
     bot.stop()
-    while True:
-        bot.arduino.read()
+    bot.set_target_heading(230)
+    bot.rotate_to_target_heading()
+    # while True:
+        # bot.arduino.read()
         # print("test")
         # heading = bot.arduino.getHeading()
         # print("GYRO_X: " + "{:4.2f}".format(heading[0]) + " GYRO_Y: " + "{:4.2f}".format(heading[1]) + " GYRO_Z: " + "{:4.2f}".format(heading[2]))
@@ -17,8 +19,8 @@ def mop(bot):
         #     bot.arduino.resetOdometer()
         #     print("reset odometer")
 
-        bot.set_target_heading(230)
-        bot.rotate_to_target_heading()
+        
+        
     
         # char = input()
         # if char == "n":
