@@ -89,6 +89,8 @@ class ArduinoMotors:
             mean_power = max(mean_power, MIN_POWER)
             mean_power = min(mean_power, MAX_POWER)
 
+            mean_power = 125
+
             power_differential = KP_DISTANCE * (abs(self.arduino.readSensor("LEFT_ENCODER")) - abs(self.arduino.readSensor("RIGHT_ENCODER")))
             power_differential = min(power_differential, MAX_POWER_DIFFERENTIAL)
             power_differential = max(power_differential, -MAX_POWER_DIFFERENTIAL)
