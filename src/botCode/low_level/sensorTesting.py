@@ -474,9 +474,9 @@ class ArduinoComms:
                 
                 # print(str(temp_sensor_data))
                 
-                for i, val in enumerate(temp_sensor_data):
+                for i in range(len(temp_sensor_data)-1):
                     # print(temp_sensor_data[i])
-                    self.sensors[SENSOR_NAMES[i]] = int(val)
+                    self.sensors[SENSOR_NAMES[i]] = int(temp_sensor_data[i])
                 
                 # print(sensor_input)
                 # print(str(self.sensors))
