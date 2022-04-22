@@ -196,7 +196,7 @@ class ArduinoComms:
     North, on the game field, is 0 degrees.
     """
     def getHeading(self):
-        print("self.sensors[HEADING]" + str(self.sensors["HEADING"]))
+        # print("self.sensors[HEADING]" + str(self.sensors["HEADING"]))
         return self.sensors["HEADING"] / 100
 
     """ getOdometer()
@@ -266,6 +266,7 @@ class ArduinoComms:
                 # print(sensor_input)
                 # print(str(self.sensors))
                 # print("parsed correctly")
+                print("self.sensors[]: " + str(self.sensors))
                 self.ser.reset_input_buffer()
 
 
