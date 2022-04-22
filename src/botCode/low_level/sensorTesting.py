@@ -481,6 +481,8 @@ class ArduinoComms:
                 # print(sensor_input)
                 # print(str(self.sensors))
                 print("parsed correctly")
+                self.ser.reset_input_buffer()
+
 
 
                 # sensor_items = json.loads(sensor_input).items()
