@@ -77,11 +77,11 @@ class ArduinoMotors:
         pwr_right = 0
         # initial_heading = self.arduino.getHeading()
         # print("curr head: " + str(current_heading))
-        print("targ head: " + str(self.target_heading))
-        while (abs(self.arduino.getHeading() - self.target_heading) < 3):
+        # print("targ head: " + str(self.target_heading))
+        while (abs(self.arduino.getHeading() - self.target_heading) > 3):
             current_heading = self.arduino.getHeading()
-            # print("curr head: " + str(current_heading))
-            # print("targ head: " + str(self.target_heading))
+            print("curr head: " + str(current_heading))
+            print("targ head: " + str(self.target_heading))
             
             mean_power = KP_ANGLE * (self.target_heading - current_heading)
             mean_power = min(mean_power, MAX_POWER)
