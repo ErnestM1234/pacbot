@@ -9,6 +9,8 @@ def mop(bot):
     bot.stop()
     bot.set_target_heading(180)
     bot.rotate_to_target_heading()
+    while True:
+        bot.stop()
     # while True:
         # bot.arduino.read()
         # print("test")

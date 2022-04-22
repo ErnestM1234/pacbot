@@ -79,6 +79,7 @@ class ArduinoMotors:
         # initial_heading = self.arduino.getHeading()
         # print("curr head: " + str(current_heading))
         # print("targ head: " + str(self.target_heading))
+        print(self.arduino.getHeading())
         while (abs(self.arduino.getHeading() - self.target_heading) > 10):
             self.arduino.read()
             current_heading = self.arduino.getHeading()
@@ -115,12 +116,6 @@ class ArduinoMotors:
         # if self.arduino.getHeading() - self.target_heading < 0:
         #     target_heading
         # self.arduino.write(MotorDirection.FORWARDS, MOTOR_SPEED, MotorDirection.BACKWARDS, MOTOR_SPEED)
-        self.stop()
-        self.stop()
-        self.stop()
-        self.stop()
-        self.stop()
-        self.stop()
 
 
     # ------------------------ Rotations ------------------------ #
