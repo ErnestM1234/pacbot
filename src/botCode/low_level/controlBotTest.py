@@ -7,7 +7,7 @@ from motorsTesting import *
 def mop(bot):
     # bot.move_forwards()
     bot.stop()
-    bot.set_target_heading(230)
+    bot.set_target_heading(180)
     bot.rotate_to_target_heading()
     # while True:
         # bot.arduino.read()
