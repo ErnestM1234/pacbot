@@ -463,7 +463,7 @@ class ArduinoComms:
 
                 temp_sensor_input = sensor_input.replace('{','')
                 temp_sensor_input = temp_sensor_input.replace('}','')
-                temp_sensor_data = sensor_input.split(',')
+                temp_sensor_data = temp_sensor_input.split(',')
                 
                 for i in range(len(temp_sensor_data)):
                     # print(temp_sensor_data[i])
