@@ -14,7 +14,8 @@ KD_R = 1
 KP_ANGLE = 3
 KP_DISTANCE = 0
 
-MAX_POWER = 180
+MIN_POWER = 100
+MAX_POWER = 150
 MAX_POWER_DIFFERENTIAL = 50
 
 class Directions(Enum):
@@ -85,6 +86,7 @@ class ArduinoMotors:
             # print("targ head: " + str(self.target_heading))
             
             mean_power = KP_ANGLE * (self.target_heading - current_heading)
+            mean_power = max(mean_power, MIN_POWER)
             mean_power = min(mean_power, MAX_POWER)
 
             power_differential = KP_DISTANCE * (abs(self.arduino.readSensor("LEFT_ENCODER")) - abs(self.arduino.readSensor("RIGHT_ENCODER")))
