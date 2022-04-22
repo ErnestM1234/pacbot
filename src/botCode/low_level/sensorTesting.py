@@ -487,7 +487,7 @@ class ArduinoComms:
                 # for key, value in sensor_items:
                 #     self.sensors[key] = value
             except Exception as e:
-                print("parsing error: " + e)
+                print("parsing error: " + str(e))
                 # print(sensor_input)
                 # print(temp_sensor_data)
                 # print("ACC_X: " + str(self.sensors["ACC_X"]) + " ACC_Y: " + str(self.sensors["ACC_Y"]) + " ACC_Z: " + str(self.sensors["ACC_Z"]))
