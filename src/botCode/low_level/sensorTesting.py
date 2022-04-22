@@ -260,7 +260,7 @@ class ArduinoComms:
                 
                 for i in range(len(temp_sensor_data)-1):
                     # print(temp_sensor_data[i])
-                    self.sensors[SENSOR_NAMES[i]] = int(temp_sensor_data[i])
+                    self.sensors[SENSOR_NAMES[i]] = int(float(temp_sensor_data[i]))
                 
                 # print(sensor_input)
                 # print(str(self.sensors))
