@@ -1,4 +1,3 @@
-from select import KQ_FILTER_READ
 from sensorTesting import *
 
 WALL_STOP_DIST = 50 # mm
@@ -92,20 +91,13 @@ class ArduinoMotors:
 
             l_dir = MotorDirection.BACKWARDS # "backwards" (actually forwards)
             r_dir = MotorDirection.BACKWARDS
-            
+
             if pwr_left < 0:
                 l_dir = MotorDirection.FORWARDS
             if pwr_right < 0:
                 r_dir = MotorDirection.FORWARDS
             
             self.arduino.write(l_dir, abs(l_dir), r_dir, abs(r_dir))
-
-
-
-
-
-
-
 
         
         # if self.arduino.getHeading() - self.target_heading < 0:
