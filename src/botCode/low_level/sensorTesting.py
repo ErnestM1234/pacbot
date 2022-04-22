@@ -67,7 +67,7 @@ SENSOR_NAMES = [
     "LEFT_DIAG_DIST",   "RIGHT_DIAG_DIST",  "FORWARD_DIST",
     "ACC_X",            "ACC_Y",            "ACC_Z",
     "GYRO_X",           "GYRO_Y",           "GYRO_Z",
-    "MAG_X",            "MAG_Y",            "MAG_Z"
+    "MAG_X",            "MAG_Y",            "MAG_Z",
     "HEADING",
 ]
 
