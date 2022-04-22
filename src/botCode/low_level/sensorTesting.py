@@ -267,7 +267,7 @@ class ArduinoComms:
                 # print(sensor_input)
                 # print(str(self.sensors))
                 # print("parsed correctly")
-                # print("self.sensors[]: " + str(self.sensors))
+                print("self.sensors[]: " + str(self.sensors))
                 self.ser.reset_input_buffer()
 
 
