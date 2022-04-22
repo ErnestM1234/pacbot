@@ -464,10 +464,15 @@ class ArduinoComms:
                     temp_sensor_input = sensor_input.replace('{','')
                     temp_sensor_input = temp_sensor_input.replace('}','')
                     temp_sensor_data = temp_sensor_input.split(',')
+
+                    for i in range(len(temp_sensor_data)):
+                        temp_sensor_data[i] = filter(str.isdigit, temp_sensor_data[i])
+                    
+                    print(temp_sensor_data)
                     
                     for i in range(len(temp_sensor_data)):
                         # print(temp_sensor_data[i])
-                        self.sensors[SENSOR_NAMES[i]] = int(filter(str.isdigit, temp_sensor_data[i]))
+                        self.sensors[SENSOR_NAMES[i]] = int(temp_sensor_data[i])
                     
                     print(sensor_input)
                     # print(str(self.sensors))
