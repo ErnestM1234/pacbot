@@ -196,6 +196,7 @@ class ArduinoComms:
     North, on the game field, is 0 degrees.
     """
     def getHeading(self):
+        print("self.sensors[HEADING]" + str(self.sensors["HEADING"]))
         return self.sensors["HEADING"] / 100
 
     """ getOdometer()
