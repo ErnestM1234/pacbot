@@ -469,7 +469,8 @@ class ArduinoComms:
                         # print(temp_sensor_data[i])
                         self.sensors[SENSOR_NAMES[i]] = int(temp_sensor_data[i])
                     
-                    print(str(self.sensors))
+                    print(sensor_input)
+                    # print(str(self.sensors))
 
                 # sensor_items = json.loads(sensor_input).items()
                 # for key, value in sensor_items:
