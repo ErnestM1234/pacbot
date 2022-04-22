@@ -461,8 +461,8 @@ class ArduinoComms:
                 sensor_input = self.ser.readline().decode('ascii').rstrip()
                 
 
-                sensor_input = sensor_input.replace('{','')
-                sensor_input = sensor_input.replace('}','')
+                temp_sensor_input = sensor_input.replace('{','')
+                temp_sensor_input = temp_sensor_input.replace('}','')
                 temp_sensor_data = sensor_input.split(',')
                 
                 for i in range(len(temp_sensor_data)):
@@ -536,7 +536,7 @@ class ArduinoComms:
         
         output = "{rmd:" + rmd + ",rmp:" + rmp + ",lmd:" + lmd + ",lmp:" + lmp + "}"
 
-        print(output)
+        # print(output)
 
         # for testing purposes comment out when not testing
         # self.simulation_update(rmdVerified, rmpVerified, lmdVerified, lmpVerified)
