@@ -16,10 +16,13 @@ def mop(bot):
         # if bot.arduino.readSensor("FORWARD_DIST") < 50:
         #     bot.arduino.resetOdometer()
         #     print("reset odometer")
+
+        bot.set_target_heading(230)
+        bot.rotate_to_target_heading()
     
-        char = input()
-        if char == "n":
-            bot.arduino.calibrate()
+        # char = input()
+        # if char == "n":
+        #     bot.arduino.calibrate()
         # print("heading: " + str(bot.arduino.getHeading()))
         # print("MAG X: " + "{:6.2f}".format(bot.arduino.readSensor("MAG_X")) + " MAG Y: " + "{:6.2f}".format(bot.arduino.readSensor("MAG_Y")) + " MAG Z: " + "{:6.2f}".format(bot.arduino.readSensor("MAG_Z")))
         # if char == "f":

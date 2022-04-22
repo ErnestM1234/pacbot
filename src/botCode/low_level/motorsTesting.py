@@ -12,6 +12,12 @@ KI_R = 1
 KP_R = 1
 KD_R = 1
 
+KP_ANGLE = 3
+KP_DISTANCE = 0
+
+MAX_POWER = 180
+MAX_POWER_DIFFERENTIAL = 50
+
 class Directions(Enum):
     NORTH = 0
     EAST = 90
@@ -40,15 +46,71 @@ stop()
 """
 
 MOTOR_SPEED = 200
+DISTANCE_DIFF = 0 # distance differential
+INIT_PWR_L = 150
+INIT_PWR_R = 150
 
 class ArduinoMotors:
     def __init__(self):
         self.arduino = ArduinoComms()
         self.heading = 0
         self.odometer = 0
-        self.ki = 1
-        self.kp = 1
-        self.kd = 1
+        self.target_heading = 0
+
+    # ------------------------ target heading ------------------------ #
+    """ set_target_heading()
+    input:  void
+    return: void
+    sets the target heading
+    """
+    def set_target_heading(self, target_heading):
+        self.target_heading = target_heading
+
+    """ rotate_to_target_heading()
+    input:  void
+    return: void
+    rotates CW to the target heading
+    """
+    def rotate_to_target_heading(self):
+        self.arduino.calibrate()
+
+        pwr_left = 0
+        pwr_right = 0
+        # initial_heading = self.arduino.getHeading()
+        while (abs(self.arduino.getHeading() - self.target_heading) < 3):
+            current_heading = self.arduino.getHeading()
+            
+            mean_power = KP_ANGLE * (self.target_heading - current_heading)
+            mean_power = min(mean_power, MAX_POWER)
+
+            power_differential = KP_DISTANCE * (abs(self.arduino.readSensor("LEFT_ENCODER")) - abs(self.arduino.readSensor("RIGHT_ENCODER")))
+            power_differential = min(power_differential, MAX_POWER_DIFFERENTIAL)
+            power_differential = max(power_differential, -MAX_POWER_DIFFERENTIAL)
+
+            pwr_left = mean_power - power_differential
+            pwr_right = -mean_power - power_differential
+
+            l_dir = MotorDirection.BACKWARDS # "backwards" (actually forwards)
+            r_dir = MotorDirection.BACKWARDS
+            
+            if pwr_left < 0:
+                l_dir = MotorDirection.FORWARDS
+            if pwr_right < 0:
+                r_dir = MotorDirection.FORWARDS
+            
+            self.arduino.write(l_dir, abs(l_dir), r_dir, abs(r_dir))
+
+
+
+
+
+
+
+
+        
+        # if self.arduino.getHeading() - self.target_heading < 0:
+        #     target_heading
+        self.arduino.write(MotorDirection.FORWARDS, MOTOR_SPEED, MotorDirection.BACKWARDS, MOTOR_SPEED)
 
     # ------------------------ Rotations ------------------------ #
     """ rotate_right()
