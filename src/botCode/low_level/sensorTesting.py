@@ -494,7 +494,7 @@ class ArduinoComms:
                 # print("GYRO_X: " + str(self.sensors["GYRO_X"]).zfill(8) + " GYRO_Y: " + str(self.sensors["GYRO_Y"]).zfill(8) + " GYRO_Z: " + str(self.sensors["GYRO_Z"]).zfill(8))
                 # print("MAG_X: " + str(self.sensors["MAG_X"]) + " MAG_Y: " + str(self.sensors["MAG_Y"]) + " MAG_Z: " + str(self.sensors["MAG_Z"]))
 
-            self.ser.reset_input_buffer()
+            # self.ser.reset_input_buffer()
             # update odometer
             # self.updateOdometer()
             # print("odometer:" + str(self.getOdometer()))
