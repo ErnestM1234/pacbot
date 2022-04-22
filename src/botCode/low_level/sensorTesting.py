@@ -244,7 +244,7 @@ class ArduinoComms:
             # try:
             sensor_input = self.ser.readline().decode('ascii').rstrip()
 
-            print("raw input " + sensor_input)
+            # print("raw input " + sensor_input)
             # print("received input")
             
             if (len(sensor_input) > 0 and sensor_input[0] == '{' and sensor_input[len(sensor_input)-1] == '}'):
@@ -264,7 +264,7 @@ class ArduinoComms:
                 
                 # print(sensor_input)
                 # print(str(self.sensors))
-                print("parsed correctly")
+                # print("parsed correctly")
                 self.ser.reset_input_buffer()
 
 
@@ -334,7 +334,7 @@ class ArduinoComms:
         
         output = "{rmd:" + rmd + ",rmp:" + rmp + ",lmd:" + lmd + ",lmp:" + lmp + "}"
 
-        print(output)
+        # print(output)
 
         # for testing purposes comment out when not testing
         # self.simulation_update(rmdVerified, rmpVerified, lmdVerified, lmpVerified)
