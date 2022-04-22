@@ -245,7 +245,7 @@ class ArduinoComms:
             sensor_input = self.ser.readline().decode('ascii').rstrip()
 
             # print("raw input " + sensor_input)
-            # print("received input")
+            print("received input")
             
             if (len(sensor_input) > 0 and sensor_input[0] == '{' and sensor_input[len(sensor_input)-1] == '}'):
                 temp_sensor_input = sensor_input.replace('{','')
