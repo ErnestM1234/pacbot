@@ -457,37 +457,37 @@ class ArduinoComms:
             # flush input
             # self.ser.reset_input_buffer()
             # this is to ensure that we are receiving a json formatted string
-            try:
-                sensor_input = self.ser.readline().decode('ascii').rstrip()
+            # try:
+            sensor_input = self.ser.readline().decode('ascii').rstrip()
 
-                print("raw input " + sensor_input)
-                # print("received input")
+            print("raw input " + sensor_input)
+            # print("received input")
+            
+            if (len(sensor_input) > 0 and sensor_input[0] == '{' and sensor_input[len(sensor_input)-1] == '}'):
+                temp_sensor_input = sensor_input.replace('{','')
+                temp_sensor_input = temp_sensor_input.replace('}','')
+                # print(temp_sensor_input)
+                temp_sensor_data = temp_sensor_input.split(',')
+
+                # for i in range(len(temp_sensor_data)):
+                #     temp_sensor_data[i] = filter(str.isdigit, temp_sensor_data[i])
                 
-                if (len(sensor_input) > 0 and sensor_input[0] == '{' and sensor_input[len(sensor_input)-1] == '}'):
-                    temp_sensor_input = sensor_input.replace('{','')
-                    temp_sensor_input = temp_sensor_input.replace('}','')
-                    # print(temp_sensor_input)
-                    temp_sensor_data = temp_sensor_input.split(',')
-
-                    # for i in range(len(temp_sensor_data)):
-                    #     temp_sensor_data[i] = filter(str.isdigit, temp_sensor_data[i])
-                    
-                    # print(str(temp_sensor_data))
-                    
-                    for i, val in enumerate(temp_sensor_data):
-                        # print(temp_sensor_data[i])
-                        self.sensors[SENSOR_NAMES[i]] = int(val)
-                    
-                    # print(sensor_input)
-                    # print(str(self.sensors))
-                    print("parsed correctly")
+                # print(str(temp_sensor_data))
+                
+                for i, val in enumerate(temp_sensor_data):
+                    # print(temp_sensor_data[i])
+                    self.sensors[SENSOR_NAMES[i]] = int(val)
+                
+                # print(sensor_input)
+                # print(str(self.sensors))
+                print("parsed correctly")
 
 
                 # sensor_items = json.loads(sensor_input).items()
                 # for key, value in sensor_items:
                 #     self.sensors[key] = value
-            except Exception as e:
-                print("parsing error: " + str(e))
+            # except Exception as e:
+            #     print("parsing error: " + str(e))
                 # print(sensor_input)
                 # print(temp_sensor_data)
                 # print("ACC_X: " + str(self.sensors["ACC_X"]) + " ACC_Y: " + str(self.sensors["ACC_Y"]) + " ACC_Z: " + str(self.sensors["ACC_Z"]))
