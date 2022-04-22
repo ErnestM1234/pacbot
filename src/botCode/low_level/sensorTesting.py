@@ -486,8 +486,8 @@ class ArduinoComms:
                 # sensor_items = json.loads(sensor_input).items()
                 # for key, value in sensor_items:
                 #     self.sensors[key] = value
-            except:
-                print("parsing error")
+            except Exception as e:
+                print("parsing error: " + e)
                 # print(sensor_input)
                 # print(temp_sensor_data)
                 # print("ACC_X: " + str(self.sensors["ACC_X"]) + " ACC_Y: " + str(self.sensors["ACC_Y"]) + " ACC_Z: " + str(self.sensors["ACC_Z"]))
