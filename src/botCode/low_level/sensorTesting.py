@@ -544,7 +544,7 @@ class ArduinoComms:
         
         output = "{rmd:" + rmd + ",rmp:" + rmp + ",lmd:" + lmd + ",lmp:" + lmp + "}"
 
-        # print(output)
+        print(output)
 
         # for testing purposes comment out when not testing
         # self.simulation_update(rmdVerified, rmpVerified, lmdVerified, lmpVerified)
