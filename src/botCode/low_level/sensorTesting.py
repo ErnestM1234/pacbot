@@ -460,7 +460,8 @@ class ArduinoComms:
             try:
                 sensor_input = self.ser.readline().decode('ascii').rstrip()
 
-                print("raw input " + sensor_input)
+                # print("raw input " + sensor_input)
+                print("received input")
                 
                 if (len(sensor_input) > 0 and sensor_input[0] == '{' and sensor_input[len(sensor_input)-1] == '}'):
                     temp_sensor_input = sensor_input.replace('{','')
@@ -477,7 +478,9 @@ class ArduinoComms:
                         self.sensors[SENSOR_NAMES[i]] = int(temp_sensor_data[i])
                     
                     # print(sensor_input)
-                    print(str(self.sensors))
+                    # print(str(self.sensors))
+                    print("parsed correctly")
+
 
                 # sensor_items = json.loads(sensor_input).items()
                 # for key, value in sensor_items:
