@@ -101,7 +101,7 @@ class ArduinoMotors:
             if pwr_right < 0:
                 r_dir = MotorDirection.FORWARDS
             
-            self.arduino.write(l_dir, abs(l_dir), r_dir, abs(r_dir))
+            self.arduino.write(l_dir, abs(pwr_left), r_dir, abs(pwr_right))
 
         
         # if self.arduino.getHeading() - self.target_heading < 0:
