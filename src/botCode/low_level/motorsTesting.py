@@ -1,7 +1,16 @@
+from select import KQ_FILTER_READ
 from sensorTesting import *
 
 WALL_STOP_DIST = 50 # mm
 
+# gyro tunings (for going straight)
+KI_S = 1
+KP_S = 1
+KD_S = 1
+# gyro tunings (for rotation)
+KI_R = 1
+KP_R = 1
+KD_R = 1
 
 class Directions(Enum):
     NORTH = 0
@@ -37,6 +46,9 @@ class ArduinoMotors:
         self.arduino = ArduinoComms()
         self.heading = 0
         self.odometer = 0
+        self.ki = 1
+        self.kp = 1
+        self.kd = 1
 
     # ------------------------ Rotations ------------------------ #
     """ rotate_right()
