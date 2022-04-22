@@ -17,7 +17,7 @@ def mop(bot):
         #     bot.arduino.resetOdometer()
         #     print("reset odometer")
 
-        bot.set_target_heading(23000)
+        bot.set_target_heading(230)
         bot.rotate_to_target_heading()
     
         # char = input()
