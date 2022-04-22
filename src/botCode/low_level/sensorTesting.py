@@ -460,17 +460,16 @@ class ArduinoComms:
             try:
                 sensor_input = self.ser.readline().decode('ascii').rstrip()
                 
-
-                temp_sensor_input = sensor_input.replace('{','')
-                temp_sensor_input = temp_sensor_input.replace('}','')
-                temp_sensor_data = temp_sensor_input.split(',')
-                
-                for i in range(len(temp_sensor_data)):
-                    # print(temp_sensor_data[i])
-                    self.sensors[SENSOR_NAMES[i]] = int(temp_sensor_data[i])
+                if (sensor_input[0] == '{' and sensor_input[len(sensor_input)-1] == '}'):
+                    temp_sensor_input = sensor_input.replace('{','')
+                    temp_sensor_input = temp_sensor_input.replace('}','')
+                    temp_sensor_data = temp_sensor_input.split(',')
                     
-                
-                self.ser.reset_input_buffer()
+                    for i in range(len(temp_sensor_data)):
+                        # print(temp_sensor_data[i])
+                        self.sensors[SENSOR_NAMES[i]] = int(temp_sensor_data[i])
+                    
+                    # print(str(self.sensors))
 
                 # sensor_items = json.loads(sensor_input).items()
                 # for key, value in sensor_items:
@@ -483,6 +482,7 @@ class ArduinoComms:
                 # print("GYRO_X: " + str(self.sensors["GYRO_X"]).zfill(8) + " GYRO_Y: " + str(self.sensors["GYRO_Y"]).zfill(8) + " GYRO_Z: " + str(self.sensors["GYRO_Z"]).zfill(8))
                 # print("MAG_X: " + str(self.sensors["MAG_X"]) + " MAG_Y: " + str(self.sensors["MAG_Y"]) + " MAG_Z: " + str(self.sensors["MAG_Z"]))
 
+            self.ser.reset_input_buffer()
             # update odometer
             # self.updateOdometer()
             # print("odometer:" + str(self.getOdometer()))
