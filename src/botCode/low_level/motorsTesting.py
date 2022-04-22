@@ -79,7 +79,7 @@ class ArduinoMotors:
         # initial_heading = self.arduino.getHeading()
         # print("curr head: " + str(current_heading))
         # print("targ head: " + str(self.target_heading))
-        while (abs(self.arduino.getHeading() - self.target_heading) > 3):
+        while (abs(self.arduino.getHeading() - self.target_heading) > 10):
             self.arduino.read()
             current_heading = self.arduino.getHeading()
             # print("curr head: " + str(current_heading))
@@ -89,7 +89,7 @@ class ArduinoMotors:
             mean_power = max(mean_power, MIN_POWER)
             mean_power = min(mean_power, MAX_POWER)
 
-            mean_power = 125
+            mean_power = 100
 
             power_differential = KP_DISTANCE * (abs(self.arduino.readSensor("LEFT_ENCODER")) - abs(self.arduino.readSensor("RIGHT_ENCODER")))
             power_differential = min(power_differential, MAX_POWER_DIFFERENTIAL)
