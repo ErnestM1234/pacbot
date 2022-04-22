@@ -468,7 +468,7 @@ class ArduinoComms:
                     for i in range(len(temp_sensor_data)):
                         temp_sensor_data[i] = filter(str.isdigit, temp_sensor_data[i])
                     
-                    print(temp_sensor_data)
+                    print(str(temp_sensor_data))
                     
                     for i in range(len(temp_sensor_data)):
                         # print(temp_sensor_data[i])
