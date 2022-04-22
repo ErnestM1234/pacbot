@@ -460,7 +460,7 @@ class ArduinoComms:
             try:
                 sensor_input = self.ser.readline().decode('ascii').rstrip()
                 
-                if (sensor_input[0] == '{' and sensor_input[len(sensor_input)-1] == '}'):
+                if (len(sensor_input) > 0 and sensor_input[0] == '{' and sensor_input[len(sensor_input)-1] == '}'):
                     temp_sensor_input = sensor_input.replace('{','')
                     temp_sensor_input = temp_sensor_input.replace('}','')
                     temp_sensor_data = temp_sensor_input.split(',')
