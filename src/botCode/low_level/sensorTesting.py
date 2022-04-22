@@ -244,6 +244,7 @@ class ArduinoComms:
             # this is to ensure that we are receiving a json formatted string
             # try:
             sensor_input = self.ser.readline().decode('ascii').rstrip()
+            print(sensor_input)
 
             # print("raw input " + sensor_input)
             # print("received input")
