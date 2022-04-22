@@ -90,6 +90,8 @@ class ArduinoMotors:
             power_differential = min(power_differential, MAX_POWER_DIFFERENTIAL)
             power_differential = max(power_differential, -MAX_POWER_DIFFERENTIAL)
 
+            print("offset " + str(self.target_heading - current_heading))
+
             pwr_left = mean_power - power_differential
             pwr_right = -mean_power - power_differential
 
