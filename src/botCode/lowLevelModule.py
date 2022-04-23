@@ -18,7 +18,7 @@ PORT = os.environ.get("LOCAL_PORT", 11295)
 # FORWARDS   = 0
 # ROTATE     = 1
 # FORCE_STOP = 2
-FREQUENCY = 60
+FREQUENCY = 30
 
 class LowLevelCommandModule(rm.ProtoModule):
     def __init__(self, addr, port):
