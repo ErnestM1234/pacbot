@@ -64,13 +64,13 @@ class PacbotServerCommsModule(rm.ProtoModule):
         
     def msg_received(self, msg, msg_type):
         # This gets called whenever any message is received
-        if msg_type == MsgType.ACK:
-            print("got ack")
-            state = self.server_module.get_state()
-            if state != None:
-                # Broadcast state to local modules
-                print("broadcast")
-                self.write(state.SerializeToString(), MsgType.LIGHT_STATE)
+        #if msg_type == MsgType.ACK:
+            # print("got ack")
+        state = self.server_module.get_state()
+        if state != None:
+            # Broadcast state to local modules
+            print("broadcast")
+            self.write(state.SerializeToString(), MsgType.LIGHT_STATE)
 
     def tick(self):
         return
