@@ -361,16 +361,6 @@ def get_action(state):
 #    dt:            distance threshold (in cells)
 
 
-
-
-class GameEngine(rm.ProtoModule):
-    def __init__(self, addr, port):
-        self.subscriptions = [MsgType.LIGHT_STATE]
-        super().__init__(addr, port, message_buffers, MsgType, FREQUENCY, self.subscriptions)
-        self.loop.add_reader(sys.stdin, self.keypress)
-        self.game = GameState()
-
-
         # self.getActionInput = {
         #     "pellets": [()],
         #     "power_pellets": [()],
@@ -386,34 +376,68 @@ class GameEngine(rm.ProtoModule):
         #     "dt": 0,
         # }
 
+
+class GameEngine(rm.ProtoModule):
+    def __init__(self, addr, port):
+        self.subscriptions = [MsgType.LIGHT_STATE]
+        super().__init__(addr, port, message_buffers, MsgType, FREQUENCY, self.subscriptions)
+        # self.loop.add_reader(sys.stdin, self.keypress)
+        self.game = GameState()
+
         self.gameEngineGetAction = 0
 
-    def update_state(state):
+    def update_state(self, state):
         return
 
-    def get_action(state):
+    def get_action(self, state):
         return
 
     def msg_received(self, msg, msg_type):
         if msg_type == MsgType.LIGHT_STATE:
+            
+            rgf = False # red ghost frightened
+            try:
+                rgf = msg.red_ghost.state
+            except: 
+                print("no redghost")
+
+            bgf = False
+            try:
+                bgf = msg.blue_ghost.state
+            except: 
+                print("no redghost")
+
+            pgf = False
+            try:
+                pgf = msg.pink_ghost.state
+            except: 
+                print("no redghost")
+
+            ogf = False
+            try:
+                ogf = msg.orange_ghost.state
+            except: 
+                print("no redghost")
+            
 
 
-            # self.getActionInput = {
-            #     "pellets": [()],
-            #     "power_pellets": [()],
-            #     "pac": (0,0),
-            #     "r": 0,
-            #     "b": 0,
-            #     "o": 0,
-            #     "p": 0,
-            #     "rf": 0,
-            #     "bf": 0,
-            #     "of": 0,
-            #     "pf": 0,
-            #     "dt": 0, # frighten timer to cells
-            # }
+            self.getActionInput = {
+                "prev_pac": (3,3), # spot behind pacman
+                "pellets": [(0,0)],
+                "power_pellets": [(0,0)],
+                "pac": (msg.pacman.x, msg.pacman.y),
+                "r": (msg.red_ghost.x, msg.red_ghost.y),
+                "b": (msg.blue_ghost.x, msg.blue_ghost.y),
+                "o": (msg.orange_ghost.x, msg.orange_ghost.y),
+                "p": (msg.blue_ghost.x, msg.blue_ghost.y),
+                "rf": rgf,
+                "bf": bgf,
+                "of": ogf,
+                "pf": pgf,
+                "dt": 0, # frighten timer to cells
+            }
 
-            # self.gameEngine.update(self.getActionInput)
+            self.update(self.getActionInput)
 
             return
             # self.game.pacbot.update((msg.x, msg.y))
@@ -429,32 +453,33 @@ class GameEngine(rm.ProtoModule):
         #     # self.game.next_step()
         # self._write_state()
         
-        # pacCommand = PacmanCommand()
+
+        pacCommand = PacCommand()
         # # pacCommand.mode = MsgType.PAC_COMMAND
-        # # command 1
-        # pacCommand.command_1.direction = 1
-        # pacCommand.command_1.forwards_distance = 1
-        # # command 2
-        # pacCommand.command_2.direction = 1
-        # pacCommand.command_2.forwards_distance = 2
-        # # command 3
-        # pacCommand.command_3.direction = 1
-        # pacCommand.command_3.forwards_distance = 3
-        # # command 4
-        # pacCommand.command_4.direction = 1
-        # pacCommand.command_4.forwards_distance = 4
-        # # command 5
-        # pacCommand.command_5.direction = 1
-        # pacCommand.command_5.forwards_distance = 5
+        # command 1
+        pacCommand.command_1.direction = PacCommand.RIGHT
+        pacCommand.command_1.forwards_distance = 1
+        # command 2
+        pacCommand.command_2.direction = PacCommand.FORWARDS
+        pacCommand.command_2.forwards_distance = 2
+        # command 3
+        pacCommand.command_3.direction = PacCommand.FORWARDS
+        pacCommand.command_3.forwards_distance = 3
+        # command 4
+        pacCommand.command_4.direction = PacCommand.FORWARDS
+        pacCommand.command_4.forwards_distance = 4
+        # command 5
+        pacCommand.command_5.direction = PacCommand.FORWARDS
+        pacCommand.command_5.forwards_distance = 1
 
-        # self.write(pacCommand, MsgType.PACMAN_COMMAND)
+        self.write(pacCommand.SerializeToString(), MsgType.PAC_COMMAND)
 
-        light_state = StateConverter.convert_game_state_to_light(self.game)
-        self.write(light_state.SerializeToString(), MsgType.LIGHT_STATE)
+        # light_state = StateConverter.convert_game_state_to_light(self.game)
+        # self.write(light_state.SerializeToString(), MsgType.LIGHT_STATE)
 
-        self.write(light_state, MsgType.PACMAN_COMMAND)
+        # self.write(light_state, MsgType.PACMAN_COMMAND)
 
-        print("sent pacCommand")
+        print("sent pacCommand: " + str(pacCommand))
         return
 
 def main():

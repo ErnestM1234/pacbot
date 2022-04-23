@@ -18,6 +18,8 @@ import robomodules as rm
 from messages import *
 from pacbot.variables import game_frequency, ticks_per_update
 from pacbot import StateConverter, GameState
+from messages.pacCommand_pb2 import PacCommand
+
 
 ADDRESS = os.environ.get("BIND_ADDRESS","localhost") # the address of the game engine server
 # ADDRESS = os.environ.get("BIND_ADDRESS","172.20.10.3")
@@ -91,6 +93,7 @@ class GameEngine(rm.ProtoModule):
     def _write_state(self):
         # full_state = StateConverter.convert_game_state_to_full(self.game)
         # self.write(full_state.SerializeToString(), MsgType.FULL_STATE)
+        # print("message written")
 
         # light_state = StateConverter.convert_game_state_to_light(self.game)
         # self.write(light_state.SerializeToString(), MsgType.LIGHT_STATE)
@@ -108,6 +111,26 @@ class GameEngine(rm.ProtoModule):
     def tick(self):
         # this function will get called in a loop with FREQUENCY frequency
         self._write_state()
+
+        # pacCommand = PacCommand()
+        # # pacCommand.mode = MsgType.PAC_COMMAND
+        # # command 1
+        # pacCommand.command_1.direction = PacCommand.RIGHT
+        # pacCommand.command_1.forwards_distance = 1
+        # # command 2
+        # pacCommand.command_2.direction = PacCommand.FORWARDS
+        # pacCommand.command_2.forwards_distance = 2
+        # # command 3
+        # pacCommand.command_3.direction = PacCommand.FORWARDS
+        # pacCommand.command_3.forwards_distance = 3
+        # # command 4
+        # pacCommand.command_4.direction = PacCommand.FORWARDS
+        # pacCommand.command_4.forwards_distance = 4
+        # # command 5
+        # pacCommand.command_5.direction = PacCommand.FORWARDS
+        # pacCommand.command_5.forwards_distance = 1
+
+        # self.write(pacCommand, MsgType.PAC_COMMAND)
 
         if self.game.play:
             return

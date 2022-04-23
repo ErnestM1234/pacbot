@@ -1,6 +1,7 @@
 from .variables import *
 from messages.pacmanState_pb2 import PacmanState
 from messages.lightState_pb2 import LightState
+from messages.pacCommand_pb2 import PacCommand
 import time
 
 class StateConverter:
@@ -34,6 +35,26 @@ class StateConverter:
             return PacmanState.CHERRY
         else:
             return PacmanState.EMPTY
+
+    @classmethod
+    def convert_to_command(cls, game_state):
+        pacCommand = PacCommand()
+        # command 1
+        pacCommand.command_1.direction = PacCommand.RIGHT
+        pacCommand.command_1.forwards_distance = 1
+        # command 2
+        pacCommand.command_2.direction = PacCommand.FORWARDS
+        pacCommand.command_2.forwards_distance = 2
+        # command 3
+        pacCommand.command_3.direction = PacCommand.FORWARDS
+        pacCommand.command_3.forwards_distance = 3
+        # command 4
+        pacCommand.command_4.direction = PacCommand.FORWARDS
+        pacCommand.command_4.forwards_distance = 4
+        # command 5
+        pacCommand.command_5.direction = PacCommand.FORWARDS
+        pacCommand.command_5.forwards_distance = 1
+
 
     @classmethod
     def convert_game_state_to_full(cls, game_state):
