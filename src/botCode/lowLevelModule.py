@@ -82,7 +82,7 @@ class LowLevelCommandModule(rm.ProtoModule):
     def kill(self):
         output = "{sto}"
         while True:
-            self.arduino.write(output.encode('utf-8'))
+            self.arduino.ser.write(output.encode('utf-8'))
             print("killed")
 
 def main():
