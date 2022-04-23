@@ -85,7 +85,7 @@ class PacbotGameEngineCommsModule(rm.ProtoModule):
         if command != None:
             # Broadcast commands to local modules
             print("broadcast")
-           self.write(command.SerializeToString(), MsgType.PAC_COMMAND)
+            self.write(command.SerializeToString(), MsgType.PAC_COMMAND)
 
 def main():
     module = PacbotGameEngineCommsModule(GAME_ENGINE_ADDRESS, GAME_ENGINE_PORT, LOCAL_ADDRESS, LOCAL_PORT)
