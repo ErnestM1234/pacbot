@@ -74,7 +74,7 @@ class PacbotGameEngineCommsModule(rm.ProtoModule):
     def msg_received(self, msg, msg_type):
         if msg_type == MsgType.LIGHT_STATE:
             # broadcast state to Our Game Engine
-        
+            print("broadcast")
             self.game_engine_module.write(msg.SerializeToString(), MsgType.LIGHT_STATE)
         return
 
