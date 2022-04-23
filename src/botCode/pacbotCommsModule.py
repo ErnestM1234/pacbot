@@ -76,7 +76,7 @@ class PacbotServerCommsModule(rm.ProtoModule):
     def tick(self):
 
         state = self.server_module.get_state()
-        if state != None and self.first:
+        if state != None and self.first and self.server_module.get_state().mode != LightState.PAUSED:
             self.first = False
             # Broadcast state to local modules
             print("broadcast")
