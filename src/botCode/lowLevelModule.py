@@ -61,11 +61,11 @@ class LowLevelCommandModule(rm.ProtoModule):
         ack = Ack()
         ack.hasAck = 1
         self.write(ack.SerializeToString(), MsgType.ACK)
-        # print("execute end")
+        print("sent ack")
         return True
             
     def msg_received(self, msg, msg_type):
-        # print("mess received")
+        print("mess received")
         if msg_type == MsgType.PAC_COMMAND:
             self.command_queue.append((msg.command.direction, msg.command.forwards_distance))
             # print(str(self.command_queue))

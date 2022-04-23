@@ -39,6 +39,7 @@ class PacbotServerClient(rm.ProtoModule):
         self.state = None
 
     def msg_received(self, msg, msg_type):
+        print("got light state")
         # This gets called whenever any message is received
         # This module will connect to server and receive the game state
 
@@ -64,10 +65,11 @@ class PacbotServerCommsModule(rm.ProtoModule):
     def msg_received(self, msg, msg_type):
         # This gets called whenever any message is received
         if msg_type == MsgType.ACK:
+            print("got ack")
             state = self.server_module.get_state()
             if state != None:
-                print("broadcast")
                 # Broadcast state to local modules
+                print("broadcast")
                 self.write(state.SerializeToString(), MsgType.LIGHT_STATE)
 
     def tick(self):
