@@ -1,0 +1,10 @@
+syntax = "proto2";
+
+package botCode;
+
+
+message Ack {
+
+  required int32 hasAck = 1;
+
+}

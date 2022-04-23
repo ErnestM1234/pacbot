@@ -53,7 +53,7 @@ class PacbotServerClient(rm.ProtoModule):
 # this connects to the pacbot('s sever)
 class PacbotServerCommsModule(rm.ProtoModule):
     def __init__(self, server_addr, server_port, local_addr, local_port):
-        self.subscriptions = [MsgType.PACMAN_LOCATION]
+        self.subscriptions = [MsgType.ACK]
         # this connects to the local server
         super().__init__(local_addr, local_port, message_buffers, MsgType, LOCAL_FREQUENCY, self.subscriptions)
         # this connects to the server
@@ -62,15 +62,19 @@ class PacbotServerCommsModule(rm.ProtoModule):
         
     def msg_received(self, msg, msg_type):
         # This gets called whenever any message is received
-        if msg_type == MsgType.PACMAN_LOCATION:
-           self.server_module.write(msg.SerializeToString(), MsgType.PACMAN_LOCATION)
+        if msg_type == MsgType.ACK:
+            state = self.server_module.get_state()
+            if state != None:
+                # Broadcast state to local modules
+                self.write(state.SerializeToString(), MsgType.LIGHT_STATE)
 
     def tick(self):
-        # Get state from the server
-        state = self.server_module.get_state()
-        if state != None:
-            # Broadcast state to local modules
-            self.write(state.SerializeToString(), MsgType.LIGHT_STATE)
+        return
+        # # Get state from the server
+        # state = self.server_module.get_state()
+        # if state != None:
+        #     # Broadcast state to local modules
+        #     self.write(state.SerializeToString(), MsgType.LIGHT_STATE)
 
 def main():
     module = PacbotServerCommsModule(SERVER_ADDRESS, SERVER_PORT, LOCAL_ADDRESS, LOCAL_PORT)

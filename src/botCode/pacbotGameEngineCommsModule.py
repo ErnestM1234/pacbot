@@ -34,7 +34,7 @@ GAME_ENGINE - Princeton's computation server that gives pacbot actions
 # for silly reasons these classes have to be nested
 class PacbotGameEngineClient(rm.ProtoModule):
     def __init__(self, addr, port, loop):
-        self.subscriptions = [MsgType.PACMAN_COMMAND]
+        self.subscriptions = [MsgType.PAC_COMMAND]
         # this connects to the game engine
         super().__init__(addr, port, message_buffers, MsgType, GAME_ENGINE_FREQUENCY, self.subscriptions, loop)
         self.command = None
@@ -42,7 +42,7 @@ class PacbotGameEngineClient(rm.ProtoModule):
     def msg_received(self, msg, msg_type):
         # This gets called whenever any message is received
         # This module will connect to server and receive the game state
-        if msg_type == MsgType.PACMAN_COMMAND:
+        if msg_type == MsgType.PAC_COMMAND:
             self.command = msg
 
     def tick(self):
@@ -63,7 +63,7 @@ class PacbotGameEngineCommsModule(rm.ProtoModule):
 
     def msg_received(self, msg, msg_type):
         if msg_type == MsgType.LIGHT_STATE:
-            # broadcast state to Game Enginex
+            # broadcast state to Our Game Engine
             self.game_engine_module.write(msg.SerializeToString(), MsgType.LIGHT_STATE)
         return
 
@@ -72,7 +72,7 @@ class PacbotGameEngineCommsModule(rm.ProtoModule):
         command = self.game_engine_module.get_command()
         if command != None:
             # Broadcast commands to local modules
-           self.write(command.SerializeToString(), MsgType.PACMAN_COMMAND)
+           self.write(command.SerializeToString(), MsgType.PAC_COMMAND)
 
 def main():
     module = PacbotGameEngineCommsModule(GAME_ENGINE_ADDRESS, GAME_ENGINE_PORT, LOCAL_ADDRESS, LOCAL_PORT)
