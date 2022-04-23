@@ -11,6 +11,8 @@ from math import sqrt as sqrt
 from math import pi as pi
 import time
 
+FORWARDS  = 0
+ROTATE    = 1
 
 """
 INPUTS:
@@ -296,53 +298,42 @@ class ArduinoComms:
 
         return self.sensors
 
-    """ write()
-    Input:
-        rightMotorDirection     - direction of right motor spin
-        rightMotorPower         - power of right motor
-        leftMotorDirection      - direction of left motor spin
-        leftMotorPower          - power of left motor
-    Output:     void
-    Writes to command of format {rmd:000,rmp:000,lmd:000,rmp:000}
-    """
-    def write(self, rightMotorDirection, rightMotorPower, leftMotorDirection, leftMotorPower):
-        # check input validity
-        rmpVerified = max(min(rightMotorPower,255),0) # 0 < rmd < 255
-        lmpVerified = max(min(leftMotorPower, 255),0) # 0 < lmd < 255
+    ''' write()
+    inputs:
+    * state (forwards / rotate)  - int
+    * amount forward motion      - int
+    * rotation left              - bool
+    * rotation right             - bool
+    output: void
+    communicate with arduino to make a movement
 
+    Format example:
+    {fwd:12}
+    {rot:0}
+    {rot:1}
+    {rot:0}
+    {fwd:4}
+    '''
 
-        # output integer format must be in three digits
-        self.motorState["rmd"] = rightMotorDirection
-        self.motorState["rmp"] = rmpVerified
-        self.motorState["lmd"] = leftMotorDirection
-        self.motorState["lmp"] = lmpVerified
-
-
-        # convert to string
-        # rmd = str(rmdVerified).zfill(3)
-        rmp = str(rmpVerified).zfill(3)
-        # lmd = str(lmdVerified).zfill(3)
-        lmp = str(lmpVerified).zfill(3)
-        # output = "{rmd:" + rmd + ",rmp:" + rmp + ",lmd:" + lmd + ",lmp:" + lmp + "}"
-
-        if rightMotorDirection == MotorDirection.FORWARDS:
-            rmd = "000"
-        else:
-            rmd = "001"
-
-        if leftMotorDirection == MotorDirection.FORWARDS:
-            lmd = "000"
-        else:
-            lmd = "001"
+    def write(self, action_type, forward_amt, rot_left, rot_right):
+    
+        output = ""
         
-        output = "{rmd:" + rmd + ",rmp:" + rmp + ",lmd:" + lmd + ",lmp:" + lmp + "}"
-
-        # print(output)
-
-        # for testing purposes comment out when not testing
-        # self.simulation_update(rmdVerified, rmpVerified, lmdVerified, lmpVerified)
-
-        # write to serial
+        if (action_type == FORWARDS):
+            assert (not rot_left and not rot_right), "cannot rotate while moving forwards"
+            output += ("{fwd:"+str(forward_amt))
+            
+        elif (action_type == ROTATE):
+            assert forward_amt == 0, "cannot move forwards while rotating"
+            assert rot_left ^ rot_right, "cannot simultaneously rotate right and left"
+            output += "{rot:"
+            if (rot_left):
+                output += "0"
+            else:
+                output += "1"
+        
+        output += "}"
+        
         self.ser.write(output.encode('utf-8'))
 
     """ calibrate()
