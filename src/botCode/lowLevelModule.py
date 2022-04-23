@@ -39,7 +39,7 @@ class LowLevelCommandModule(rm.ProtoModule):
         self.arduino.write(ROTATE, 0, False, True)
 
     def _execute_command(self):
-        print("execute start")
+        # print("execute start")
         
         if not self.current_command:
             return False
@@ -60,12 +60,12 @@ class LowLevelCommandModule(rm.ProtoModule):
                 self.arduino.write(ROTATE, 0, False, True)
                 
         self.pending_completion = False
-        print(str(self.command_queue))
+        # print(str(self.command_queue))
         
         ack = Ack()
         ack.hasAck = 1
         self.write(ack.SerializeToString(), MsgType.ACK)
-        print("execute end")
+        # print("execute end")
         return True
             
     def msg_received(self, msg, msg_type):
