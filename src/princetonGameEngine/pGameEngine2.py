@@ -575,8 +575,17 @@ class GameEngine(rm.ProtoModule):
 
     def msg_received(self, msg, msg_type):
         if msg_type == MsgType.LIGHT_STATE:
+        
 
             print("got lightState")
+            if msg.mode == LightState.PAUSED:
+                stopComm = PacCommand()
+                pacCommand.command.direction = direction
+                pacCommand.command.forwards_distance = forwards_distance
+
+
+                self.write(pacCommand.SerializeToString(), MsgType.PAC_COMMAND)
+
             
             rgf = False # red ghost frightened
             try:

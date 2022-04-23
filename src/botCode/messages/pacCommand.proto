@@ -16,5 +16,6 @@ message PacCommand {
     LEFT = 0;
     RIGHT = 1;
     FORWARDS = 2;
+    STOP = 3;
   }
 }

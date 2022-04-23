@@ -54,7 +54,9 @@ class LowLevelCommandModule(rm.ProtoModule):
                 self.arduino.write(ROTATE, 0, True, False)
             elif (cmd[0] == PacCommand.RIGHT):
                 self.arduino.write(ROTATE, 0, False, True)
-                
+            elif (cmd[0] == PacCommand.STOP):
+                self.kill()
+
         self.pending_completion = False
         # print(str(self.command_queue))
         

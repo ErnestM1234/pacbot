@@ -14,7 +14,7 @@ _sym_db = _symbol_database.Default()
 
 
 
-DESCRIPTOR = _descriptor_pool.Default().AddSerializedFile(b'\n\x10pacCommand.proto\x12\x13princetonGameEngine\"\xda\x01\n\nPacCommand\x12\x38\n\x07\x63ommand\x18\x01 \x02(\x0b\x32\'.princetonGameEngine.PacCommand.Command\x1a\x62\n\x07\x43ommand\x12<\n\tdirection\x18\x01 \x02(\x0e\x32).princetonGameEngine.PacCommand.Direction\x12\x19\n\x11\x66orwards_distance\x18\x02 \x02(\x05\".\n\tDirection\x12\x08\n\x04LEFT\x10\x00\x12\t\n\x05RIGHT\x10\x01\x12\x0c\n\x08\x46ORWARDS\x10\x02')
+DESCRIPTOR = _descriptor_pool.Default().AddSerializedFile(b'\n\x10pacCommand.proto\x12\x13princetonGameEngine\"\xe4\x01\n\nPacCommand\x12\x38\n\x07\x63ommand\x18\x01 \x02(\x0b\x32\'.princetonGameEngine.PacCommand.Command\x1a\x62\n\x07\x43ommand\x12<\n\tdirection\x18\x01 \x02(\x0e\x32).princetonGameEngine.PacCommand.Direction\x12\x19\n\x11\x66orwards_distance\x18\x02 \x02(\x05\"8\n\tDirection\x12\x08\n\x04LEFT\x10\x00\x12\t\n\x05RIGHT\x10\x01\x12\x0c\n\x08\x46ORWARDS\x10\x02\x12\x08\n\x04STOP\x10\x03')
 
 
 
@@ -40,9 +40,9 @@ if _descriptor._USE_C_DESCRIPTORS == False:
 
   DESCRIPTOR._options = None
   _PACCOMMAND._serialized_start=42
-  _PACCOMMAND._serialized_end=260
+  _PACCOMMAND._serialized_end=270
   _PACCOMMAND_COMMAND._serialized_start=114
   _PACCOMMAND_COMMAND._serialized_end=212
   _PACCOMMAND_DIRECTION._serialized_start=214
-  _PACCOMMAND_DIRECTION._serialized_end=260
+  _PACCOMMAND_DIRECTION._serialized_end=270
 # @@protoc_insertion_point(module_scope)
