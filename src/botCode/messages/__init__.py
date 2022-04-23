@@ -22,7 +22,7 @@ message_buffers = {
     MsgType.PACMAN_LOCATION: PacmanState.AgentState,
     MsgType.PACMAN_COMMAND: PacmanCommand,
     MsgType.TEST: Test,
-    MsgType.PAC_COMMAND: PacCommand
+    MsgType.PAC_COMMAND: PacCommand,
     MsgType.ACK: Ack
 }
 

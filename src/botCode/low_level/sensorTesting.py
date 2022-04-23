@@ -240,18 +240,19 @@ class ArduinoComms:
     Checks for acknowledgement from the Arduino
     """
     def checkAck(self):
-    	if self.ser.in_waiting > 0:
-        	token = self.ser.readline().decode('ascii').rstrip()
+        if self.ser.in_waiting > 0:
+            token = self.ser.readline().decode('ascii').rstrip()
             if (token == '{ACK}'):
-            	return True
+                return True
             self.ser.reset_input_buffer()
         return False
-        
+
     """ read()
-    input:  void
-    output: a python dictionary containing all of the sensor values
-    Reads a new set of values from the serial stream.
+        input:  void
+        output: a python dictionary containing all of the sensor values
+        Reads a new set of values from the serial stream.
     """
+
     def read(self):
         # read from input buffer
         if self.ser.in_waiting > 0:
@@ -264,6 +265,10 @@ class ArduinoComms:
 
             # print("raw input " + sensor_input)
             # print("received input")
+
+            if len(sensor_input) > 0 and  sensor_input == "{ACK}":
+                return
+
             
             if (len(sensor_input) > 0 and sensor_input[0] == '{' and sensor_input[len(sensor_input)-1] == '}'):
                 temp_sensor_input = sensor_input.replace('{','')
@@ -271,42 +276,20 @@ class ArduinoComms:
                 # print(temp_sensor_input)
                 temp_sensor_data = temp_sensor_input.split(',')
 
+
                 # for i in range(len(temp_sensor_data)):
                 #     temp_sensor_data[i] = filter(str.isdigit, temp_sensor_data[i])
                 
-                # print(str(temp_sensor_data))
-                
                 for i in range(len(temp_sensor_data)):
                     # print(temp_sensor_data[i])
+ 
                     self.sensors[SENSOR_NAMES[i]] = int(float(temp_sensor_data[i]))
                 
                 # print(sensor_input)
-                # print(str(self.sensors))
+                print(str(self.sensors))
                 # print("parsed correctly")
                 # print("self.sensors[]: " + str(self.sensors))
                 self.ser.reset_input_buffer()
-
-
-
-                # sensor_items = json.loads(sensor_input).items()
-                # for key, value in sensor_items:
-                #     self.sensors[key] = value
-            # except Exception as e:
-            #     print("parsing error: " + str(e))
-                # print(sensor_input)
-                # print(temp_sensor_data)
-                # print("ACC_X: " + str(self.sensors["ACC_X"]) + " ACC_Y: " + str(self.sensors["ACC_Y"]) + " ACC_Z: " + str(self.sensors["ACC_Z"]))
-                # print("GYRO_X: " + str(self.sensors["GYRO_X"]).zfill(8) + " GYRO_Y: " + str(self.sensors["GYRO_Y"]).zfill(8) + " GYRO_Z: " + str(self.sensors["GYRO_Z"]).zfill(8))
-                # print("MAG_X: " + str(self.sensors["MAG_X"]) + " MAG_Y: " + str(self.sensors["MAG_Y"]) + " MAG_Z: " + str(self.sensors["MAG_Z"]))
-
-            # self.ser.reset_input_buffer()
-            # update odometer
-            # self.updateOdometer()
-            # print("odometer:" + str(self.getOdometer()))
-
-            # d_time = (time.time_ns() - self.last_time_measured)
-            # self.last_time_measured = time.time_ns()
-            # print(str(d_time))
             
 
 
@@ -322,11 +305,11 @@ class ArduinoComms:
     communicate with arduino to make a movement
 
     Format example:
-    {fwd:12}
-    {rot:0}
-    {rot:1}
-    {rot:0}
-    {fwd:4}
+    {fwd12}
+    {rot0}
+    {rot1}
+    {rot0}
+    {fwd4}
     '''
 
     def write(self, action_type, forward_amt, rot_left, rot_right):
@@ -347,10 +330,11 @@ class ArduinoComms:
                 output += "1"
                 
         elif (action_type == FORCE_STOP):
-        	output += "sto"
-        
+            output += "sto"
+
         output += "}"
         
+        print(output)
         self.ser.write(output.encode('utf-8'))
 
     """ calibrate()

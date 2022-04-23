@@ -5,20 +5,24 @@ import time
 import robomodules as rm
 import variables as var
 from grid import grid
-from deque import *
+from collections import deque
 from messages import MsgType, message_buffers, LightState, PacmanCommand
-from sensorTesting import *
 from messages.ack_pb2 import Ack
 from messages.pacCommand_pb2 import PacCommand
+from low_level.sensorTesting import *
 
 ADDRESS = os.environ.get("LOCAL_ADDRESS","localhost")
 PORT = os.environ.get("LOCAL_PORT", 11295)
 
+
+FORWARDS   = 0
+ROTATE     = 1
+FORCE_STOP = 2
 FREQUENCY = 60
 
 class LowLevelCommandModule(rm.ProtoModule):
     def __init__(self, addr, port):
-      	self.arduino = ArduinoComms()
+        self.arduino = ArduinoComms()
         self.subscriptions = [MsgType.PAC_COMMAND]
         super().__init__(addr, port, message_buffers, MsgType, FREQUENCY, self.subscriptions)
         self.command_queue = deque()
@@ -36,8 +40,8 @@ class LowLevelCommandModule(rm.ProtoModule):
 
     def _execute_command(self):
         
-        if !self.current_command:
-        	return False
+        if not self.current_command:
+            return False
           
         self.pending_completion = True        
         cmd = self.current_command
@@ -46,12 +50,12 @@ class LowLevelCommandModule(rm.ProtoModule):
             self.current_command = self.command_queue.popleft()
         
         while not self.arduino.checkAck():
-          	if (cmd[0] == PacCommand.FORWARDS):
-            	self.arduino.write(FORWARDS, cmd[1], False, False)
-          	else if (cmd[0] == PacCommand.LEFT):
-          		self.arduino.write(ROTATE, 0, True, False)
-          	else if (cmd[0] == PacCommand.RIGHT):
-              	self.arduino.write(ROTATE, 0, False, True)
+            if (cmd[0] == PacCommand.FORWARDS):
+                self.arduino.write(FORWARDS, cmd[1], False, False)
+            elif (cmd[0] == PacCommand.LEFT):
+                self.arduino.write(ROTATE, 0, True, False)
+            elif (cmd[0] == PacCommand.RIGHT):
+                self.arduino.write(ROTATE, 0, False, True)
                 
         self.pending_completion = False
         
@@ -70,9 +74,9 @@ class LowLevelCommandModule(rm.ProtoModule):
             self._execute_command()
             
     def kill(self):
-      	output = "{sto}"
-    	while True:
-          self.arduino.write(output.encode('utf-8'))
+        output = "{sto}"
+        while True:
+            self.arduino.write(output.encode('utf-8'))
 
 def main():
     module = LowLevelCommandModule(ADDRESS, PORT)

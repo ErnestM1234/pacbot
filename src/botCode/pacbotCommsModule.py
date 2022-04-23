@@ -4,8 +4,8 @@ import os
 import robomodules as rm
 from messages import *
 
-# SERVER_ADDRESS = os.environ.get("BIND_ADDRESS","localhost")
-SERVER_ADDRESS = os.environ.get("BIND_ADDRESS","172.20.10.3")
+SERVER_ADDRESS = os.environ.get("BIND_ADDRESS","localhost")
+# SERVER_ADDRESS = os.environ.get("BIND_ADDRESS","172.20.10.3")
 SERVER_PORT = os.environ.get("BIND_PORT", 11297)
 
 LOCAL_ADDRESS = os.environ.get("LOCAL_ADDRESS","localhost") # always on local host
