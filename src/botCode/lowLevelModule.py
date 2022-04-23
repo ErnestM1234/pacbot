@@ -54,8 +54,7 @@ class LowLevelCommandModule(rm.ProtoModule):
                 self.arduino.write(ROTATE, 0, True, False)
             elif (cmd[0] == PacCommand.RIGHT):
                 self.arduino.write(ROTATE, 0, False, True)
-            elif (cmd[0] == PacCommand.STOP):
-                self.kill()
+        
 
         self.pending_completion = False
         # print(str(self.command_queue))
@@ -69,6 +68,8 @@ class LowLevelCommandModule(rm.ProtoModule):
     def msg_received(self, msg, msg_type):
         print("mess received")
         if msg_type == MsgType.PAC_COMMAND:
+            if (msg.command.direction == PacCommand.STOP):
+                self.kill()
             self.command_queue.append((msg.command.direction, msg.command.forwards_distance))
             # print(str(self.command_queue))
     

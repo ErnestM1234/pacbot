@@ -53,6 +53,9 @@ class GameEngine(rm.ProtoModule):
             if (self.game.play):
                 logging.info('Game is paused')
                 self.game.pause()
+                light_state = StateConverter.convert_game_state_to_light(self.game)
+                light_state.mode = LightState.PAUSED
+                self.write(light_state.SerializeToString(), MsgType.LIGHT_STATE)
             else:
                 logging.info('Game resumed')
                 self.game.unpause()
