@@ -66,6 +66,7 @@ class PacbotServerCommsModule(rm.ProtoModule):
         if msg_type == MsgType.ACK:
             state = self.server_module.get_state()
             if state != None:
+                print("broadcast")
                 # Broadcast state to local modules
                 self.write(state.SerializeToString(), MsgType.LIGHT_STATE)
 
