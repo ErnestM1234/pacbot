@@ -61,24 +61,31 @@ class PacbotServerCommsModule(rm.ProtoModule):
         # this connects to the server
         self.server_module = PacbotServerClient(server_addr, server_port, self.loop)
         self.server_module.connect()
+        self.first = True
         
     def msg_received(self, msg, msg_type):
         # This gets called whenever any message is received
-        #if msg_type == MsgType.ACK:
-            # print("got ack")
-        state = self.server_module.get_state()
-        if state != None:
-            # Broadcast state to local modules
-            print("broadcast")
-            self.write(state.SerializeToString(), MsgType.LIGHT_STATE)
+        if msg_type == MsgType.ACK:
+            print("got ack")
+            state = self.server_module.get_state()
+            if state != None:
+                # Broadcast state to local modules
+                print("broadcast")
+                self.write(state.SerializeToString(), MsgType.LIGHT_STATE)
 
     def tick(self):
+
         state = self.server_module.get_state()
-        if state != None:
+        if state != None and self.first:
+            self.first = False
             # Broadcast state to local modules
             print("broadcast")
             self.write(state.SerializeToString(), MsgType.LIGHT_STATE)
-        return
+            self.write(state.SerializeToString(), MsgType.LIGHT_STATE)
+            self.write(state.SerializeToString(), MsgType.LIGHT_STATE)
+            self.write(state.SerializeToString(), MsgType.LIGHT_STATE)
+            self.write(state.SerializeToString(), MsgType.LIGHT_STATE)
+        # return
         # # Get state from the server
         # state = self.server_module.get_state()
         # if state != None:
