@@ -26,7 +26,7 @@ class LowLevelCommandModule(rm.ProtoModule):
         self.subscriptions = [MsgType.PAC_COMMAND]
         super().__init__(addr, port, message_buffers, MsgType, FREQUENCY, self.subscriptions)
         self.command_queue = deque()
-        self.current_command = ("forwards", 0) # in the form of a tuple
+        self.current_command = (PacCommand.FORWARDS, 0) # in the form of a tuple
         self.pending_completion = False
         
     def _move_forward(self):
@@ -65,13 +65,11 @@ class LowLevelCommandModule(rm.ProtoModule):
         return True
             
     def msg_received(self, msg, msg_type):
-        print("got mess")
         if msg_type == MsgType.PAC_COMMAND:
             self.command_queue.append((msg.command.direction, msg.command.forwards_distance))
-            print(str(self.command_queue))
+            # print(str(self.command_queue))
     
     def tick(self):
-        print('tick')
         if self.current_command and not self.pending_completion:
             self._execute_command()
             
