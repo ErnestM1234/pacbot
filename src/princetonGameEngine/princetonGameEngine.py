@@ -481,8 +481,8 @@ class GameEngine(rm.ProtoModule):
             direction = PacCommand.RIGHT
 
             
-        pacCommand.command_1.direction = direction
-        pacCommand.command_1.forwards_distance = forwards_distance
+        pacCommand.command.direction = direction
+        pacCommand.command.forwards_distance = forwards_distance
 
 
         self.write(pacCommand.SerializeToString(), MsgType.PAC_COMMAND)
@@ -492,7 +492,7 @@ class GameEngine(rm.ProtoModule):
 
         # self.write(light_state, MsgType.PACMAN_COMMAND)
 
-        print("sent pacCommand: " + str(pacCommand))
+        print("\n ----- sent pacCommand: \n" + str(pacCommand) + "----- \n")
         return
 
 def main():
