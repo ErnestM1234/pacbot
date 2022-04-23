@@ -71,6 +71,8 @@ class LowLevelCommandModule(rm.ProtoModule):
     def msg_received(self, msg, msg_type):
         # print("mess received")
         if msg_type == MsgType.PAC_COMMAND:
+            if len(self.command_queue) == 0:
+                self.current_command = (msg.command.direction, msg.command.forwards_distance)
             self.command_queue.append((msg.command.direction, msg.command.forwards_distance))
             # print(str(self.command_queue))
     
@@ -85,7 +87,6 @@ class LowLevelCommandModule(rm.ProtoModule):
 
 def main():
     module = LowLevelCommandModule(ADDRESS, PORT)
-    module.run()
     try:
         module.run()
     except KeyboardInterrupt:
