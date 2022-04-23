@@ -450,6 +450,30 @@ class GameEngine(rm.ProtoModule):
 
 
 
+            pacActionCommand = get_action(self.state)[0] # get command from algorithm
+
+            # fill out pac command
+            pacCommand = PacCommand()
+
+            direction = PacCommand.FORWARDS
+            forwards_distance = 0
+
+            if pacActionCommand[0] == 0:
+                direction = PacCommand.FORWARDS
+                forwards_distance = pacActionCommand[1]
+            elif pacActionCommand[0] == 1:
+                direction = PacCommand.LEFT
+            elif pacActionCommand[0] == -1:
+                direction = PacCommand.RIGHT
+
+                
+            pacCommand.command.direction = direction
+            pacCommand.command.forwards_distance = forwards_distance
+            self.write(pacCommand.SerializeToString(), MsgType.PAC_COMMAND)
+
+
+
+
     def tick(self):
         # this function will get called in a loop with FREQUENCY frequency
         # if self.game.play:
@@ -465,28 +489,7 @@ class GameEngine(rm.ProtoModule):
         # index 1 is forwards dist (int)
 
         
-        pacActionCommand = get_action(self.state)[0] # get command from algorithm
-
-
-        # fill out pac command
-        pacCommand = PacCommand()
-
-        direction = PacCommand.FORWARDS
-        forwards_distance = 0
-
-        if pacActionCommand[0] == 0:
-            direction = PacCommand.FORWARDS
-            forwards_distance = pacActionCommand[1]
-        elif pacActionCommand[0] == 1:
-            direction = PacCommand.LEFT
-        elif pacActionCommand[0] == -1:
-            direction = PacCommand.RIGHT
-
-            
-        pacCommand.command.direction = direction
-        pacCommand.command.forwards_distance = forwards_distance
-        self.write(pacCommand.SerializeToString(), MsgType.PAC_COMMAND)
-
+       
         
         # pacCommand = PacCommand()
         # pacCommand.command.direction = PacCommand.FORWARDS
