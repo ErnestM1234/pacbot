@@ -5,15 +5,15 @@ import robomodules as rm
 from messages import *
 
 # SERVER_ADDRESS = os.environ.get("BIND_ADDRESS","localhost")
-SERVER_ADDRESS = os.environ.get("BIND_ADDRESS","10.24.106.144")
+SERVER_ADDRESS = os.environ.get("BIND_ADDRESS","172.20.1.25")
 SERVER_PORT = os.environ.get("BIND_PORT", 11297)
 
 LOCAL_ADDRESS = os.environ.get("LOCAL_ADDRESS","localhost") # always on local host
 LOCAL_PORT = os.environ.get("LOCAL_PORT", 11295)
 
 # GAME_ENGINE_ADDRESS = os.environ.get("LOCAL_ADDRESS","localhost")
-GAME_ENGINE_ADDRESS = os.environ.get("LOCAL_ADDRESS","10.24.106.144")
-GAME_ENGINE_PORT = os.environ.get("LOCAL_PORT", 11293)
+# GAME_ENGINE_ADDRESS = os.environ.get("LOCAL_ADDRESS","10.24.106.144")
+# GAME_ENGINE_PORT = os.environ.get("LOCAL_PORT", 11293)
 
 SERVER_FREQUENCY = 0
 GAME_ENGINE_FREQUENCY = 0 # no idea what this value means

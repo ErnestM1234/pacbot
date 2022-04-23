@@ -14,7 +14,7 @@ from messages import MsgType
 ###
 
 # ADDRESS = os.environ.get("BIND_ADDRESS","localhost")
-ADDRESS = os.environ.get("BIND_ADDRESS","10.24.106.144")
+ADDRESS = os.environ.get("BIND_ADDRESS","172.20.1.25")
 ###
 # BIND_PORT is the port the server is listening on. All modules (such as the game engine) should connect
 # to this port.
