@@ -11,8 +11,9 @@ from math import sqrt as sqrt
 from math import pi as pi
 import time
 
-FORWARDS  = 0
-ROTATE    = 1
+FORWARDS   = 0
+ROTATE     = 1
+FORCE_STOP = 2
 
 """
 INPUTS:
@@ -233,6 +234,19 @@ class ArduinoComms:
         self.odometer += avg_enc * d_time * RPM_TO_RADIANS_PER_NANSEC
         self.last_time_measured = curr_time
 
+    """ checkAck()
+    input:  void
+    output: void
+    Checks for acknowledgement from the Arduino
+    """
+    def checkAck(self):
+    	if self.ser.in_waiting > 0:
+        	token = self.ser.readline().decode('ascii').rstrip()
+            if (token == '{ACK}'):
+            	return True
+            self.ser.reset_input_buffer()
+        return False
+        
     """ read()
     input:  void
     output: a python dictionary containing all of the sensor values
@@ -321,16 +335,19 @@ class ArduinoComms:
         
         if (action_type == FORWARDS):
             assert (not rot_left and not rot_right), "cannot rotate while moving forwards"
-            output += ("{fwd:"+str(forward_amt))
+            output += ("{fwd"+str(forward_amt))
             
         elif (action_type == ROTATE):
             assert forward_amt == 0, "cannot move forwards while rotating"
             assert rot_left ^ rot_right, "cannot simultaneously rotate right and left"
-            output += "{rot:"
+            output += "{rot"
             if (rot_left):
                 output += "0"
             else:
                 output += "1"
+                
+        elif (action_type == FORCE_STOP):
+        	output += "sto"
         
         output += "}"
         
