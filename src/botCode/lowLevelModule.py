@@ -71,9 +71,10 @@ class LowLevelCommandModule(rm.ProtoModule):
     def msg_received(self, msg, msg_type):
         # print("mess received")
         if msg_type == MsgType.PAC_COMMAND:
-            if len(self.command_queue) == 0:
+            if len(self.command_queue) == 0 and not self.current_command:
                 self.current_command = (msg.command.direction, msg.command.forwards_distance)
-            self.command_queue.append((msg.command.direction, msg.command.forwards_distance))
+            else:
+                self.command_queue.append((msg.command.direction, msg.command.forwards_distance))
             # print(str(self.command_queue))
     
     def tick(self):
