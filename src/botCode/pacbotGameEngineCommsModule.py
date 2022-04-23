@@ -11,8 +11,8 @@ from messages import *
 LOCAL_ADDRESS = os.environ.get("LOCAL_ADDRESS","localhost") # always on local host
 LOCAL_PORT = os.environ.get("LOCAL_PORT", 11295)
 
-GAME_ENGINE_ADDRESS = os.environ.get("LOCAL_ADDRESS","localhost")
-# GAME_ENGINE_ADDRESS = os.environ.get("LOCAL_ADDRESS","172.20.10.3")
+# GAME_ENGINE_ADDRESS = os.environ.get("LOCAL_ADDRESS","localhost")
+GAME_ENGINE_ADDRESS = os.environ.get("LOCAL_ADDRESS","172.20.10.3")
 GAME_ENGINE_PORT = os.environ.get("LOCAL_PORT", 11293)
 
 SERVER_FREQUENCY = 0
