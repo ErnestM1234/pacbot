@@ -46,6 +46,7 @@ class PacbotGameEngineClient(rm.ProtoModule):
         # This module will connect to server and receive the game state
         # print("got message: \n" + str(msg))
         if msg_type == MsgType.PAC_COMMAND:
+            print("received command")
 
             self.command = msg
     

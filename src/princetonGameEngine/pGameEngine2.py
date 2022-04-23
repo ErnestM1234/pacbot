@@ -123,7 +123,7 @@ def astar(maze, start, end):
                 path.append(current.position)
                 current = current.parent
             path = path[::-1]
-            print(path)
+            #print(path)
             if len(path) == 1: # no actions needed
                 return [], len(path)
             if len(path) == 2: # no turns needed
@@ -303,6 +303,7 @@ def pathAStar(maze, start, end):
 
             # Add the child to the open list
             open_list.append(child)
+    return []
 
 
 def main():
@@ -322,7 +323,7 @@ def main():
     end = (7, 6)
 
     path = astar(maze, start, end)
-    print(path)
+    #print(path)
 
 
 # helper method to astar to a ghost, which is technically a barrier in maze
@@ -394,7 +395,7 @@ def get_action(state):
     for g_position in g_positions:
         if WALLS[tuple(g_position)]:
             continue
-        print("pathfinding to ghost")
+        #print("pathfinding to ghost")
         tup = astar_ghost(obstacles_without_back, state["pac"], g_position)
         if tup:
             actions, pathlength = tup 
@@ -408,16 +409,16 @@ def get_action(state):
                 actions, pathlength = tup 
             nearby_actions = actions
             
-    print("nearby:", nearby)
+    #print("nearby:", nearby)
 
-    print("phase: frightened ghosts")
+    #print("phase: frightened ghosts")
 
     # target the closest frightened ghost not on pac
     # move to it if it exists and is within dt
     closest_d = None
     closest_actions = None
     for f_position in f_positions:
-        print("pathfinding to frightened ghost")
+        #print("pathfinding to frightened ghost")
         tup = astar_ghost(obstacles, state["pac"], f_position)
         if tup:
             actions, pathlength = tup 
@@ -433,7 +434,7 @@ def get_action(state):
     if closest_d and closest_d <= state["dt"]:
         return closest_actions[:5]
 
-    print("phase: power pellets")
+    #print("phase: power pellets")
 
     # target the closest power pellet not on pac
     # move to it, if it exists and (is further than 1 cell away or a ghost is within NT)
@@ -442,7 +443,7 @@ def get_action(state):
     closest_d = None 
     closest_actions = None
     for position in positions:
-        print("pathfinding to power pellet")
+        #print("pathfinding to power pellet")
         tup = astar(obstacles, state["pac"], position)
         if tup:
             actions, pathlength = tup 
@@ -459,15 +460,15 @@ def get_action(state):
         if closest_d > 1:
             return closest_actions[:5]
         if nearby: # pathfind to nearest ghost
-            print("nearby actions")
-            print(nearby_actions)
+            #print("nearby actions")
+            #print(nearby_actions)
             closest_actions[-1] = (closest_actions[-1][0], nearby_actions[0][1])
             closest_actions.extend(nearby_actions[1:])
             return closest_actions[:5]
         else:
             return [(0, 0)]
     # grid, algorithm, a star
-    print("phase: pellets")
+    #print("phase: pellets")
     # target the closest pellet not on pac
     # move to it if it exists
     positions = np.argwhere(state["pellets"])
@@ -574,6 +575,8 @@ class GameEngine(rm.ProtoModule):
 
     def msg_received(self, msg, msg_type):
         if msg_type == MsgType.LIGHT_STATE:
+
+            print("got lightState")
             
             rgf = False # red ghost frightened
             try:
@@ -601,10 +604,10 @@ class GameEngine(rm.ProtoModule):
             
             self.lastState = self.state
             pacDir = (-1,0) #0,1,2,3=N,E,S,W
-            x = self.lastState.pac[0]
-            y = self.lastState.pac[1]
+            x = self.lastState["pac"][0]
+            y = self.lastState["pac"][1]
             if x != msg.pacman.x and y != msg.pacman.y:
-               if self.lastState.dir%2 == (-1,0): #N or S
+               if self.lastState["dir"] == (-1,0) or self.lastState["dir"] == (1,0): #N or S
                   if y < msg.pacman.y:
                      pacDir = (0,1) #E
                   else:
@@ -615,7 +618,7 @@ class GameEngine(rm.ProtoModule):
                   else:
                      pacDir = (-1,0)
             else:
-               pacDir = self.lastState.dir
+               pacDir = self.lastState["dir"]
                
             
             posList = pathAStar(self.WALLS, (x,y), (msg.pacman.x, msg.pacman.y))
@@ -663,8 +666,8 @@ class GameEngine(rm.ProtoModule):
                 direction = PacCommand.RIGHT
 
                 
-            pacCommand.command_1.direction = direction
-            pacCommand.command_1.forwards_distance = forwards_distance
+            pacCommand.command.direction = direction
+            pacCommand.command.forwards_distance = forwards_distance
 
 
             self.write(pacCommand.SerializeToString(), MsgType.PAC_COMMAND)
