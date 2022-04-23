@@ -1,17 +1,5 @@
 #!/usr/bin/env python3
 
-"""
-[
-    (L | R | F, -1 | FORWARDS_DIST),
-    (L | R | F, -1 | FORWARDS_DIST),
-    (L | R | F, -1 | FORWARDS_DIST),
-    (L | R | F, -1 | FORWARDS_DIST),
-    (L | R | F, -1 | FORWARDS_DIST),
-]
-
-
-"""
-
 import os, sys, logging
 import time
 import robomodules as rm
@@ -33,67 +21,14 @@ class GameEngine(rm.ProtoModule):
 
         self.game = GameState()
 
-    """ command_north()
-    input: void
-    output: void
-    send command for pacbot to go north
-    """
-    def command_north(self):
-        command = PacmanCommand()
-        command.dir = PacmanCommand.NORTH
-        self.write(command.SerializeToString(), MsgType.PACMAN_COMMAND)
-        print("command: North")
-    
-    """ command_south()
-    input: void
-    output: void
-    send command for pacbot to go south
-    """
-    def command_south(self):
-        command = PacmanCommand()
-        command.dir = PacmanCommand.SOUTH
-        self.write(command.SerializeToString(), MsgType.PACMAN_COMMAND)
-        print("command: South")
-
-    """ command_east()
-    input: void
-    output: void
-    send command for pacbot to go east
-    """
-    def command_east(self):
-        command = PacmanCommand()
-        command.dir = PacmanCommand.EAST
-        self.write(command.SerializeToString(), MsgType.PACMAN_COMMAND)
-        print("command: East")
-
-    """ command_west()
-    input: void
-    output: void
-    send command for pacbot to go west
-    """
-    def command_west(self):
-        command = PacmanCommand()
-        command.dir = PacmanCommand.WEST
-        self.write(command.SerializeToString(), MsgType.PACMAN_COMMAND)
-        print("command: West")
-    
-    """ command_stop()
-    input: void
-    output: void
-    send command for pacbot to stop
-    """
-    def command_stop(self):
-        command = PacmanCommand()
-        command.dir = PacmanCommand.STOP
-        self.write(command.SerializeToString(), MsgType.PACMAN_COMMAND)
-        print("command: stop")
-
     def _write_state(self):
         # full_state = StateConverter.convert_game_state_to_full(self.game)
         # self.write(full_state.SerializeToString(), MsgType.FULL_STATE)
 
         # light_state = StateConverter.convert_game_state_to_light(self.game)
         # self.write(light_state.SerializeToString(), MsgType.LIGHT_STATE)
+        
+        self.write(light_state.SerializeToString(), MsgType.TEST)
         return
 
 
@@ -107,14 +42,13 @@ class GameEngine(rm.ProtoModule):
 
     def tick(self):
         # this function will get called in a loop with FREQUENCY frequency
-        if self.game.play:
+        # if self.game.play:
 
             # call game engine
-            self.gameEngine.getAction()
+            # self.gameEngine.getAction()
 
             # This will become asynchronous
             # self.game.next_step()
-            
         self._write_state()
 
     def keypress(self):
@@ -128,16 +62,6 @@ class GameEngine(rm.ProtoModule):
             logging.info("Restarting...")
             self.game.restart()
             self._write_state()
-        elif char == "n":
-            self.command_north()
-        elif char == "s":
-            self.command_south()
-        elif char == "e":
-            self.command_east()
-        elif char == "w":
-            self.command_west()
-        elif char == "s":
-            self.command_stop()
         elif char == "p":
             if (self.game.play):
                 logging.info('Game is paused')
@@ -160,12 +84,6 @@ def main():
     print('    r - restart')
     print('    p - (un)pause')
     print('    q - quit')
-    print('------------')
-    print('    n - north')
-    print('    s - south')
-    print('    e - east')
-    print('    w - west')
-
     engine.run()
 
 

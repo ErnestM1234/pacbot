@@ -1,0 +1,22 @@
+syntax = "proto2";
+
+package botCode;
+
+
+message Test {
+
+  message NestedTestMessage {
+    required int32 int1 = 1;
+    required int32 int2 = 2;
+    optional Direction direction = 3;
+    optional int32 frightened_counter = 4;
+  }
+  required int32 testNum = 1;
+
+  enum Direction {
+    UP = 0;
+    DOWN = 1;
+    LEFT = 2;
+    RIGHT = 3;
+  }
+}
