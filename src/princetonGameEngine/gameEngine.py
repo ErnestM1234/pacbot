@@ -19,8 +19,8 @@ from messages import *
 from pacbot.variables import game_frequency, ticks_per_update
 from pacbot import StateConverter, GameState
 
-# ADDRESS = os.environ.get("BIND_ADDRESS","localhost") # the address of the game engine server
-ADDRESS = os.environ.get("BIND_ADDRESS","172.20.10.3")
+ADDRESS = os.environ.get("BIND_ADDRESS","localhost") # the address of the game engine server
+# ADDRESS = os.environ.get("BIND_ADDRESS","172.20.10.3")
 PORT = os.environ.get("BIND_PORT", 11293)            # the port the game engine server is listening to
 
 FREQUENCY = game_frequency * ticks_per_update
@@ -107,15 +107,16 @@ class GameEngine(rm.ProtoModule):
 
     def tick(self):
         # this function will get called in a loop with FREQUENCY frequency
-        if self.game.play:
+        self._write_state()
 
+        if self.game.play:
+            return
             # call game engine
-            self.gameEngine.getAction()
+            # self.gameEngine.getAction()
 
             # This will become asynchronous
             # self.game.next_step()
             
-        self._write_state()
 
     def keypress(self):
         char = sys.stdin.read(1)
