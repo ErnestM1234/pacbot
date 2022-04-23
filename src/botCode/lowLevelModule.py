@@ -15,9 +15,9 @@ ADDRESS = os.environ.get("LOCAL_ADDRESS","localhost")
 PORT = os.environ.get("LOCAL_PORT", 11295)
 
 
-FORWARDS   = 0
-ROTATE     = 1
-FORCE_STOP = 2
+# FORWARDS   = 0
+# ROTATE     = 1
+# FORCE_STOP = 2
 FREQUENCY = 60
 
 class LowLevelCommandModule(rm.ProtoModule):

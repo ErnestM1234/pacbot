@@ -13,10 +13,10 @@ def mop(bot):
         if (bot.checkAck()):
             print("RECEIVED ACKNOWLEDGEMENT")
 
-        bot.write(ROTATE, 0, True, False)
+        # bot.write(FORWARDS, 0, True, False)
 
-        if (bot.checkAck()):
-            print("RECEIVED ACKNOWLEDGEMENT")
+        # if (bot.checkAck()):
+        #     print("RECEIVED ACKNOWLEDGEMENT")
 
         """command {
             direction: FORWARDS
