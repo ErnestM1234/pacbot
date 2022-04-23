@@ -61,7 +61,7 @@ class LowLevelCommandModule(rm.ProtoModule):
         
         ack = Ack()
         ack.hasAck = 1
-        self.write(ack.SerializeToString(), MsgType.ACK())
+        self.write(ack.SerializeToString(), MsgType.ACK)
         return True
             
     def msg_received(self, msg, msg_type):
