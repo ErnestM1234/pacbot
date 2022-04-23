@@ -39,6 +39,7 @@ class LowLevelCommandModule(rm.ProtoModule):
         self.arduino.write(ROTATE, 0, False, True)
 
     def _execute_command(self):
+        print("execute start")
         
         if not self.current_command:
             return False
@@ -50,7 +51,7 @@ class LowLevelCommandModule(rm.ProtoModule):
             self.current_command = self.command_queue.popleft()
         
         while not self.arduino.checkAck():
-            print("test")
+            # print("test")
             if (cmd[0] == PacCommand.FORWARDS):
                 self.arduino.write(FORWARDS, cmd[1], False, False)
             elif (cmd[0] == PacCommand.LEFT):
@@ -64,10 +65,11 @@ class LowLevelCommandModule(rm.ProtoModule):
         ack = Ack()
         ack.hasAck = 1
         self.write(ack.SerializeToString(), MsgType.ACK)
+        print("execute end")
         return True
             
     def msg_received(self, msg, msg_type):
-        print("mess received")
+        # print("mess received")
         if msg_type == MsgType.PAC_COMMAND:
             self.command_queue.append((msg.command.direction, msg.command.forwards_distance))
             # print(str(self.command_queue))
