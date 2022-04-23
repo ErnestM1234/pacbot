@@ -48,7 +48,9 @@ class LowLevelCommandModule(rm.ProtoModule):
 
         while not self.arduino.checkAck():
             # print("test")
-            if (cmd[0] == PacCommand.FORWARDS):
+            if (cmd[0] == PacCommand.STOP):
+                self.kill()
+            elif (cmd[0] == PacCommand.FORWARDS):
                 self.arduino.write(FORWARDS, cmd[1], False, False)
             elif (cmd[0] == PacCommand.LEFT):
                 self.arduino.write(ROTATE, 0, True, False)
@@ -81,6 +83,7 @@ class LowLevelCommandModule(rm.ProtoModule):
         output = "{sto}"
         while True:
             self.arduino.write(output.encode('utf-8'))
+            print("killed")
 
 def main():
     module = LowLevelCommandModule(ADDRESS, PORT)
