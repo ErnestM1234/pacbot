@@ -243,6 +243,7 @@ class ArduinoComms:
         if self.ser.in_waiting > 0:
             token = self.ser.readline().decode('ascii').rstrip()
             if (token == '{ACK}'):
+                print("RECEIVED ACKNOWLEDGEMENT")
                 return True
             self.ser.reset_input_buffer()
         return False

@@ -15,8 +15,8 @@ FREQUENCY = game_frequency * ticks_per_update
 
 
 # ADDRESS = os.environ.get("BIND_ADDRESS","localhost") # the address of the game engine server
-ADDRESS = os.environ.get("BIND_ADDRESS","localhost")
-# ADDRESS = os.environ.get("BIND_ADDRESS","172.20.10.3")
+# ADDRESS = os.environ.get("BIND_ADDRESS","localhost")
+ADDRESS = os.environ.get("BIND_ADDRESS","172.20.10.3")
 PORT = os.environ.get("BIND_PORT", 11293)            # the port the game engine server is listening to
 
 
@@ -448,6 +448,8 @@ class GameEngine(rm.ProtoModule):
 
             self.state = self.getActionInput
 
+
+
     def tick(self):
         # this function will get called in a loop with FREQUENCY frequency
         # if self.game.play:
@@ -461,6 +463,8 @@ class GameEngine(rm.ProtoModule):
 
         # index 0 is dir (int)
         # index 1 is forwards dist (int)
+
+        """
         pacActionCommand = get_action(self.state)[0] # get command from algorithm
 
         
@@ -483,16 +487,29 @@ class GameEngine(rm.ProtoModule):
             
         pacCommand.command.direction = direction
         pacCommand.command.forwards_distance = forwards_distance
-
-
         self.write(pacCommand.SerializeToString(), MsgType.PAC_COMMAND)
+
+        """
+        pacCommand = PacCommand()
+        pacCommand.command.direction = 1
+        pacCommand.command.forwards_distance = PacCommand.FORWARDS
+        self.write(pacCommand.SerializeToString(), MsgType.PAC_COMMAND)
+
+        # pacCommand = PacCommand()
+        # direction = PacCommand.FORWARDS
+        # forwards_distance = 1
+        # pacCommand.command.direction = direction
+        # pacCommand.command.forwards_distance = forwards_distance
+
+
+        
 
         # light_state = StateConverter.convert_game_state_to_light(self.game)
         # self.write(light_state.SerializeToString(), MsgType.LIGHT_STATE)
 
         # self.write(light_state, MsgType.PACMAN_COMMAND)
 
-        print("\n ----- sent pacCommand: \n" + str(pacCommand) + "----- \n")
+        # print("\n ----- sent pacCommand: \n" + str(pacCommand) + "----- \n")
         return
 
 def main():

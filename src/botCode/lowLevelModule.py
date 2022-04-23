@@ -67,7 +67,7 @@ class LowLevelCommandModule(rm.ProtoModule):
     def msg_received(self, msg, msg_type):
         if msg_type == MsgType.PAC_COMMAND:
             self.command_queue.append((msg.command.direction, msg.command.forwards_distance))
-        return True
+            print(str(self.command_queue))
     
     def tick(self):
         if self.current_command and not self.pending_completion:

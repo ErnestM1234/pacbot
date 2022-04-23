@@ -26,9 +26,7 @@ def mop(bot):
 
 def main():
     bot = ArduinoComms()
-    try:
-        mop(bot)
-    except KeyboardInterrupt:
-        bot.stop()
+    mop(bot)
+
 
 main()
