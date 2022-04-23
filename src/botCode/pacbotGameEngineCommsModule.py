@@ -46,7 +46,6 @@ class PacbotGameEngineClient(rm.ProtoModule):
         # This module will connect to server and receive the game state
         # print("got message: \n" + str(msg))
         if msg_type == MsgType.PAC_COMMAND:
-            print("broadcast")
 
             self.command = msg
     
@@ -85,6 +84,7 @@ class PacbotGameEngineCommsModule(rm.ProtoModule):
         command = self.game_engine_module.get_command()
         if command != None:
             # Broadcast commands to local modules
+            print("broadcast")
            self.write(command.SerializeToString(), MsgType.PAC_COMMAND)
 
 def main():
