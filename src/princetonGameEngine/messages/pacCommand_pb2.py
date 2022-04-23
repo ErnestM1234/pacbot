@@ -14,7 +14,7 @@ _sym_db = _symbol_database.Default()
 
 
 
-DESCRIPTOR = _descriptor_pool.Default().AddSerializedFile(b'\n\x10pacCommand.proto\x12\x07\x62otCode\"\x84\x03\n\nPacCommand\x12.\n\tcommand_1\x18\x01 \x02(\x0b\x32\x1b.botCode.PacCommand.Command\x12.\n\tcommand_2\x18\x02 \x02(\x0b\x32\x1b.botCode.PacCommand.Command\x12.\n\tcommand_3\x18\x03 \x02(\x0b\x32\x1b.botCode.PacCommand.Command\x12.\n\tcommand_4\x18\x04 \x02(\x0b\x32\x1b.botCode.PacCommand.Command\x12.\n\tcommand_5\x18\x05 \x02(\x0b\x32\x1b.botCode.PacCommand.Command\x1aV\n\x07\x43ommand\x12\x30\n\tdirection\x18\x01 \x02(\x0e\x32\x1d.botCode.PacCommand.Direction\x12\x19\n\x11\x66orwards_distance\x18\x02 \x02(\x05\".\n\tDirection\x12\x08\n\x04LEFT\x10\x00\x12\t\n\x05RIGHT\x10\x01\x12\x0c\n\x08\x46ORWARDS\x10\x02')
+DESCRIPTOR = _descriptor_pool.Default().AddSerializedFile(b'\n\x10pacCommand.proto\x12\x07\x62otCode\"\xc2\x01\n\nPacCommand\x12,\n\x07\x63ommand\x18\x01 \x02(\x0b\x32\x1b.botCode.PacCommand.Command\x1aV\n\x07\x43ommand\x12\x30\n\tdirection\x18\x01 \x02(\x0e\x32\x1d.botCode.PacCommand.Direction\x12\x19\n\x11\x66orwards_distance\x18\x02 \x02(\x05\".\n\tDirection\x12\x08\n\x04LEFT\x10\x00\x12\t\n\x05RIGHT\x10\x01\x12\x0c\n\x08\x46ORWARDS\x10\x02')
 
 
 
@@ -40,9 +40,9 @@ if _descriptor._USE_C_DESCRIPTORS == False:
 
   DESCRIPTOR._options = None
   _PACCOMMAND._serialized_start=30
-  _PACCOMMAND._serialized_end=418
-  _PACCOMMAND_COMMAND._serialized_start=284
-  _PACCOMMAND_COMMAND._serialized_end=370
-  _PACCOMMAND_DIRECTION._serialized_start=372
-  _PACCOMMAND_DIRECTION._serialized_end=418
+  _PACCOMMAND._serialized_end=224
+  _PACCOMMAND_COMMAND._serialized_start=90
+  _PACCOMMAND_COMMAND._serialized_end=176
+  _PACCOMMAND_DIRECTION._serialized_start=178
+  _PACCOMMAND_DIRECTION._serialized_end=224
 # @@protoc_insertion_point(module_scope)

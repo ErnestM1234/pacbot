@@ -10,11 +10,7 @@ message PacCommand {
     required int32 forwards_distance = 2;
   }
   
-  required Command command_1 = 1;
-  required Command command_2 = 2;
-  required Command command_3 = 3;
-  required Command command_4 = 4;
-  required Command command_5 = 5;
+  required Command command = 1;
 
   enum Direction {
     LEFT = 0;

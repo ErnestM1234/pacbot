@@ -382,15 +382,25 @@ class GameEngine(rm.ProtoModule):
         self.subscriptions = [MsgType.LIGHT_STATE]
         super().__init__(addr, port, message_buffers, MsgType, FREQUENCY, self.subscriptions)
         # self.loop.add_reader(sys.stdin, self.keypress)
-        self.game = GameState()
+        # self.game = GameState()
+        self.state = {
+            "prev_pac": (0,0), # spot behind pacman
+            "pellets": [(0,0)],
+            "power_pellets": [(0,0)],
+            "pac": (0,0),
+            "r": (0,0),
+            "b": (0,0),
+            "o": (0,0),
+            "p": (0,0),
+            "rf": False,
+            "bf": False,
+            "of": False,
+            "pf": False,
+            "dt": 0, # frighten timer to cells
+        }
 
         self.gameEngineGetAction = 0
 
-    def update_state(self, state):
-        return
-
-    def get_action(self, state):
-        return
 
     def msg_received(self, msg, msg_type):
         if msg_type == MsgType.LIGHT_STATE:
@@ -420,7 +430,6 @@ class GameEngine(rm.ProtoModule):
                 print("no redghost")
             
 
-
             self.getActionInput = {
                 "prev_pac": (3,3), # spot behind pacman
                 "pellets": [(0,0)],
@@ -437,10 +446,7 @@ class GameEngine(rm.ProtoModule):
                 "dt": 0, # frighten timer to cells
             }
 
-            self.update(self.getActionInput)
-
-            return
-            # self.game.pacbot.update((msg.x, msg.y))
+            self.state = self.getActionInput
 
     def tick(self):
         # this function will get called in a loop with FREQUENCY frequency
@@ -452,25 +458,32 @@ class GameEngine(rm.ProtoModule):
         #     # This will become asynchronous
         #     # self.game.next_step()
         # self._write_state()
+
+        # index 0 is dir (int)
+        # index 1 is forwards dist (int)
+        pacActionCommand = get_action(self.state)[0] # get command from algorithm
+
+        
         
 
+        # fill out pac command
         pacCommand = PacCommand()
-        # # pacCommand.mode = MsgType.PAC_COMMAND
-        # command 1
-        pacCommand.command_1.direction = PacCommand.RIGHT
-        pacCommand.command_1.forwards_distance = 1
-        # command 2
-        pacCommand.command_2.direction = PacCommand.FORWARDS
-        pacCommand.command_2.forwards_distance = 2
-        # command 3
-        pacCommand.command_3.direction = PacCommand.FORWARDS
-        pacCommand.command_3.forwards_distance = 3
-        # command 4
-        pacCommand.command_4.direction = PacCommand.FORWARDS
-        pacCommand.command_4.forwards_distance = 4
-        # command 5
-        pacCommand.command_5.direction = PacCommand.FORWARDS
-        pacCommand.command_5.forwards_distance = 1
+
+        direction = PacCommand.FORWARDS
+        forwards_distance = 0
+
+        if pacActionCommand[0] == 0:
+            direction = PacCommand.FORWARDS
+            forwards_distance = pacActionCommand[1]
+        elif pacActionCommand[0] == 1:
+            direction = PacCommand.LEFT
+        elif pacActionCommand[0] == -1:
+            direction = PacCommand.RIGHT
+
+            
+        pacCommand.command_1.direction = direction
+        pacCommand.command_1.forwards_distance = forwards_distance
+
 
         self.write(pacCommand.SerializeToString(), MsgType.PAC_COMMAND)
 
