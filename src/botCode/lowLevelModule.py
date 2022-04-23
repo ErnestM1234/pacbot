@@ -50,6 +50,7 @@ class LowLevelCommandModule(rm.ProtoModule):
             self.current_command = self.command_queue.popleft()
         
         while not self.arduino.checkAck():
+            print("test")
             if (cmd[0] == PacCommand.FORWARDS):
                 self.arduino.write(FORWARDS, cmd[1], False, False)
             elif (cmd[0] == PacCommand.LEFT):
