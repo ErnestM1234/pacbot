@@ -26,7 +26,6 @@ class LowLevelCommandModule(rm.ProtoModule):
         self.subscriptions = [MsgType.PAC_COMMAND]
         super().__init__(addr, port, message_buffers, MsgType, FREQUENCY, self.subscriptions)
         self.command_queue = deque()
-        self.current_command = (PacCommand.FORWARDS, 0) # in the form of a tuple
         self.pending_completion = False
         
     def _move_forward(self):
@@ -41,15 +40,12 @@ class LowLevelCommandModule(rm.ProtoModule):
     def _execute_command(self):
         # print("execute start")
         
-        if not self.current_command:
+        if len(self.command_queue) == 0:
             return False
           
         self.pending_completion = True        
-        cmd = self.current_command
-        self.current_command = None
-        if (len(self.command_queue) > 0):
-            self.current_command = self.command_queue.popleft()
-        
+        cmd = self.command_queue.popleft()
+
         while not self.arduino.checkAck():
             # print("test")
             if (cmd[0] == PacCommand.FORWARDS):
@@ -71,14 +67,11 @@ class LowLevelCommandModule(rm.ProtoModule):
     def msg_received(self, msg, msg_type):
         # print("mess received")
         if msg_type == MsgType.PAC_COMMAND:
-            if len(self.command_queue) == 0 and not self.current_command:
-                self.current_command = (msg.command.direction, msg.command.forwards_distance)
-            else:
-                self.command_queue.append((msg.command.direction, msg.command.forwards_distance))
+            self.command_queue.append((msg.command.direction, msg.command.forwards_distance))
             # print(str(self.command_queue))
     
     def tick(self):
-        if self.current_command and not self.pending_completion:
+        if not self.pending_completion:
             self._execute_command()
             
     def kill(self):

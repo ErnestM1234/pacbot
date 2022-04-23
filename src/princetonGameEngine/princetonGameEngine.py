@@ -464,11 +464,9 @@ class GameEngine(rm.ProtoModule):
         # index 0 is dir (int)
         # index 1 is forwards dist (int)
 
-        """
+        
         pacActionCommand = get_action(self.state)[0] # get command from algorithm
 
-        
-        
 
         # fill out pac command
         pacCommand = PacCommand()
@@ -489,11 +487,11 @@ class GameEngine(rm.ProtoModule):
         pacCommand.command.forwards_distance = forwards_distance
         self.write(pacCommand.SerializeToString(), MsgType.PAC_COMMAND)
 
-        """
-        pacCommand = PacCommand()
-        pacCommand.command.direction = PacCommand.FORWARDS
-        pacCommand.command.forwards_distance = 1
-        self.write(pacCommand.SerializeToString(), MsgType.PAC_COMMAND)
+        
+        # pacCommand = PacCommand()
+        # pacCommand.command.direction = PacCommand.FORWARDS
+        # pacCommand.command.forwards_distance = 1
+        # self.write(pacCommand.SerializeToString(), MsgType.PAC_COMMAND)
         # print(str(pacCommand))
 
         # light_state = StateConverter.convert_game_state_to_light(self.game)
