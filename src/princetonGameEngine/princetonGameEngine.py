@@ -494,11 +494,11 @@ class GameEngine(rm.ProtoModule):
         pacCommand.command.direction = PacCommand.FORWARDS
         pacCommand.command.forwards_distance = 1
         self.write(pacCommand.SerializeToString(), MsgType.PAC_COMMAND)
-        print(str(pacCommand))
+        # print(str(pacCommand))
 
         # light_state = StateConverter.convert_game_state_to_light(self.game)
         # self.write(light_state.SerializeToString(), MsgType.LIGHT_STATE)
-        print("sent mess")
+        # print("sent mess")
 
         # pacCommand = PacCo mmand()
         # direction = PacCommand.FORWARDS
