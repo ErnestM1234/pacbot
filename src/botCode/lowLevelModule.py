@@ -72,8 +72,8 @@ class LowLevelCommandModule(rm.ProtoModule):
     
     def tick(self):
         print('tick')
-        if self.current_command and not self.pending_completion:
-            self._execute_command()
+        # if self.current_command and not self.pending_completion:
+        #     self._execute_command()
             
     def kill(self):
         output = "{sto}"
