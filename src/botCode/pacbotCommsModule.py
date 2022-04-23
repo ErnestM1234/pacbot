@@ -73,6 +73,11 @@ class PacbotServerCommsModule(rm.ProtoModule):
             self.write(state.SerializeToString(), MsgType.LIGHT_STATE)
 
     def tick(self):
+        state = self.server_module.get_state()
+        if state != None:
+            # Broadcast state to local modules
+            print("broadcast")
+            self.write(state.SerializeToString(), MsgType.LIGHT_STATE)
         return
         # # Get state from the server
         # state = self.server_module.get_state()
