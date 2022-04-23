@@ -82,6 +82,7 @@ class LowLevelCommandModule(rm.ProtoModule):
 
 def main():
     module = LowLevelCommandModule(ADDRESS, PORT)
+    module.run()
     try:
         module.run()
     except KeyboardInterrupt:
