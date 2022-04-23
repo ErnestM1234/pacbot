@@ -59,6 +59,7 @@ class LowLevelCommandModule(rm.ProtoModule):
                 self.arduino.write(ROTATE, 0, False, True)
                 
         self.pending_completion = False
+        print(str(self.command_queue))
         
         ack = Ack()
         ack.hasAck = 1
