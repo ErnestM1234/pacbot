@@ -43,9 +43,10 @@ class PacbotGameEngineClient(rm.ProtoModule):
     def msg_received(self, msg, msg_type):
         # This gets called whenever any message is received
         # This module will connect to server and receive the game state
+        print("got message: " + str(msg))
         if msg_type == MsgType.PAC_COMMAND:
             self.command = msg
-            print("got message: " + str(msg))
+    
 
     def tick(self):
         return        
