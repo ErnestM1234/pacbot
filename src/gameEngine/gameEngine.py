@@ -6,8 +6,8 @@ from messages import *
 from pacbot.variables import game_frequency, ticks_per_update
 from pacbot import StateConverter, GameState
 
-# ADDRESS = os.environ.get("BIND_ADDRESS","localhost") # the address of the game engine server
-ADDRESS = os.environ.get("BIND_ADDRESS","172.20.10.3")
+ADDRESS = os.environ.get("BIND_ADDRESS","localhost") # the address of the game engine server
+# ADDRESS = os.environ.get("BIND_ADDRESS","172.20.10.3")
 PORT = os.environ.get("BIND_PORT", 11297)            # the port the game engine server is listening to
 
 FREQUENCY = game_frequency * ticks_per_update

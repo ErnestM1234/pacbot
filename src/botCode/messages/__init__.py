@@ -12,8 +12,8 @@ class MsgType(Enum):
     PACMAN_LOCATION = 1
     PACMAN_COMMAND = 2
     TEST = 3
-    PAC_COMMAND = 4
-    ACK = 5
+    ACK = 4
+    PAC_COMMAND = 5
 
 
 

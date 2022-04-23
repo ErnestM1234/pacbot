@@ -6,7 +6,7 @@ from messages import *
 
 SERVER_ADDRESS = os.environ.get("BIND_ADDRESS","localhost")
 # SERVER_ADDRESS = os.environ.get("BIND_ADDRESS","172.20.10.3")
-SERVER_PORT = os.environ.get("BIND_PORT", 11297)
+SERVER_PORT = os.environ.get("BIND_PORT", 11293)
 
 LOCAL_ADDRESS = os.environ.get("LOCAL_ADDRESS","localhost") # always on local host
 LOCAL_PORT = os.environ.get("LOCAL_PORT", 11295)
@@ -33,7 +33,7 @@ GAME_ENGINE - Princeton's computation server that gives pacbot actions
 # this connects to the Server
 class PacbotServerClient(rm.ProtoModule):
     def __init__(self, addr, port, loop):
-        self.subscriptions = [MsgType.LIGHT_STATE]
+        self.subscriptions = [MsgType.PAC_COMMAND]
         # this connects to the game engine
         super().__init__(addr, port, message_buffers, MsgType, SERVER_FREQUENCY, self.subscriptions, loop)
         self.state = None
@@ -42,7 +42,8 @@ class PacbotServerClient(rm.ProtoModule):
         # This gets called whenever any message is received
         # This module will connect to server and receive the game state
 
-        if msg_type == MsgType.LIGHT_STATE:
+        if msg_type == MsgType.PAC_COMMAND:
+            print("got mess")
             self.state = msg
 
     def tick(self):

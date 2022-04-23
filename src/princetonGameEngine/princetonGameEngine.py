@@ -380,9 +380,9 @@ def get_action(state):
 class GameEngine(rm.ProtoModule):
     def __init__(self, addr, port):
         self.subscriptions = [MsgType.LIGHT_STATE]
-        super().__init__(addr, port, message_buffers, MsgType, FREQUENCY, self.subscriptions)
+        super().__init__(addr, port, message_buffers, MsgType, int(FREQUENCY), self.subscriptions)
         # self.loop.add_reader(sys.stdin, self.keypress)
-        # self.game = GameState()
+        self.game = GameState()
         self.state = {
             "prev_pac": (0,0), # spot behind pacman
             "pellets": [(0,0)],
@@ -491,11 +491,16 @@ class GameEngine(rm.ProtoModule):
 
         """
         pacCommand = PacCommand()
-        pacCommand.command.direction = 1
-        pacCommand.command.forwards_distance = PacCommand.FORWARDS
+        pacCommand.command.direction = PacCommand.FORWARDS
+        pacCommand.command.forwards_distance = 1
         self.write(pacCommand.SerializeToString(), MsgType.PAC_COMMAND)
+        print(str(pacCommand))
 
-        # pacCommand = PacCommand()
+        # light_state = StateConverter.convert_game_state_to_light(self.game)
+        # self.write(light_state.SerializeToString(), MsgType.LIGHT_STATE)
+        print("sent mess")
+
+        # pacCommand = PacCo mmand()
         # direction = PacCommand.FORWARDS
         # forwards_distance = 1
         # pacCommand.command.direction = direction

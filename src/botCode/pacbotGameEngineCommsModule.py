@@ -11,12 +11,12 @@ from messages import *
 LOCAL_ADDRESS = os.environ.get("LOCAL_ADDRESS","localhost") # always on local host
 LOCAL_PORT = os.environ.get("LOCAL_PORT", 11295)
 
-# GAME_ENGINE_ADDRESS = os.environ.get("LOCAL_ADDRESS","localhost")
-GAME_ENGINE_ADDRESS = os.environ.get("LOCAL_ADDRESS","172.20.10.3")
+GAME_ENGINE_ADDRESS = os.environ.get("LOCAL_ADDRESS","localhost")
+# GAME_ENGINE_ADDRESS = os.environ.get("LOCAL_ADDRESS","172.20.10.3")
 GAME_ENGINE_PORT = os.environ.get("LOCAL_PORT", 11293)
 
 SERVER_FREQUENCY = 0
-GAME_ENGINE_FREQUENCY = 0 # no idea what this value means
+GAME_ENGINE_FREQUENCY = 30 # no idea what this value means
 LOCAL_FREQUENCY = 30
 
 """
@@ -34,21 +34,28 @@ GAME_ENGINE - Princeton's computation server that gives pacbot actions
 # for silly reasons these classes have to be nested
 class PacbotGameEngineClient(rm.ProtoModule):
     def __init__(self, addr, port, loop):
-        self.subscriptions = [MsgType.PAC_COMMAND]
+        self.subscriptions = [MsgType.PAC_COMMAND, MsgType.LIGHT_STATE]
         # this connects to the game engine
         super().__init__(addr, port, message_buffers, MsgType, GAME_ENGINE_FREQUENCY, self.subscriptions, loop)
         self.command = None
-        print("PacbotGameEngineClient init")
+        print(str(port))
+        print(str(addr))
 
     def msg_received(self, msg, msg_type):
         # This gets called whenever any message is received
         # This module will connect to server and receive the game state
-        print("got message: " + str(msg))
+        print("got message: \n" + str(msg))
         if msg_type == MsgType.PAC_COMMAND:
             self.command = msg
     
 
     def tick(self):
+        # pacCommand = PacCommand()
+        # pacCommand.command.direction = 1
+        # pacCommand.command.forwards_distance = PacCommand.FORWARDS
+        # self.write(pacCommand.SerializeToString(), MsgType.PAC_COMMAND)
+        # print("sent")
+
         return        
         
     def get_command(self):
@@ -72,6 +79,7 @@ class PacbotGameEngineCommsModule(rm.ProtoModule):
         return
 
     def tick(self):
+        # self.game_engine_module.tick()
         # Get command from the game engine
         command = self.game_engine_module.get_command()
         if command != None:
