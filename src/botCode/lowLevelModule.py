@@ -65,6 +65,7 @@ class LowLevelCommandModule(rm.ProtoModule):
         return True
             
     def msg_received(self, msg, msg_type):
+        print("got mess")
         if msg_type == MsgType.PAC_COMMAND:
             self.command_queue.append((msg.command.direction, msg.command.forwards_distance))
             print(str(self.command_queue))

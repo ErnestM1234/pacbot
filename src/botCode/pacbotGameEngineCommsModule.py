@@ -38,13 +38,13 @@ class PacbotGameEngineClient(rm.ProtoModule):
         # this connects to the game engine
         super().__init__(addr, port, message_buffers, MsgType, GAME_ENGINE_FREQUENCY, self.subscriptions, loop)
         self.command = None
-        print(str(port))
-        print(str(addr))
+        # print(str(port))
+        # print(str(addr))
 
     def msg_received(self, msg, msg_type):
         # This gets called whenever any message is received
         # This module will connect to server and receive the game state
-        print("got message: \n" + str(msg))
+        # print("got message: \n" + str(msg))
         if msg_type == MsgType.PAC_COMMAND:
             self.command = msg
     
